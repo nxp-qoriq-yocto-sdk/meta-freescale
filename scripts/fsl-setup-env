@@ -75,6 +75,11 @@ For more information about OpenEmbedded see their website:
 
 You can now run 'bitbake <target>'
 "
+    if [ "$setup_g" = "true" ]; then
+        echo "    core-image-cgl
+    core-image-lsb-sdk"
+    fi
+
     echo "Targets specific to Freescale targets:"
     for i in `ls $FSLROOTDIR/recipes-*/images/*.bb 2>/dev/null`;do
         i=`basename $i`;i=`echo $i |sed -e 's,^\(.*\)\.bb,\1,'`
@@ -90,7 +95,7 @@ clean_up()
    unset PROGNAME ROOTDIR OEROOTDIR FSLROOTDIR PROJECT_DIR \
          EULA EULA_FILE LAYER_LIST MACHINE FSLDISTRO EXTRAROOTDIR \
          OLD_OPTIND CPUS JOBS THREADS DOWNLOADS CACHES DISTRO \
-         setup_flag setup_h setup_j setup_t setup_l setup_builddir \
+         setup_flag setup_h setup_j setup_t setup_g setup_l setup_builddir \
          setup_download setup_sstate setup_error layer append_layer
    unset -f usage prompt_message
 }
@@ -115,6 +120,7 @@ usage() {
     * [-t tasks]:   number of BitBake tasks that can be issued in parallel.
     * [-d path]:    non-default path of DL_DIR (downloaded source)
     * [-c path]:    non-default path of SSTATE_DIR (shared state Cache)
+    * [-g]:         enable Carrier Grade Linux
     * [-l]:         lite mode. To help conserve disk space, deletes the building
                     directory once the package is built.
     * [-h]:         help
@@ -132,7 +138,7 @@ usage() {
 
 # parse the parameters
 OLD_OPTIND=$OPTIND
-while getopts "m:j:t:b:d:c:lh" setup_flag
+while getopts "m:j:t:b:d:c:glh" setup_flag
 do
     case $setup_flag in
         m) MACHINE="$OPTARG";
@@ -146,6 +152,8 @@ do
         d) setup_download="$OPTARG";
            ;;
         c) setup_sstate="$OPTARG";
+           ;;
+        g) setup_g='true';
            ;;
         l) setup_l='true';
            ;;
@@ -181,7 +189,7 @@ LAYER_LIST=" \
     meta-openembedded/meta-ruby \
     meta-openembedded/meta-filesystems \
     meta-openembedded/meta-webserver \
-    meta-openembedded/toolchain-layer \
+    meta-openembedded/meta-xfce \
     \
     meta-freescale \
     meta-freescale-internal \
@@ -193,7 +201,6 @@ LAYER_LIST=" \
     meta-browser \
     meta-virtualization \
     meta-java \
-    meta-linaro/meta-linaro-toolchain \
     meta-cloud-services/meta-openstack \
     meta-cloud-services/meta-openstack-aio-deploy \
     meta-cloud-services/meta-openstack-compute-deploy \
@@ -207,15 +214,33 @@ LAYER_LIST=" \
     meta-fsl-local-build \
     meta-fsl-testing \
 "
+if [ "$setup_g" == "true" ]; then
+LAYER_LIST="$LAYER_LIST \
+    meta-selinux \
+    meta-qt3 \
+    meta-openclovis \
+    meta-cgl/meta-cgl-common \
+    meta-fsl-cgl \
+    "
+fi
+if [ "` echo ${MACHINE} | grep '^ls'`" ]; then
+    LAYER_LIST="$LAYER_LIST \
+        meta-linaro/meta-linaro-toolchain \
+    "
+fi
 
 EULA_FILE="$FSLROOTDIR/EULA"
 
-if [ "`ls $FSLROOTDIR/conf/machine $EXTRAROOTDIR/conf/machine \
+if [ "`ls $FSLROOTDIR/conf/machine \
        | grep "\.conf" | egrep "^imx|^twr" | grep ${MACHINE} | wc -l`" != "0" ]; then
     FSLDISTRO="fslc-imx"
-elif [ "`ls $FSLROOTDIR/conf/machine $EXTRAROOTDIR/conf/machine \
+elif [ "`ls $FSLROOTDIR/conf/machine \
        | grep "\.conf" | egrep -v "^imx|^twr" | grep ${MACHINE} | wc -l`" != "0" ]; then
-    DISTRO="fsl-qoriq"
+    if [ "$setup_g" = "true" ]; then
+        DISTRO="fsl-qoriq-cgl"
+    else
+        DISTRO="fsl-qoriq"
+    fi
 fi
 
 if [ -z "$DISTRO" ]; then
