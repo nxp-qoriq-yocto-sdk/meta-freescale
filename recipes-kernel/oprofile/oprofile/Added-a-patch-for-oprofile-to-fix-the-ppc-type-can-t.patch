@@ -1,0 +1,74 @@
+From 9140f5b39b2f42a5111b689e34f7439cacf63d15 Mon Sep 17 00:00:00 2001
+From: Wenbin Song <Wenbin.Song@freescale.com>
+Date: Thu, 12 Nov 2015 11:57:32 +0800
+Subject: [PATCH] find ppc type
+
+Signed-off-by: Minghuan Lian <Minghuan.Lian@freescale.com>
+Signed-off-by: Wenbin Song <Wenbin.Song@freescale.com>
+---
+ libop/op_cpu_type.c | 42 ++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 40 insertions(+), 2 deletions(-)
+
+diff --git a/libop/op_cpu_type.c b/libop/op_cpu_type.c
+index 6ce1f13..50a4d34 100644
+--- a/libop/op_cpu_type.c
++++ b/libop/op_cpu_type.c
+@@ -451,6 +451,43 @@ static op_cpu _get_tile_cpu_type(void)
+ 	return op_get_cpu_number(cpu_type_str);
+ }
+ 
++static op_cpu _get_ppc_cpu_type(char *machine)
++{
++	char *cpu_model;
++	char line[100], cpu_type_str[64];
++	cpu_type_str[0] = '\0';
++	strcat(cpu_type_str,"ppc/");
++
++	if (strcmp(machine,"ppc") == 0 ){
++		cpu_model = _get_cpuinfo_cpu_type(line, 100, "cpu");
++		if (!cpu_model)
++			return CPU_NO_GOOD;
++		strncat(cpu_type_str,cpu_model,strlen(cpu_model));
++		if (strncmp(cpu_type_str, "ppc/e5500", 9) == 0){
++			strcpy(cpu_type_str,"ppc/e500mc");
++		}
++		if (strncmp(cpu_type_str, "ppc/e6500", 9) == 0){
++			cpu_type_str[9] = '\0';
++		}
++		return op_get_cpu_number(cpu_type_str);
++	}
++
++	if (strcmp(machine,"ppc64") == 0){
++		cpu_model = _get_cpuinfo_cpu_type(line, 100, "cpu");
++		if (cpu_model){
++			if (strncmp(cpu_model, "e6500", 5) == 0){
++				strncat(cpu_type_str,"e6500",5);
++				return op_get_cpu_number(cpu_type_str);
++			}
++			if (strncmp(cpu_model, "e5500", 5) == 0){
++				strncat(cpu_type_str,"e500mc",6);
++				return op_get_cpu_number(cpu_type_str);
++			}
++		}
++	}
++	return _get_ppc64_cpu_type();
++}
++
+ #if defined(__x86_64__) || defined(__i386__)
+ int op_is_cpu_vendor(char * vendor)
+ {
+@@ -685,8 +722,9 @@ static op_cpu __get_cpu_type(void)
+ 		return _get_x86_64_cpu_type();
+ 	}
+ 	if ((strncmp(uname_info.machine, "ppc64", 5) == 0) ||
+-			(strncmp(uname_info.machine, "ppc64le", 7) == 0)) {
+-		return _get_ppc64_cpu_type();
++			(strncmp(uname_info.machine, "ppc64le", 7) == 0) ||
++			(strcmp(uname_info.machine,"ppc") == 0)) {
++		return _get_ppc_cpu_type(uname_info.machine);
+ 	}
+ 	if (strncmp(uname_info.machine, "alpha", 5) == 0) {
+ 		return _get_alpha_cpu_type();
+-- 
+2.1.0.27.g96db324
+
