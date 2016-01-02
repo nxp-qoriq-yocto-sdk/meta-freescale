@@ -9,9 +9,6 @@ LIC_FILES_CHKSUM = " \
     file://Licenses/lgpl-2.1.txt;md5=4fbd65380cdd255951079008b364516c \
 "
 
-SRCBRANCH = "sdk-v1.9.x"
-SRC_URI = "git://git.freescale.com/ppc/sdk/u-boot.git;branch=${SRCBRANCH} \
-    file://gcc5.patch \
-    file://add-fgnu89-inline-option-for-gcc5.patch \
-"
-SRCREV = "eb3d4fc5759729d7af71ac31ebf6a7e8d0e79da3"
+SRCBRANCH = "master"
+SRC_URI = "git://sw-stash.freescale.net/scm/sdk/u-boot-devel.git;branch=${SRCBRANCH};protocol=http"
+SRCREV = "${AUTOREV}"
