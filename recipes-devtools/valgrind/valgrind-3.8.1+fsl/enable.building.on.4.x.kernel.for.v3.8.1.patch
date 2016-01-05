@@ -1,0 +1,45 @@
+Enable building valgrind on host with 4.x kernel.
+
+For OpenEmbedded builds we should be checking something like
+OLDEST_KERNEL instead of `uname -r`, but this is good enough for now.
+
+Building on 4.x* currently fails with:
+  configure:5556: checking for the kernel version
+  configure:5579: result: unsupported (4.0.0-rc3-00111-gaffb817)
+  configure:5581: error: Valgrind works on kernels 2.4, 2.6
+
+Upstream-Status: Pending
+Signed-off-by: Martin Jansa <Martin.Jansa@gmail.com>
+---
+ configure.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/configure.in b/configure.in
+index 7e0d72a..4067125 100644
+--- a/configure.in
++++ b/configure.in
+@@ -263,9 +263,9 @@ case "${host_os}" in
+         kernel=`uname -r`
+ 
+         case "${kernel}" in
+-             2.6.*|3.*) 
+-        	    AC_MSG_RESULT([2.6.x/3.x family (${kernel})])
+-        	    AC_DEFINE([KERNEL_2_6], 1, [Define to 1 if you're using Linux 2.6.x or Linux 3.x])
++             2.6.*|3.*|4.*)
++                   AC_MSG_RESULT([2.6.x/3.x/4.x family (${kernel})])
++                   AC_DEFINE([KERNEL_2_6], 1, [Define to 1 if you're using Linux 2.6.x or Linux 3.x or Linux 4.x])
+         	    ;;
+ 
+              2.4.*) 
+@@ -275,7 +275,7 @@ case "${host_os}" in
+ 
+              *) 
+         	    AC_MSG_RESULT([unsupported (${kernel})])
+-        	    AC_MSG_ERROR([Valgrind works on kernels 2.4, 2.6])
++        	    AC_MSG_ERROR([Valgrind works on kernels 2.4, 2.6, 3.x, 4.x])
+         	    ;;
+         esac
+ 
+-- 
+2.4.0
+
