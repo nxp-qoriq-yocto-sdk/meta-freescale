@@ -2,14 +2,17 @@
 require conf/machine/include/soc-family.inc
 
 # common providers of QorIQ targets
-PREFERRED_PROVIDER_cryptodev-linux = "cryptodev-qoriq-linux"
-PREFERRED_PROVIDER_cryptodev-module = "cryptodev-qoriq-module"
-PREFERRED_PROVIDER_cryptodev-tests = "cryptodev-qoriq-tests"
-PREFERRED_PROVIDER_openssl = "openssl-qoriq"
 PREFERRED_PROVIDER_u-boot ?= "u-boot-qoriq"
 PREFERRED_PROVIDER_virtual/bootloader ?= "u-boot-qoriq"
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-qoriq"
+PREFERRED_PROVIDER_cryptodev-linux ?= "cryptodev-qoriq-linux"
+PREFERRED_PROVIDER_cryptodev-module ?= "cryptodev-qoriq-module"
+PREFERRED_PROVIDER_cryptodev-tests ?= "cryptodev-qoriq-tests"
+PREFERRED_PROVIDER_openssl = "openssl-qoriq"
 PREFERRED_PROVIDER_qemu = "qemu-qoriq"
+
+PREFERRED_VERSION_make = "3.81"
+PREFERRED_VERSION_valgrind_e500v2 = "3.8.1+fsl"
 
 # Define the default image type
 IMAGE_CLASSES ?= "image_types_uboot"
