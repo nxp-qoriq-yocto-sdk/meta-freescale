@@ -1,4 +1,4 @@
-require kernel-module-ipc.inc
+require ipc-module.inc
 
 EXTRA_OEMAKE ="KERNEL_DIR=${STAGING_KERNEL_DIR} ${SOC}=1"
 
