@@ -2,8 +2,6 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 require recipes-devtools/qemu/qemu.inc
 
-PROVIDES += "qemu"
-
 DESCRIPTION = "This recipe requires poky's qemu.inc which includes the FSL \
 fixes of QorIQ ARM and QorIQ PPC targets, the recipe assumes that glx enable \
 config option is changed to --enable-opengl. The recipe only works for FSL \
@@ -13,7 +11,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=441c28d2cf86e15a37fa47e15a72fbac \
                     file://COPYING.LIB;endline=24;md5=c04def7ae38850e7d3ef548588159913"
 
 # This means QEMU v2.2.0 with FSL specific patches applied
-PV = "2.2.0+${SRCPV}"
+PV = "2.2.0+fsl"
 
 # FIXME: this recipe requires poky's qemu.inc which assumes version 2.3
 # where glx enable config option changed to --enable-opengl. For now we

@@ -9,7 +9,7 @@ PREFERRED_PROVIDER_cryptodev-linux ?= "cryptodev-qoriq-linux"
 PREFERRED_PROVIDER_cryptodev-module ?= "cryptodev-qoriq-module"
 PREFERRED_PROVIDER_cryptodev-tests ?= "cryptodev-qoriq-tests"
 PREFERRED_PROVIDER_openssl = "openssl-qoriq"
-PREFERRED_PROVIDER_qemu = "qemu-qoriq"
+PREFERRED_VERSION_qemu ?= "2.2.0+fsl"
 
 PREFERRED_VERSION_make = "3.81"
 PREFERRED_VERSION_valgrind_e500v2 = "3.8.1+fsl"
