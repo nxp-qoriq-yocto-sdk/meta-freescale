@@ -1,0 +1,69 @@
+From 30fe6960f9e8ca035641d87344aa1cf4aca54979 Mon Sep 17 00:00:00 2001
+From: Sandeep Malik <Sandeep.Malik@freescale.com>
+Date: Tue, 5 Jan 2016 17:57:29 +0530
+Subject: [PATCH] asf_ipsec: Patch to fix the insmod issue with gcc5.2
+
+When asf_ipsec module compiled with gcc5.2 is insmod;
+it fails to load with an error "Unknown Symbol". The
+issue is that the newer compiler does strict checking
+for inline functions.
+
+Signed-off-by: Sandeep Malik <Sandeep.Malik@nxp.com>
+
+QASF-1430
+---
+ asfmodule/asfipsec/driver/ipseccmn.h   | 5 +++++
+ asfmodule/asfipsec/driver/ipsecfp.c    | 5 -----
+ asfmodule/asfipsec/driver/ipsecfp_ah.c | 4 ----
+ 3 files changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/asfmodule/asfipsec/driver/ipseccmn.h b/asfmodule/asfipsec/driver/ipseccmn.h
+index 1dd44fa..8731fba 100644
+--- a/asfmodule/asfipsec/driver/ipseccmn.h
++++ b/asfmodule/asfipsec/driver/ipseccmn.h
+@@ -44,6 +44,11 @@ extern unsigned int *pulVSGL2blobMagicNumber;
+ extern unsigned int **pulTunnelMagicNumber;
+ extern unsigned int ulTimeStamp_g;
+ 
++static inline ASF_void_t secfp_SkbFree(ASF_void_t *freeArg)
++{
++	ASFSkbFree(freeArg);
++}
++
+ #define ASFIPSEC_ERR	asf_err
+ #define ASFIPSEC_DPERR asf_dperr
+ 
+diff --git a/asfmodule/asfipsec/driver/ipsecfp.c b/asfmodule/asfipsec/driver/ipsecfp.c
+index b1c273e..ca1eceb 100644
+--- a/asfmodule/asfipsec/driver/ipsecfp.c
++++ b/asfmodule/asfipsec/driver/ipsecfp.c
+@@ -278,11 +278,6 @@ void secfp_IVDeInit(void)
+ #endif
+ 
+ 
+-inline ASF_void_t secfp_SkbFree(ASF_void_t *freeArg)
+-{
+-	ASFSkbFree(freeArg);
+-}
+-
+ void secfp_deInit(void)
+ {
+ 	ASFIPSEC_PRINT("DeInitializing Sec FP ");
+diff --git a/asfmodule/asfipsec/driver/ipsecfp_ah.c b/asfmodule/asfipsec/driver/ipsecfp_ah.c
+index c2aca1a..c4a681c 100644
+--- a/asfmodule/asfipsec/driver/ipsecfp_ah.c
++++ b/asfmodule/asfipsec/driver/ipsecfp_ah.c
+@@ -124,10 +124,6 @@ void secfp_prepareAHOutDescriptor(struct sk_buff *skb, void *pData,
+ #ifdef ASFIPSEC_DEBUG_FRAME
+ extern void print_desc(struct talitos_desc *desc);
+ #endif
+-static inline ASF_void_t secfp_SkbFree(ASF_void_t *freeArg)
+-{
+-	ASFSkbFree(freeArg);
+-}
+ 
+ extern __be16 secfp_IPv4_IDs[NR_CPUS];
+ static inline __be16 secfp_getNextId(void)
+-- 
+2.4.3
+

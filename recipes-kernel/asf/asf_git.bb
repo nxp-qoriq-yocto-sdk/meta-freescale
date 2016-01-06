@@ -3,7 +3,9 @@ SECTION = "asf"
 LICENSE = "GPLv2 & GPLv2+ & BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b5881ecf398da8a03a3f4c501e29d287"
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/asf.git;branch=sdk-v1.9.x"
+SRC_URI = "git://git.freescale.com/ppc/sdk/asf.git;branch=sdk-v1.9.x \
+    file://0001-asf_ipsec-Patch-to-fix-the-insmod-issue-with-gcc5.2.patch;striplevel=2 \
+"
 SRCREV = "9580a629d3aec3ab3c5e152c6693846b96787906"
 
 RDEPENDS_${PN} += "ipsec-tools"
