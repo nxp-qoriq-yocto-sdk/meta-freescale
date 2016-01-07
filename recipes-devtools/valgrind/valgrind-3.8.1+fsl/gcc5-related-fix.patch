@@ -1,0 +1,35 @@
+gcc5 related fix
+
+Upstream-Status: Backport
+
+Signed-off-by: Ting Liu <ting.liu@nxp.com>
+---
+ configure.in | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/configure.in b/configure.in
+index e199e9a..2aa50a5 100644
+--- a/configure.in
++++ b/configure.in
+@@ -134,6 +134,9 @@ case "${is_clang}-${gcc_version}" in
+      notclang-4.*)
+ 	AC_MSG_RESULT([ok (${gcc_version})])
+ 	;;
++     notclang-5*)
++	AC_MSG_RESULT([ok (${gcc_version})])
++	;;
+      clang-2.9|clang-3.*|clang-4.*)
+ 	AC_MSG_RESULT([ok (clang-${gcc_version})])
+ 	;;
+@@ -777,7 +777,7 @@ if test x$ac_cv_header_features_h = xyes; then
+ glibc version is: __GLIBC__ __GLIBC_MINOR__
+ #endif
+ _ACEOF
+-  GLIBC_VERSION="`$CPP conftest.$ac_ext | $SED -n 's/^glibc version is: //p' | $SED 's/ /./g'`"
++  GLIBC_VERSION="`$CPP -P conftest.$ac_ext | $SED -n 's/^glibc version is: //p' | $SED 's/ /./g'`"
+ fi
+ 
+ # not really a version check
+-- 
+1.9.2
+

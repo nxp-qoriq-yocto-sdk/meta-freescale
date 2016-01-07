@@ -75,6 +75,7 @@ SRC_URI = "http://www.valgrind.org/downloads/valgrind-3.8.1.tar.bz2 \
     file://configure-with-newer-glibc.patch \
     file://valgrind-3.8.1-Bug-308573.patch \
     file://enable.building.on.4.x.kernel.for.v3.8.1.patch \
+    file://gcc5-related-fix.patch \
 "
 SRC_URI[md5sum] = "288758010b271119a0ffc0183f1d6e38"
 SRC_URI[sha256sum] = "473be00576bed311a662b277a2bfbe97d9cca4058e68619a0e420c9fc19958db"
