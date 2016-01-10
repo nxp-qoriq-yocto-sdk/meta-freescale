@@ -93,4 +93,6 @@ do_install () {
 
 inherit libc-package
 
+INSANE_SKIP_${PN} = 'already-stripped'
+
 BBCLASSEXTEND = "nativesdk"
