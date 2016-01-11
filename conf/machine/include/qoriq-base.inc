@@ -13,6 +13,7 @@ PREFERRED_PROVIDER_qemu = "qemu-qoriq"
 
 PREFERRED_VERSION_make = "3.81"
 PREFERRED_VERSION_valgrind_e500v2 = "3.8.1+fsl"
+PREFERRED_VERSION_samba = "3.6.24"
 
 # Define the default image type
 IMAGE_CLASSES ?= "image_types_uboot"
