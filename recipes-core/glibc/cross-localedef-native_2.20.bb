@@ -22,6 +22,7 @@ SRC_URI = "git://sourceware.org/git/glibc.git;branch=release/${PV}/master;name=g
            ${EGLIBCPATCHES} \
           "
 EGLIBCPATCHES = "\
+           file://intl-Merge-with-gettext-version-0.19.3.patch \
            file://timezone-re-written-tzselect-as-posix-sh.patch \
            file://eglibc.patch \
            file://option-groups.patch \

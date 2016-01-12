@@ -25,6 +25,7 @@ SRC_URI = "git://sourceware.org/git/glibc.git;branch=release/${PV}/master \
            file://ppce6500-32b_slow_ieee754_sqrt.patch \
            file://grok_gold.patch \
            file://fix_am_rootsbindir.patch \
+           file://intl-Merge-with-gettext-version-0.19.3.patch \
            ${EGLIBCPATCHES} \
            ${CVEPATCHES} \
            ${FSLPATCHES} \
