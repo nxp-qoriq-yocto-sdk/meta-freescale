@@ -1,0 +1,12 @@
+--- openjdk/jdk/src/solaris/bin/ppc64/jvm.cfg.orig   2016-01-13 13:25:05.651551001 -0700
++++ openjdk/jdk/src/solaris/bin/ppc64/jvm.cfg	2016-01-13 23:59:02.651551157 -0700
+@@ -30,4 +30,9 @@
+ # "-XXaltjvm=<jvm_dir>" option, but that too is unsupported
+ # and may not be available in a future release.
+ #
++-client KNOWN
+ -server KNOWN
++-hotspot ERROR
++-classic WARN
++-native ERROR
++-green ERROR
