@@ -1,0 +1,1968 @@
+From b5a2973550cccf9c0b6cef10d50d585cb0c7da43 Mon Sep 17 00:00:00 2001
+From: Cristian Sovaiala <cristian.sovaiala@freescale.com>
+Date: Mon, 30 Mar 2015 15:44:28 +0300
+Subject: [PATCH 1/2] Add DPAA MACsec API
+
+Upstream-Status: Inappropriate [enable feature]
+
+Signed-off-by: Camelia Groza <camelia.groza@freescale.com>
+Signed-off-by: Andrei Vasiliu <andrei.vasiliu@freescale.com>
+Signed-off-by: Iulia Manda <manda.iulia@freescale.com>
+Signed-off-by: Cristian Sovaiala <cristian.sovaiala@freescale.com>
+---
+ hostapd/dpaa_macsec_defconfig        | 319 ++++++++++++++
+ src/drivers/dpaa_utils_macsec.c      | 815 +++++++++++++++++++++++++++++++++++
+ src/drivers/dpaa_utils_macsec.h      | 269 ++++++++++++
+ src/drivers/drivers.mak              |   4 +
+ wpa_supplicant/dpaa_macsec_defconfig | 500 +++++++++++++++++++++
+ 5 files changed, 1907 insertions(+)
+ create mode 100644 hostapd/dpaa_macsec_defconfig
+ create mode 100644 src/drivers/dpaa_utils_macsec.c
+ create mode 100644 src/drivers/dpaa_utils_macsec.h
+ create mode 100644 wpa_supplicant/dpaa_macsec_defconfig
+
+diff --git a/hostapd/dpaa_macsec_defconfig b/hostapd/dpaa_macsec_defconfig
+new file mode 100644
+index 0000000..9404e81
+--- /dev/null
++++ b/hostapd/dpaa_macsec_defconfig
+@@ -0,0 +1,319 @@
++# Example hostapd build time configuration
++#
++# This file lists the configuration options that are used when building the
++# hostapd binary. All lines starting with # are ignored. Configuration option
++# lines must be commented out complete, if they are not to be included, i.e.,
++# just setting VARIABLE=n is not disabling that variable.
++#
++# This file is included in Makefile, so variables like CFLAGS and LIBS can also
++# be modified from here. In most cass, these lines should use += in order not
++# to override previous values of the variables.
++
++# Driver interface for Host AP driver
++CONFIG_DRIVER_HOSTAP=y
++
++# Driver interface for wired authenticator
++CONFIG_DRIVER_WIRED=y
++
++# Driver interface for drivers using the nl80211 kernel interface
++#CONFIG_DRIVER_NL80211=y
++
++# driver_nl80211.c requires libnl. If you are compiling it yourself
++# you may need to point hostapd to your version of libnl.
++#
++#CFLAGS += -I$<path to libnl include files>
++#LIBS += -L$<path to libnl library files>
++
++# Use libnl v2.0 (or 3.0) libraries.
++#CONFIG_LIBNL20=y
++
++# Use libnl 3.2 libraries (if this is selected, CONFIG_LIBNL20 is ignored)
++#CONFIG_LIBNL32=y
++
++
++# Driver interface for FreeBSD net80211 layer (e.g., Atheros driver)
++#CONFIG_DRIVER_BSD=y
++#CFLAGS += -I/usr/local/include
++#LIBS += -L/usr/local/lib
++#LIBS_p += -L/usr/local/lib
++#LIBS_c += -L/usr/local/lib
++
++# Driver interface for no driver (e.g., RADIUS server only)
++#CONFIG_DRIVER_NONE=y
++
++# IEEE 802.11F/IAPP
++CONFIG_IAPP=y
++
++# WPA2/IEEE 802.11i RSN pre-authentication
++CONFIG_RSN_PREAUTH=y
++
++# PeerKey handshake for Station to Station Link (IEEE 802.11e DLS)
++CONFIG_PEERKEY=y
++
++# IEEE 802.11w (management frame protection)
++CONFIG_IEEE80211W=y
++
++# Integrated EAP server
++CONFIG_EAP=y
++
++# EAP Re-authentication Protocol (ERP) in integrated EAP server
++CONFIG_ERP=y
++
++# EAP-MD5 for the integrated EAP server
++CONFIG_EAP_MD5=y
++
++# EAP-TLS for the integrated EAP server
++CONFIG_EAP_TLS=y
++
++# EAP-MSCHAPv2 for the integrated EAP server
++CONFIG_EAP_MSCHAPV2=y
++
++# EAP-PEAP for the integrated EAP server
++CONFIG_EAP_PEAP=y
++
++# EAP-GTC for the integrated EAP server
++CONFIG_EAP_GTC=y
++
++# EAP-TTLS for the integrated EAP server
++CONFIG_EAP_TTLS=y
++
++# EAP-SIM for the integrated EAP server
++#CONFIG_EAP_SIM=y
++
++# EAP-AKA for the integrated EAP server
++#CONFIG_EAP_AKA=y
++
++# EAP-AKA' for the integrated EAP server
++# This requires CONFIG_EAP_AKA to be enabled, too.
++#CONFIG_EAP_AKA_PRIME=y
++
++# EAP-PAX for the integrated EAP server
++#CONFIG_EAP_PAX=y
++
++# EAP-PSK for the integrated EAP server (this is _not_ needed for WPA-PSK)
++#CONFIG_EAP_PSK=y
++
++# EAP-pwd for the integrated EAP server (secure authentication with a password)
++#CONFIG_EAP_PWD=y
++
++# EAP-SAKE for the integrated EAP server
++#CONFIG_EAP_SAKE=y
++
++# EAP-GPSK for the integrated EAP server
++#CONFIG_EAP_GPSK=y
++# Include support for optional SHA256 cipher suite in EAP-GPSK
++#CONFIG_EAP_GPSK_SHA256=y
++
++# EAP-FAST for the integrated EAP server
++# Note: If OpenSSL is used as the TLS library, OpenSSL 1.0 or newer is needed
++# for EAP-FAST support. Older OpenSSL releases would need to be patched, e.g.,
++# with openssl-0.9.8x-tls-extensions.patch, to add the needed functions.
++#CONFIG_EAP_FAST=y
++
++# Wi-Fi Protected Setup (WPS)
++#CONFIG_WPS=y
++# Enable UPnP support for external WPS Registrars
++#CONFIG_WPS_UPNP=y
++# Enable WPS support with NFC config method
++#CONFIG_WPS_NFC=y
++
++# EAP-IKEv2
++#CONFIG_EAP_IKEV2=y
++
++# Trusted Network Connect (EAP-TNC)
++#CONFIG_EAP_TNC=y
++
++# EAP-EKE for the integrated EAP server
++#CONFIG_EAP_EKE=y
++
++# PKCS#12 (PFX) support (used to read private key and certificate file from
++# a file that usually has extension .p12 or .pfx)
++CONFIG_PKCS12=y
++
++# RADIUS authentication server. This provides access to the integrated EAP
++# server from external hosts using RADIUS.
++#CONFIG_RADIUS_SERVER=y
++
++# Build IPv6 support for RADIUS operations
++CONFIG_IPV6=y
++
++# IEEE Std 802.11r-2008 (Fast BSS Transition)
++#CONFIG_IEEE80211R=y
++
++# Use the hostapd's IEEE 802.11 authentication (ACL), but without
++# the IEEE 802.11 Management capability (e.g., FreeBSD/net80211)
++#CONFIG_DRIVER_RADIUS_ACL=y
++
++# IEEE 802.11n (High Throughput) support
++#CONFIG_IEEE80211N=y
++
++# Wireless Network Management (IEEE Std 802.11v-2011)
++# Note: This is experimental and not complete implementation.
++#CONFIG_WNM=y
++
++# IEEE 802.11ac (Very High Throughput) support
++#CONFIG_IEEE80211AC=y
++
++# Remove debugging code that is printing out debug messages to stdout.
++# This can be used to reduce the size of the hostapd considerably if debugging
++# code is not needed.
++#CONFIG_NO_STDOUT_DEBUG=y
++
++# Add support for writing debug log to a file: -f /tmp/hostapd.log
++# Disabled by default.
++#CONFIG_DEBUG_FILE=y
++
++# Add support for sending all debug messages (regardless of debug verbosity)
++# to the Linux kernel tracing facility. This helps debug the entire stack by
++# making it easy to record everything happening from the driver up into the
++# same file, e.g., using trace-cmd.
++#CONFIG_DEBUG_LINUX_TRACING=y
++
++# Remove support for RADIUS accounting
++#CONFIG_NO_ACCOUNTING=y
++
++# Remove support for RADIUS
++#CONFIG_NO_RADIUS=y
++
++# Remove support for VLANs
++#CONFIG_NO_VLAN=y
++
++# Enable support for fully dynamic VLANs. This enables hostapd to
++# automatically create bridge and VLAN interfaces if necessary.
++#CONFIG_FULL_DYNAMIC_VLAN=y
++
++# Use netlink-based kernel API for VLAN operations instead of ioctl()
++# Note: This requires libnl 3.1 or newer.
++#CONFIG_VLAN_NETLINK=y
++
++# Remove support for dumping internal state through control interface commands
++# This can be used to reduce binary size at the cost of disabling a debugging
++# option.
++#CONFIG_NO_DUMP_STATE=y
++
++# Enable tracing code for developer debugging
++# This tracks use of memory allocations and other registrations and reports
++# incorrect use with a backtrace of call (or allocation) location.
++#CONFIG_WPA_TRACE=y
++# For BSD, comment out these.
++#LIBS += -lexecinfo
++#LIBS_p += -lexecinfo
++#LIBS_c += -lexecinfo
++
++# Use libbfd to get more details for developer debugging
++# This enables use of libbfd to get more detailed symbols for the backtraces
++# generated by CONFIG_WPA_TRACE=y.
++#CONFIG_WPA_TRACE_BFD=y
++# For BSD, comment out these.
++#LIBS += -lbfd -liberty -lz
++#LIBS_p += -lbfd -liberty -lz
++#LIBS_c += -lbfd -liberty -lz
++
++# hostapd depends on strong random number generation being available from the
++# operating system. os_get_random() function is used to fetch random data when
++# needed, e.g., for key generation. On Linux and BSD systems, this works by
++# reading /dev/urandom. It should be noted that the OS entropy pool needs to be
++# properly initialized before hostapd is started. This is important especially
++# on embedded devices that do not have a hardware random number generator and
++# may by default start up with minimal entropy available for random number
++# generation.
++#
++# As a safety net, hostapd is by default trying to internally collect
++# additional entropy for generating random data to mix in with the data
++# fetched from the OS. This by itself is not considered to be very strong, but
++# it may help in cases where the system pool is not initialized properly.
++# However, it is very strongly recommended that the system pool is initialized
++# with enough entropy either by using hardware assisted random number
++# generator or by storing state over device reboots.
++#
++# hostapd can be configured to maintain its own entropy store over restarts to
++# enhance random number generation. This is not perfect, but it is much more
++# secure than using the same sequence of random numbers after every reboot.
++# This can be enabled with -e<entropy file> command line option. The specified
++# file needs to be readable and writable by hostapd.
++#
++# If the os_get_random() is known to provide strong random data (e.g., on
++# Linux/BSD, the board in question is known to have reliable source of random
++# data from /dev/urandom), the internal hostapd random pool can be disabled.
++# This will save some in binary size and CPU use. However, this should only be
++# considered for builds that are known to be used on devices that meet the
++# requirements described above.
++#CONFIG_NO_RANDOM_POOL=y
++
++# Select TLS implementation
++# openssl = OpenSSL (default)
++# gnutls = GnuTLS
++# internal = Internal TLSv1 implementation (experimental)
++# none = Empty template
++#CONFIG_TLS=openssl
++
++# TLS-based EAP methods require at least TLS v1.0. Newer version of TLS (v1.1)
++# can be enabled to get a stronger construction of messages when block ciphers
++# are used.
++#CONFIG_TLSV11=y
++
++# TLS-based EAP methods require at least TLS v1.0. Newer version of TLS (v1.2)
++# can be enabled to enable use of stronger crypto algorithms.
++#CONFIG_TLSV12=y
++
++# If CONFIG_TLS=internal is used, additional library and include paths are
++# needed for LibTomMath. Alternatively, an integrated, minimal version of
++# LibTomMath can be used. See beginning of libtommath.c for details on benefits
++# and drawbacks of this option.
++#CONFIG_INTERNAL_LIBTOMMATH=y
++#ifndef CONFIG_INTERNAL_LIBTOMMATH
++#LTM_PATH=/usr/src/libtommath-0.39
++#CFLAGS += -I$(LTM_PATH)
++#LIBS += -L$(LTM_PATH)
++#LIBS_p += -L$(LTM_PATH)
++#endif
++# At the cost of about 4 kB of additional binary size, the internal LibTomMath
++# can be configured to include faster routines for exptmod, sqr, and div to
++# speed up DH and RSA calculation considerably
++#CONFIG_INTERNAL_LIBTOMMATH_FAST=y
++
++# Interworking (IEEE 802.11u)
++# This can be used to enable functionality to improve interworking with
++# external networks.
++#CONFIG_INTERWORKING=y
++
++# Hotspot 2.0
++#CONFIG_HS20=y
++
++# Enable SQLite database support in hlr_auc_gw, EAP-SIM DB, and eap_user_file
++#CONFIG_SQLITE=y
++
++# Testing options
++# This can be used to enable some testing options (see also the example
++# configuration file) that are really useful only for testing clients that
++# connect to this hostapd. These options allow, for example, to drop a
++# certain percentage of probe requests or auth/(re)assoc frames.
++#
++#CONFIG_TESTING_OPTIONS=y
++
++# Automatic Channel Selection
++# This will allow hostapd to pick the channel automatically when channel is set
++# to "acs_survey" or "0". Eventually, other ACS algorithms can be added in
++# similar way.
++#
++# Automatic selection is currently only done through initialization, later on
++# we hope to do background checks to keep us moving to more ideal channels as
++# time goes by. ACS is currently only supported through the nl80211 driver and
++# your driver must have survey dump capability that is filled by the driver
++# during scanning.
++#
++# You can customize the ACS survey algorithm with the hostapd.conf variable
++# acs_num_scans.
++#
++# Supported ACS drivers:
++# * ath9k
++# * ath5k
++# * ath10k
++#
++# For more details refer to:
++# http://wireless.kernel.org/en/users/Documentation/acs
++#
++#CONFIG_ACS=y
++#
++# DPAA MACsec API
++CONFIG_DPAA_UTILS_MACSEC=y
+diff --git a/src/drivers/dpaa_utils_macsec.c b/src/drivers/dpaa_utils_macsec.c
+new file mode 100644
+index 0000000..84be3b9
+--- /dev/null
++++ b/src/drivers/dpaa_utils_macsec.c
+@@ -0,0 +1,815 @@
++/*
++ * DPAA MACsec API
++ * Copyright (c) 2015, Freescale Semiconductor Inc.
++ *
++ * This software may be distributed under the terms of the BSD license.
++ * See README for more details.
++ */
++
++#include "dpaa_utils_macsec.h"
++
++static struct sockaddr_nl src_addr, dest_addr;
++static struct nlmsghdr *nlh;
++static struct iovec iov;
++static int sock_fd;
++static struct msghdr msg;
++static generic_msg_t gen;
++
++static int dpa_connect(void)
++{
++	int rv;
++
++	sock_fd = socket(PF_NETLINK, SOCK_RAW, NETLINK_USER);
++	if (sock_fd < 0) {
++		wpa_printf(MSG_ERROR, "cannot create socket: %s", strerror(errno));
++		return -1;
++	}
++
++	memset(&src_addr, 0, sizeof(src_addr));
++	src_addr.nl_family = AF_NETLINK;
++	src_addr.nl_pid = getpid(); /* self pid */
++
++	rv = bind(sock_fd, (struct sockaddr *)&src_addr, sizeof(src_addr));
++	if(rv < 0) {
++		wpa_printf(MSG_ERROR, "cannot bind socket");
++		close(sock_fd);
++		return -1;
++	}
++
++	memset(&dest_addr, 0, sizeof(dest_addr));
++	dest_addr.nl_family = AF_NETLINK;
++	dest_addr.nl_pid = 0; /* For Linux Kernel */
++	dest_addr.nl_groups = 0; /* unicast */
++
++	nlh = (struct nlmsghdr *)malloc(NLMSG_SPACE(MAX_PAYLOAD));
++	memset(nlh, 0, NLMSG_SPACE(MAX_PAYLOAD));
++	nlh->nlmsg_len = NLMSG_SPACE(MAX_PAYLOAD);
++	nlh->nlmsg_pid = getpid();
++	nlh->nlmsg_flags |= NLM_F_ACK;
++
++	return 0;
++}
++
++static int send_recv(void)
++{
++	int rv;
++
++	iov.iov_base = (void *)nlh;
++	iov.iov_len = nlh->nlmsg_len;
++	msg.msg_name = (void *)&dest_addr;
++	msg.msg_namelen = sizeof(dest_addr);
++	msg.msg_iov = &iov;
++	msg.msg_iovlen = 1;
++
++	rv = sendmsg(sock_fd, &msg, 0);
++	if(rv == -1) {
++		wpa_printf(MSG_ERROR, "error in sending message: %s",
++				strerror(errno));
++		close(sock_fd);
++		return rv;
++	}
++
++	rv = recvmsg(sock_fd, &msg, 0);
++	if(rv == -1) {
++		wpa_printf(MSG_ERROR, "error in receiving message: %s",
++				strerror(errno));
++		close(sock_fd);
++		return rv;
++	}
++
++	close(sock_fd);
++
++	return 0;
++}
++
++int dpa_macsec_get_revision(int macsec_id)
++{
++	int msg_size;
++	int rv;
++	int revision;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = GET_REVISION;
++
++	gen.chf = GET_REVISION;
++	gen.payload.macsec_id = macsec_id;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	revision = *(int *)(NLMSG_DATA(nlh));
++
++	return revision;
++}
++
++int dpa_macsec_enable(enable_macsec_t en_macsec)
++{
++	int msg_size, rv;
++	int macsec_id;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = ENABLE_MACSEC;
++
++	gen.chf = ENABLE_MACSEC;
++	gen.payload.en_macsec = en_macsec;
++
++	msg_size = sizeof(gen);
++
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	macsec_id = *(int *)(NLMSG_DATA(nlh));
++
++	return macsec_id;
++}
++
++int dpa_macsec_set_exception(int macsec_id, bool enable_ex, macsec_exception ex)
++{
++	int msg_size, rv;
++	set_macsec_exception_t set_ex;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = SET_EXCEPTION;
++
++	memset(&set_ex, 0, sizeof(set_ex));
++
++	set_ex.macsec_id = macsec_id;
++	set_ex.enable_exception = enable_ex;
++	set_ex.exception = ex;
++
++	gen.chf = SET_EXCEPTION;
++	gen.payload.set_ex = set_ex;
++
++	msg_size = sizeof(gen);
++
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_secy_en(enable_secy_t enable_secy)
++{
++	int msg_size;
++	int rv;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = ENABLE_SECY;
++
++	gen.chf = ENABLE_SECY;
++	gen.payload.enable_secy = enable_secy;
++
++	msg_size = sizeof(gen);
++
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++	return rv;
++}
++
++int dpa_macsec_secy_get_txsc_phys_id(int macsec_id)
++{
++	int msg_size;
++	int rv;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = GET_TXSC_PHYS_ID;
++
++	gen.chf = GET_TXSC_PHYS_ID;
++	gen.payload.macsec_id = macsec_id;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++	return rv;
++}
++
++int dpa_macsec_secy_create_tx_sa(int macsec_id, u8 an, u8 *sak, u32 sak_len)
++{
++	int msg_size;
++	int rv;
++	create_tx_sa_t c_tx_sa;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = TX_SA_CREATE;
++
++	c_tx_sa.macsec_id = macsec_id;
++	c_tx_sa.an = an;
++	c_tx_sa.sak = sak;
++	c_tx_sa.sak_len = sak_len;
++
++	gen.chf = TX_SA_CREATE;
++	gen.payload.c_tx_sa = c_tx_sa;
++
++	msg_size = sizeof(gen);
++
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_secy_modify_txsa_key(int macsec_id, u8 an, u8 *sak, u32 sak_len)
++{
++	int msg_size;
++	int rv;
++	modify_txsa_key_t new_txsa_key;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = MODIFY_TXSA_KEY;
++
++	new_txsa_key.macsec_id = macsec_id;
++	new_txsa_key.an = an;
++	new_txsa_key.sak = sak;
++	new_txsa_key.sak_len = sak_len;
++
++	gen.chf = MODIFY_TXSA_KEY;
++	gen.payload.modify_txsa_key = new_txsa_key;
++
++	msg_size = sizeof(gen);
++
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_secy_modify_rxsa_key(int macsec_id, u32 rx_sc_id, u8 an, u8 *sak,
++					u32 sak_len)
++{
++	int msg_size;
++	int rv;
++	modify_rxsa_key_t new_rxsa_key;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = MODIFY_RXSA_KEY;
++
++	new_rxsa_key.macsec_id = macsec_id;
++	new_rxsa_key.rx_sc_id = rx_sc_id;
++	new_rxsa_key.an = an;
++	new_rxsa_key.sak = sak;
++	new_rxsa_key.sak_len = sak_len;
++
++	gen.chf = MODIFY_RXSA_KEY;
++	gen.payload.modify_rxsa_key = new_rxsa_key;
++
++	msg_size = sizeof(gen);
++
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_secy_activate_tx_sa(int macsec_id, u8 an)
++{
++	int msg_size;
++	int rv;
++	activate_tx_sa_t a_tx_sa;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = TX_SA_ACTIVATE;
++
++	a_tx_sa.macsec_id = macsec_id;
++	a_tx_sa.an = an;
++
++	gen.chf = TX_SA_ACTIVATE;
++	gen.payload.a_tx_sa = a_tx_sa;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_secy_get_tx_sa_active_an(int macsec_id)
++{
++	int msg_size;
++	int rv;
++	u8 active_an;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = GET_TXSA_AN;
++
++	gen.chf = GET_TXSA_AN;
++	gen.payload.macsec_id = macsec_id;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	active_an = *(int *)(NLMSG_DATA(nlh));
++
++	return active_an;
++}
++
++int dpa_macsec_secy_create_rx_sc(int macsec_id, u64 sci)
++{
++	int msg_size;
++	int rv;
++	u32 rx_sc_phys_id;
++	create_rx_sc_t c_rx_sc;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = RX_SC_CREATE;
++
++	c_rx_sc.macsec_id = macsec_id;
++	c_rx_sc.sci = sci;
++
++	gen.chf = RX_SC_CREATE;
++	gen.payload.c_rx_sc = c_rx_sc;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rx_sc_phys_id = *(int *)(NLMSG_DATA(nlh));
++
++	return rx_sc_phys_id;
++}
++
++int dpa_macsec_secy_get_rxsc_phys_id(int macsec_id, u32 rx_sc_id)
++{
++	int msg_size;
++	int rv;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = GET_RXSC_PHYS_ID;
++
++	gen.chf = GET_RXSC_PHYS_ID;
++	gen.payload.get_rxsc_id.macsec_id = macsec_id;
++	gen.payload.get_rxsc_id.rx_sc_id = rx_sc_id;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++	return rv;
++}
++
++int dpa_macsec_secy_create_rx_sa(int macsec_id, u32 rx_sc_id,
++				u8 an, u32 lpn, u8 *sak, u32 sak_len)
++{
++	int msg_size;
++	int rv;
++	create_rx_sa_t c_rx_sa;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = RX_SA_CREATE;
++
++	c_rx_sa.macsec_id = macsec_id;
++	c_rx_sa.rx_sc_id = rx_sc_id;
++	c_rx_sa.an = an;
++	c_rx_sa.lpn = lpn;
++	c_rx_sa.sak = sak;
++	c_rx_sa.sak_len = sak_len;
++
++	gen.chf = RX_SA_CREATE;
++	gen.payload.c_rx_sa = c_rx_sa;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_secy_rx_sa_update_npn(int macsec_id, u32 rx_sc_id, u8 an, u32 pn)
++{
++	int msg_size;
++	int rv;
++	update_npn_t update_npn;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = UPDATE_NPN;
++
++	update_npn.macsec_id = macsec_id;
++	update_npn.rx_sc_id = rx_sc_id;
++	update_npn.an = an;
++	update_npn.pn = pn;
++
++	gen.chf = UPDATE_NPN;
++	gen.payload.update_npn = update_npn;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_secy_rx_sa_update_lpn(int macsec_id, u32 rx_sc_id, u8 an, u32 pn)
++{
++	int msg_size;
++	int rv;
++	update_lpn_t update_lpn;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = UPDATE_LPN;
++
++	update_lpn.macsec_id = macsec_id;
++	update_lpn.rx_sc_id = rx_sc_id;
++	update_lpn.an = an;
++	update_lpn.pn = pn;
++
++	gen.chf = UPDATE_LPN;
++	gen.payload.update_lpn = update_lpn;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_secy_activate_rx_sa(int macsec_id, u32 rx_sc_id, u8 an)
++{
++	int msg_size;
++	int rv;
++	activate_rx_sa_t a_rx_sa;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = RX_SA_ACTIVATE;
++
++	a_rx_sa.macsec_id = macsec_id;
++	a_rx_sa.rx_sc_id = rx_sc_id;
++	a_rx_sa.an = an;
++
++	gen.chf = RX_SA_ACTIVATE;
++	gen.payload.a_rx_sa = a_rx_sa;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_secy_disable_rx_sa(int macsec_id, u32 rx_sc_id, u8 an)
++{
++	int msg_size;
++	int rv;
++	disable_rx_sa_t d_rx_sa;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = RX_SA_DISABLE;
++
++	d_rx_sa.macsec_id = macsec_id;
++	d_rx_sa.rx_sc_id = rx_sc_id;
++	d_rx_sa.an = an;
++
++	gen.chf = RX_SA_DISABLE;
++	gen.payload.d_rx_sa = d_rx_sa;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_secy_delete_rx_sa(int macsec_id, u32 rx_sc_id, u8 an)
++{
++	int msg_size;
++	int rv;
++	delete_rx_sa_t del_rx_sa;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = RX_SA_DELETE;
++
++	del_rx_sa.macsec_id = macsec_id;
++	del_rx_sa.rx_sc_id = rx_sc_id;
++	del_rx_sa.an = an;
++
++	gen.chf = RX_SA_DELETE;
++	gen.payload.del_rx_sa = del_rx_sa;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_secy_delete_rx_sc(int macsec_id, u32 rx_sc_id)
++{
++	int msg_size;
++	int rv;
++	delete_rx_sc_t del_rx_sc;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = RX_SC_DELETE;
++
++	del_rx_sc.macsec_id = macsec_id;
++	del_rx_sc.rx_sc_id = rx_sc_id;
++
++	gen.chf = RX_SC_DELETE;
++	gen.payload.del_rx_sc = del_rx_sc;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_secy_delete_tx_sa(int macsec_id, u8 an)
++{
++	int msg_size;
++	int rv;
++	delete_tx_sa_t del_tx_sa;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = TX_SA_DELETE;
++
++	del_tx_sa.macsec_id = macsec_id;
++	del_tx_sa.an = an;
++
++	gen.chf = TX_SA_DELETE;
++	gen.payload.del_tx_sa = del_tx_sa;
++
++	msg_size = sizeof(gen);
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_secy_disable(int macsec_id)
++{
++	int msg_size;
++	int rv;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = DISABLE_SECY;
++
++	gen.chf = DISABLE_SECY;
++	gen.payload.macsec_id = macsec_id;
++
++	msg_size = sizeof(gen);
++
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_disable(int macsec_id)
++{
++	int msg_size;
++	int rv;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = DISABLE_MACSEC;
++
++	gen.chf = DISABLE_MACSEC;
++	gen.payload.macsec_id = macsec_id;
++
++	msg_size = sizeof(gen);
++
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
++
++int dpa_macsec_disable_all(int macsec_id)
++{
++	int msg_size;
++	int rv;
++
++	rv = dpa_connect();
++	if(rv != 0) {
++		return -1;
++	}
++
++	nlh->nlmsg_seq = DISABLE_ALL;
++
++	gen.chf = DISABLE_ALL;
++	gen.payload.macsec_id = macsec_id;
++
++	msg_size = sizeof(gen);
++
++	memcpy(NLMSG_DATA(nlh), &gen, msg_size);
++
++	rv = send_recv();
++	if(rv != 0) {
++		return -1;
++	}
++
++	rv = *(int *)(NLMSG_DATA(nlh));
++
++	return rv;
++}
+diff --git a/src/drivers/dpaa_utils_macsec.h b/src/drivers/dpaa_utils_macsec.h
+new file mode 100644
+index 0000000..97c0a9f
+--- /dev/null
++++ b/src/drivers/dpaa_utils_macsec.h
+@@ -0,0 +1,269 @@
++
++/*
++ * DPAA MACsec API
++ * Copyright (c) 2015, Freescale Semiconductor Inc.
++ *
++ * This software may be distributed under the terms of the BSD license.
++ * See README for more details.
++ */
++
++#ifndef DPAA_UTILS_MACSEC_H
++#define DPAA_UTILS_MACSEC_H
++
++#include "includes.h"
++
++#include "utils/common.h"
++#include "utils/eloop.h"
++#include "common/defs.h"
++#include "common/ieee802_1x_defs.h"
++#include "driver.h"
++#include <linux/netlink.h>
++#include <net/if.h>
++
++#define u32 unsigned int
++#define NETLINK_USER 31
++#define MAX_PAYLOAD 1024 /* maximum payload size*/
++
++typedef uint8_t bool;
++#define TRUE  1
++#define FALSE 0
++
++typedef enum macsec_sci_insertion_mode {
++	SCI_INSERTION_MODE_EXPLICIT_SECTAG,
++	SCI_INSERTION_MODE_EXPLICIT_MAC_SA,
++	SCI_INSERTION_MODE_IMPLICT_PTP
++} macsec_sci_insertion_mode;
++
++typedef enum macsec_valid_frame_behavior {
++	VALID_FRAME_BEHAVIOR_DISABLE,
++	VALID_FRAME_BEHAVIOR_CHECK,
++	VALID_FRAME_BEHAVIOR_STRICT
++} macsec_valid_frame_behavior;
++
++typedef enum macsec_secy_exception {
++	FRAME_DISCARDED,
++} macsec_secy_exception;
++
++typedef enum macsec_secy_event {
++	NEXT_PN,
++} macsec_secy_event;
++
++typedef enum macsec_unknown_sci_treatment {
++	DISCARD_BOTH,
++	DISCARD_UNCTRL_DELIVER_DISCARD_CTRL,
++	DELIVER_UNCTRL_DISCARD_CTRL,
++	DELIVER_DISCARD_UNCTRL_DELIVER_DISCARD_CTRL
++} macsec_unknown_sci_treatment;
++
++typedef enum macsec_untag_treatment {
++	UNTAG_DELIVER_UNCTRL_DISCARD_CTRL,
++	UNTAG_DISCARD_BOTH,
++	UNTAG_DISCARD_UNCTRL_DELIVER_CTRL_UNMODIFIED
++} macsec_untag_treatment;
++
++typedef enum macsec_exception {
++	SINGLE_BIT_ECC,
++	MULTI_BIT_ECC
++} macsec_exception;
++
++typedef struct macsec_en {
++	char *if_name;
++	size_t if_name_length; /* including string terminator */
++
++	bool config_unknown_sci_treatment;
++	macsec_unknown_sci_treatment unknown_sci_treatment;
++
++	bool config_invalid_tag_treatment;
++	bool deliver_uncontrolled;
++
++	bool config_kay_frame_treatment;
++	bool discard_uncontrolled;
++
++	bool config_untag_treatment;
++	macsec_untag_treatment untag_treatment;
++
++	bool config_pn_exhaustion_threshold;
++	u32 pn_threshold;
++
++	bool config_keys_unreadable;
++
++	bool config_sectag_without_sci;
++
++	bool config_exception;
++	bool enable_exception;
++	macsec_exception exception;
++} enable_macsec_t;
++
++typedef struct en {
++	int macsec_id;
++
++	u64 sci; // MAC address(48b) + port_id(16b)
++
++	bool config_insertion_mode;
++	macsec_sci_insertion_mode sci_insertion_mode;
++
++	bool config_protect_frames;
++	bool protect_frames;
++
++	bool config_replay_window;
++	bool replay_protect;
++	uint32_t replay_window;
++
++	bool config_validation_mode;
++	macsec_valid_frame_behavior validate_frames;
++
++	bool config_confidentiality;
++	bool confidentiality_enable;
++	uint32_t confidentiality_offset;
++
++	bool config_point_to_point;
++
++	bool config_exception;
++	bool enable_exception;
++	macsec_secy_exception exception;
++
++	bool config_event;
++	bool enable_event;
++	macsec_secy_event event;
++} enable_secy_t;
++
++typedef struct get_rxsc_id {
++	int macsec_id;
++	u32 rx_sc_id;
++} get_rxsc_id_t;
++
++typedef struct create_tx_sa {
++	int macsec_id;
++	u8 an; //association number
++	u8 *sak; //secure assoc key
++	u32 sak_len; //assoc key length
++} create_tx_sa_t, modify_txsa_key_t;
++
++typedef struct activate_tx_sa {
++	int macsec_id;
++	u8 an; //association number
++} activate_tx_sa_t;
++
++typedef struct delete_rx_sc_t {
++	int macsec_id;
++	u32 rx_sc_id;
++} delete_rx_sc_t;
++
++typedef struct create_rx_sc {
++	int macsec_id;
++	u64 sci;
++} create_rx_sc_t;
++
++typedef struct create_rx_sa {
++	int macsec_id;
++	u32 rx_sc_id;
++	u8 an;
++	u32 lpn;
++	u8 *sak;
++	u32 sak_len;
++} create_rx_sa_t;
++
++typedef struct modify_rxsa_key {
++	int macsec_id;
++	u32 rx_sc_id;
++	u8 an;
++	u8 *sak;
++	u32 sak_len;
++} modify_rxsa_key_t;
++
++typedef struct activate_rx_sa {
++	int macsec_id;
++	u32 rx_sc_id;
++	u8 an;
++} activate_rx_sa_t, disable_rx_sa_t, delete_rx_sa_t, delete_tx_sa_t;
++
++typedef struct update_pn {
++	int macsec_id;
++	u32 rx_sc_id;
++	u8 an;
++	u32 pn; // packet number
++} update_npn_t, update_lpn_t;
++
++typedef struct set_macsec_ex {
++	int macsec_id;
++	bool enable_exception;
++	macsec_exception exception;
++} set_macsec_exception_t;
++
++typedef enum {ENABLE_MACSEC,
++	SET_EXCEPTION,
++	ENABLE_SECY,
++	TX_SA_CREATE,
++	TX_SA_ACTIVATE,
++	RX_SC_CREATE,
++	RX_SA_CREATE,
++	RX_SA_ACTIVATE,
++	RX_SA_DISABLE,
++	RX_SA_DELETE,
++	RX_SC_DELETE,
++	TX_SA_DELETE,
++	DISABLE_MACSEC,
++	DISABLE_SECY,
++	DISABLE_ALL,
++	GET_REVISION,
++	UPDATE_NPN,
++	UPDATE_LPN,
++	GET_TXSC_PHYS_ID,
++	GET_RXSC_PHYS_ID,
++	GET_TXSA_AN,
++	MODIFY_TXSA_KEY,
++	MODIFY_RXSA_KEY,
++} msg_type;
++
++typedef struct generic {
++	msg_type chf;
++	union {
++		int macsec_id;
++		enable_macsec_t en_macsec;
++		enable_secy_t enable_secy;
++		create_tx_sa_t c_tx_sa;
++		activate_tx_sa_t a_tx_sa;
++		create_rx_sc_t c_rx_sc;
++		get_rxsc_id_t get_rxsc_id;
++		create_rx_sa_t c_rx_sa;
++		activate_rx_sa_t a_rx_sa;
++		disable_rx_sa_t d_rx_sa;
++		delete_rx_sa_t del_rx_sa;
++		delete_rx_sc_t del_rx_sc;
++		delete_tx_sa_t del_tx_sa;
++		update_npn_t update_npn;
++		update_lpn_t update_lpn;
++		modify_txsa_key_t modify_txsa_key;
++		modify_rxsa_key_t modify_rxsa_key;
++		set_macsec_exception_t set_ex;
++	} payload;
++} generic_msg_t;
++
++int dpa_macsec_enable(enable_macsec_t en_macsec);
++int dpa_macsec_get_revision(int macsec_id);
++int dpa_macsec_secy_en(enable_secy_t enable_secy);
++int dpa_macsec_secy_get_txsc_phys_id(int macsec_id);
++int dpa_macsec_set_exception(int macsec_id, bool enable_ex, macsec_exception ex);
++int dpa_macsec_secy_create_tx_sa(int macsec_id, u8 an, u8 *sak, u32 sak_len);
++int dpa_macsec_secy_activate_tx_sa(int macsec_id, u8 an);
++int dpa_macsec_secy_get_tx_sa_active_an(int macsec_id);
++int dpa_macsec_secy_create_rx_sc(int macsec_id, u64 sci);
++int dpa_macsec_secy_get_rxsc_phys_id(int macsec_id, u32 rx_sc_id);
++int dpa_macsec_secy_create_rx_sa(int macsec_id, u32 rx_sc_id,
++					u8 an, u32 lpn, u8 *sak, u32 sak_len);
++int dpa_macsec_secy_rx_sa_update_npn(int macsec_id, u32 rx_sc_id, u8 an, u32 pn);
++int dpa_macsec_secy_rx_sa_update_lpn(int macsec_id, u32 rx_sc_id, u8 an, u32 pn);
++int dpa_macsec_secy_activate_rx_sa(int macsec_id, u32 rx_sc_id, u8 an);
++int dpa_macsec_secy_modify_txsa_key(int macsec_id, u8 an, u8 *sak, u32 sak_len);
++int dpa_macsec_secy_modify_rxsa_key(int macsec_id, u32 rx_sc_id, u8 an, u8 *sak,
++					u32 sak_len);
++
++int dpa_macsec_secy_disable_rx_sa(int macsec_id, u32 rx_sc_id, u8 an);
++int dpa_macsec_secy_delete_rx_sa(int macsec_id, u32 rx_sc_id, u8 an);
++int dpa_macsec_secy_delete_rx_sc(int macsec_id, u32 rx_sc_id);
++int dpa_macsec_secy_delete_tx_sa(int macsec_id, u8 an);
++int dpa_macsec_disable(int macsec_id);
++int dpa_macsec_secy_disable(int macsec_id);
++int dpa_macsec_disable_all(int macsec_id);
++
++#endif /* DPAA_UTILS_MACSEC_H */
+diff --git a/src/drivers/drivers.mak b/src/drivers/drivers.mak
+index 9434078..e3b0f0d 100644
+--- a/src/drivers/drivers.mak
++++ b/src/drivers/drivers.mak
+@@ -22,6 +22,10 @@ DRV_CFLAGS += -DCONFIG_DRIVER_MACSEC_QCA
+ DRV_OBJS += ../src/drivers/driver_macsec_qca.o
+ endif
+
++ifdef CONFIG_DPAA_UTILS_MACSEC
++DRV_OBJS += ../src/drivers/dpaa_utils_macsec.o
++endif
++
+ ifdef CONFIG_DRIVER_NL80211
+ DRV_CFLAGS += -DCONFIG_DRIVER_NL80211
+ DRV_OBJS += ../src/drivers/driver_nl80211.o
+diff --git a/wpa_supplicant/dpaa_macsec_defconfig b/wpa_supplicant/dpaa_macsec_defconfig
+new file mode 100644
+index 0000000..3fd4675
+--- /dev/null
++++ b/wpa_supplicant/dpaa_macsec_defconfig
+@@ -0,0 +1,500 @@
++# Example wpa_supplicant build time configuration
++#
++# This file lists the configuration options that are used when building the
++# hostapd binary. All lines starting with # are ignored. Configuration option
++# lines must be commented out complete, if they are not to be included, i.e.,
++# just setting VARIABLE=n is not disabling that variable.
++#
++# This file is included in Makefile, so variables like CFLAGS and LIBS can also
++# be modified from here. In most cases, these lines should use += in order not
++# to override previous values of the variables.
++
++
++# Uncomment following two lines and fix the paths if you have installed OpenSSL
++# or GnuTLS in non-default location
++#CFLAGS += -I/usr/local/openssl/include
++#LIBS += -L/usr/local/openssl/lib
++
++# Some Red Hat versions seem to include kerberos header files from OpenSSL, but
++# the kerberos files are not in the default include path. Following line can be
++# used to fix build issues on such systems (krb5.h not found).
++#CFLAGS += -I/usr/include/kerberos
++
++# Driver interface for generic Linux wireless extensions
++# Note: WEXT is deprecated in the current Linux kernel version and no new
++# functionality is added to it. nl80211-based interface is the new
++# replacement for WEXT and its use allows wpa_supplicant to properly control
++# the driver to improve existing functionality like roaming and to support new
++# functionality.
++CONFIG_DRIVER_WEXT=y
++
++# Driver interface for Linux drivers using the nl80211 kernel interface
++#CONFIG_DRIVER_NL80211=y
++
++# driver_nl80211.c requires libnl. If you are compiling it yourself
++# you may need to point hostapd to your version of libnl.
++#
++#CFLAGS += -I$<path to libnl include files>
++#LIBS += -L$<path to libnl library files>
++
++# Use libnl v2.0 (or 3.0) libraries.
++#CONFIG_LIBNL20=y
++
++# Use libnl 3.2 libraries (if this is selected, CONFIG_LIBNL20 is ignored)
++#CONFIG_LIBNL32=y
++
++
++# Driver interface for FreeBSD net80211 layer (e.g., Atheros driver)
++#CONFIG_DRIVER_BSD=y
++#CFLAGS += -I/usr/local/include
++#LIBS += -L/usr/local/lib
++#LIBS_p += -L/usr/local/lib
++#LIBS_c += -L/usr/local/lib
++
++# Driver interface for Windows NDIS
++#CONFIG_DRIVER_NDIS=y
++#CFLAGS += -I/usr/include/w32api/ddk
++#LIBS += -L/usr/local/lib
++# For native build using mingw
++#CONFIG_NATIVE_WINDOWS=y
++# Additional directories for cross-compilation on Linux host for mingw target
++#CFLAGS += -I/opt/mingw/mingw32/include/ddk
++#LIBS += -L/opt/mingw/mingw32/lib
++#CC=mingw32-gcc
++# By default, driver_ndis uses WinPcap for low-level operations. This can be
++# replaced with the following option which replaces WinPcap calls with NDISUIO.
++# However, this requires that WZC is disabled (net stop wzcsvc) before starting
++# wpa_supplicant.
++# CONFIG_USE_NDISUIO=y
++
++# Driver interface for wired Ethernet drivers
++CONFIG_DRIVER_WIRED=y
++
++# Driver interface for the Broadcom RoboSwitch family
++#CONFIG_DRIVER_ROBOSWITCH=y
++
++# Driver interface for no driver (e.g., WPS ER only)
++#CONFIG_DRIVER_NONE=y
++
++# Solaris libraries
++#LIBS += -lsocket -ldlpi -lnsl
++#LIBS_c += -lsocket
++
++# Enable IEEE 802.1X Supplicant (automatically included if any EAP method is
++# included)
++CONFIG_IEEE8021X_EAPOL=y
++
++# EAP-MD5
++CONFIG_EAP_MD5=y
++
++# EAP-MSCHAPv2
++CONFIG_EAP_MSCHAPV2=y
++
++# EAP-TLS
++CONFIG_EAP_TLS=y
++
++# EAL-PEAP
++CONFIG_EAP_PEAP=y
++
++# EAP-TTLS
++CONFIG_EAP_TTLS=y
++
++# EAP-FAST
++# Note: If OpenSSL is used as the TLS library, OpenSSL 1.0 or newer is needed
++# for EAP-FAST support. Older OpenSSL releases would need to be patched, e.g.,
++# with openssl-0.9.8x-tls-extensions.patch, to add the needed functions.
++#CONFIG_EAP_FAST=y
++
++# EAP-GTC
++CONFIG_EAP_GTC=y
++
++# EAP-OTP
++CONFIG_EAP_OTP=y
++
++# EAP-SIM (enable CONFIG_PCSC, if EAP-SIM is used)
++#CONFIG_EAP_SIM=y
++
++# EAP-PSK (experimental; this is _not_ needed for WPA-PSK)
++#CONFIG_EAP_PSK=y
++
++# EAP-pwd (secure authentication using only a password)
++#CONFIG_EAP_PWD=y
++
++# EAP-PAX
++#CONFIG_EAP_PAX=y
++
++# LEAP
++CONFIG_EAP_LEAP=y
++
++# EAP-AKA (enable CONFIG_PCSC, if EAP-AKA is used)
++#CONFIG_EAP_AKA=y
++
++# EAP-AKA' (enable CONFIG_PCSC, if EAP-AKA' is used).
++# This requires CONFIG_EAP_AKA to be enabled, too.
++#CONFIG_EAP_AKA_PRIME=y
++
++# Enable USIM simulator (Milenage) for EAP-AKA
++#CONFIG_USIM_SIMULATOR=y
++
++# EAP-SAKE
++#CONFIG_EAP_SAKE=y
++
++# EAP-GPSK
++#CONFIG_EAP_GPSK=y
++# Include support for optional SHA256 cipher suite in EAP-GPSK
++#CONFIG_EAP_GPSK_SHA256=y
++
++# EAP-TNC and related Trusted Network Connect support (experimental)
++#CONFIG_EAP_TNC=y
++
++# Wi-Fi Protected Setup (WPS)
++#CONFIG_WPS=y
++# Enable WPS external registrar functionality
++#CONFIG_WPS_ER=y
++# Disable credentials for an open network by default when acting as a WPS
++# registrar.
++#CONFIG_WPS_REG_DISABLE_OPEN=y
++# Enable WPS support with NFC config method
++#CONFIG_WPS_NFC=y
++
++# EAP-IKEv2
++#CONFIG_EAP_IKEV2=y
++
++# EAP-EKE
++#CONFIG_EAP_EKE=y
++
++# PKCS#12 (PFX) support (used to read private key and certificate file from
++# a file that usually has extension .p12 or .pfx)
++CONFIG_PKCS12=y
++
++# Smartcard support (i.e., private key on a smartcard), e.g., with openssl
++# engine.
++CONFIG_SMARTCARD=y
++
++# PC/SC interface for smartcards (USIM, GSM SIM)
++# Enable this if EAP-SIM or EAP-AKA is included
++#CONFIG_PCSC=y
++
++# Support HT overrides (disable HT/HT40, mask MCS rates, etc.)
++#CONFIG_HT_OVERRIDES=y
++
++# Support VHT overrides (disable VHT, mask MCS rates, etc.)
++#CONFIG_VHT_OVERRIDES=y
++
++# Development testing
++#CONFIG_EAPOL_TEST=y
++
++# Select control interface backend for external programs, e.g, wpa_cli:
++# unix = UNIX domain sockets (default for Linux/*BSD)
++# udp = UDP sockets using localhost (127.0.0.1)
++# udp6 = UDP IPv6 sockets using localhost (::1)
++# named_pipe = Windows Named Pipe (default for Windows)
++# udp-remote = UDP sockets with remote access (only for tests systems/purpose)
++# udp6-remote = UDP IPv6 sockets with remote access (only for tests purpose)
++# y = use default (backwards compatibility)
++# If this option is commented out, control interface is not included in the
++# build.
++CONFIG_CTRL_IFACE=y
++
++# Include support for GNU Readline and History Libraries in wpa_cli.
++# When building a wpa_cli binary for distribution, please note that these
++# libraries are licensed under GPL and as such, BSD license may not apply for
++# the resulting binary.
++#CONFIG_READLINE=y
++
++# Include internal line edit mode in wpa_cli. This can be used as a replacement
++# for GNU Readline to provide limited command line editing and history support.
++#CONFIG_WPA_CLI_EDIT=y
++
++# Remove debugging code that is printing out debug message to stdout.
++# This can be used to reduce the size of the wpa_supplicant considerably
++# if debugging code is not needed. The size reduction can be around 35%
++# (e.g., 90 kB).
++#CONFIG_NO_STDOUT_DEBUG=y
++
++# Remove WPA support, e.g., for wired-only IEEE 802.1X supplicant, to save
++# 35-50 kB in code size.
++#CONFIG_NO_WPA=y
++
++# Remove IEEE 802.11i/WPA-Personal ASCII passphrase support
++# This option can be used to reduce code size by removing support for
++# converting ASCII passphrases into PSK. If this functionality is removed, the
++# PSK can only be configured as the 64-octet hexstring (e.g., from
++# wpa_passphrase). This saves about 0.5 kB in code size.
++#CONFIG_NO_WPA_PASSPHRASE=y
++
++# Disable scan result processing (ap_mode=1) to save code size by about 1 kB.
++# This can be used if ap_scan=1 mode is never enabled.
++#CONFIG_NO_SCAN_PROCESSING=y
++
++# Select configuration backend:
++# file = text file (e.g., wpa_supplicant.conf; note: the configuration file
++#	path is given on command line, not here; this option is just used to
++#	select the backend that allows configuration files to be used)
++# winreg = Windows registry (see win_example.reg for an example)
++CONFIG_BACKEND=file
++
++# Remove configuration write functionality (i.e., to allow the configuration
++# file to be updated based on runtime configuration changes). The runtime
++# configuration can still be changed, the changes are just not going to be
++# persistent over restarts. This option can be used to reduce code size by
++# about 3.5 kB.
++#CONFIG_NO_CONFIG_WRITE=y
++
++# Remove support for configuration blobs to reduce code size by about 1.5 kB.
++#CONFIG_NO_CONFIG_BLOBS=y
++
++# Select program entry point implementation:
++# main = UNIX/POSIX like main() function (default)
++# main_winsvc = Windows service (read parameters from registry)
++# main_none = Very basic example (development use only)
++#CONFIG_MAIN=main
++
++# Select wrapper for operating system and C library specific functions
++# unix = UNIX/POSIX like systems (default)
++# win32 = Windows systems
++# none = Empty template
++#CONFIG_OS=unix
++
++# Select event loop implementation
++# eloop = select() loop (default)
++# eloop_win = Windows events and WaitForMultipleObject() loop
++#CONFIG_ELOOP=eloop
++
++# Should we use poll instead of select? Select is used by default.
++#CONFIG_ELOOP_POLL=y
++
++# Should we use epoll instead of select? Select is used by default.
++#CONFIG_ELOOP_EPOLL=y
++
++# Select layer 2 packet implementation
++# linux = Linux packet socket (default)
++# pcap = libpcap/libdnet/WinPcap
++# freebsd = FreeBSD libpcap
++# winpcap = WinPcap with receive thread
++# ndis = Windows NDISUIO (note: requires CONFIG_USE_NDISUIO=y)
++# none = Empty template
++#CONFIG_L2_PACKET=linux
++
++# PeerKey handshake for Station to Station Link (IEEE 802.11e DLS)
++CONFIG_PEERKEY=y
++
++# IEEE 802.11w (management frame protection), also known as PMF
++# Driver support is also needed for IEEE 802.11w.
++#CONFIG_IEEE80211W=y
++
++# Select TLS implementation
++# openssl = OpenSSL (default)
++# gnutls = GnuTLS
++# internal = Internal TLSv1 implementation (experimental)
++# none = Empty template
++#CONFIG_TLS=openssl
++
++# TLS-based EAP methods require at least TLS v1.0. Newer version of TLS (v1.1)
++# can be enabled to get a stronger construction of messages when block ciphers
++# are used. It should be noted that some existing TLS v1.0 -based
++# implementation may not be compatible with TLS v1.1 message (ClientHello is
++# sent prior to negotiating which version will be used)
++#CONFIG_TLSV11=y
++
++# TLS-based EAP methods require at least TLS v1.0. Newer version of TLS (v1.2)
++# can be enabled to enable use of stronger crypto algorithms. It should be
++# noted that some existing TLS v1.0 -based implementation may not be compatible
++# with TLS v1.2 message (ClientHello is sent prior to negotiating which version
++# will be used)
++#CONFIG_TLSV12=y
++
++# If CONFIG_TLS=internal is used, additional library and include paths are
++# needed for LibTomMath. Alternatively, an integrated, minimal version of
++# LibTomMath can be used. See beginning of libtommath.c for details on benefits
++# and drawbacks of this option.
++#CONFIG_INTERNAL_LIBTOMMATH=y
++#ifndef CONFIG_INTERNAL_LIBTOMMATH
++#LTM_PATH=/usr/src/libtommath-0.39
++#CFLAGS += -I$(LTM_PATH)
++#LIBS += -L$(LTM_PATH)
++#LIBS_p += -L$(LTM_PATH)
++#endif
++# At the cost of about 4 kB of additional binary size, the internal LibTomMath
++# can be configured to include faster routines for exptmod, sqr, and div to
++# speed up DH and RSA calculation considerably
++#CONFIG_INTERNAL_LIBTOMMATH_FAST=y
++
++# Include NDIS event processing through WMI into wpa_supplicant/wpasvc.
++# This is only for Windows builds and requires WMI-related header files and
++# WbemUuid.Lib from Platform SDK even when building with MinGW.
++#CONFIG_NDIS_EVENTS_INTEGRATED=y
++#PLATFORMSDKLIB="/opt/Program Files/Microsoft Platform SDK/Lib"
++
++# Add support for old DBus control interface
++# (fi.epitest.hostap.WPASupplicant)
++#CONFIG_CTRL_IFACE_DBUS=y
++
++# Add support for new DBus control interface
++# (fi.w1.hostap.wpa_supplicant1)
++#CONFIG_CTRL_IFACE_DBUS_NEW=y
++
++# Add introspection support for new DBus control interface
++#CONFIG_CTRL_IFACE_DBUS_INTRO=y
++
++# Add support for loading EAP methods dynamically as shared libraries.
++# When this option is enabled, each EAP method can be either included
++# statically (CONFIG_EAP_<method>=y) or dynamically (CONFIG_EAP_<method>=dyn).
++# Dynamic EAP methods are build as shared objects (eap_*.so) and they need to
++# be loaded in the beginning of the wpa_supplicant configuration file
++# (see load_dynamic_eap parameter in the example file) before being used in
++# the network blocks.
++#
++# Note that some shared parts of EAP methods are included in the main program
++# and in order to be able to use dynamic EAP methods using these parts, the
++# main program must have been build with the EAP method enabled (=y or =dyn).
++# This means that EAP-TLS/PEAP/TTLS/FAST cannot be added as dynamic libraries
++# unless at least one of them was included in the main build to force inclusion
++# of the shared code. Similarly, at least one of EAP-SIM/AKA must be included
++# in the main build to be able to load these methods dynamically.
++#
++# Please also note that using dynamic libraries will increase the total binary
++# size. Thus, it may not be the best option for targets that have limited
++# amount of memory/flash.
++#CONFIG_DYNAMIC_EAP_METHODS=y
++
++# IEEE Std 802.11r-2008 (Fast BSS Transition)
++#CONFIG_IEEE80211R=y
++
++# Add support for writing debug log to a file (/tmp/wpa_supplicant-log-#.txt)
++#CONFIG_DEBUG_FILE=y
++
++# Send debug messages to syslog instead of stdout
++#CONFIG_DEBUG_SYSLOG=y
++# Set syslog facility for debug messages
++#CONFIG_DEBUG_SYSLOG_FACILITY=LOG_DAEMON
++
++# Add support for sending all debug messages (regardless of debug verbosity)
++# to the Linux kernel tracing facility. This helps debug the entire stack by
++# making it easy to record everything happening from the driver up into the
++# same file, e.g., using trace-cmd.
++#CONFIG_DEBUG_LINUX_TRACING=y
++
++# Add support for writing debug log to Android logcat instead of standard
++# output
++#CONFIG_ANDROID_LOG=y
++
++# Enable privilege separation (see README 'Privilege separation' for details)
++#CONFIG_PRIVSEP=y
++
++# Enable mitigation against certain attacks against TKIP by delaying Michael
++# MIC error reports by a random amount of time between 0 and 60 seconds
++#CONFIG_DELAYED_MIC_ERROR_REPORT=y
++
++# Enable tracing code for developer debugging
++# This tracks use of memory allocations and other registrations and reports
++# incorrect use with a backtrace of call (or allocation) location.
++#CONFIG_WPA_TRACE=y
++# For BSD, uncomment these.
++#LIBS += -lexecinfo
++#LIBS_p += -lexecinfo
++#LIBS_c += -lexecinfo
++
++# Use libbfd to get more details for developer debugging
++# This enables use of libbfd to get more detailed symbols for the backtraces
++# generated by CONFIG_WPA_TRACE=y.
++#CONFIG_WPA_TRACE_BFD=y
++# For BSD, uncomment these.
++#LIBS += -lbfd -liberty -lz
++#LIBS_p += -lbfd -liberty -lz
++#LIBS_c += -lbfd -liberty -lz
++
++# wpa_supplicant depends on strong random number generation being available
++# from the operating system. os_get_random() function is used to fetch random
++# data when needed, e.g., for key generation. On Linux and BSD systems, this
++# works by reading /dev/urandom. It should be noted that the OS entropy pool
++# needs to be properly initialized before wpa_supplicant is started. This is
++# important especially on embedded devices that do not have a hardware random
++# number generator and may by default start up with minimal entropy available
++# for random number generation.
++#
++# As a safety net, wpa_supplicant is by default trying to internally collect
++# additional entropy for generating random data to mix in with the data fetched
++# from the OS. This by itself is not considered to be very strong, but it may
++# help in cases where the system pool is not initialized properly. However, it
++# is very strongly recommended that the system pool is initialized with enough
++# entropy either by using hardware assisted random number generator or by
++# storing state over device reboots.
++#
++# wpa_supplicant can be configured to maintain its own entropy store over
++# restarts to enhance random number generation. This is not perfect, but it is
++# much more secure than using the same sequence of random numbers after every
++# reboot. This can be enabled with -e<entropy file> command line option. The
++# specified file needs to be readable and writable by wpa_supplicant.
++#
++# If the os_get_random() is known to provide strong random data (e.g., on
++# Linux/BSD, the board in question is known to have reliable source of random
++# data from /dev/urandom), the internal wpa_supplicant random pool can be
++# disabled. This will save some in binary size and CPU use. However, this
++# should only be considered for builds that are known to be used on devices
++# that meet the requirements described above.
++#CONFIG_NO_RANDOM_POOL=y
++
++# IEEE 802.11n (High Throughput) support (mainly for AP mode)
++#CONFIG_IEEE80211N=y
++
++# IEEE 802.11ac (Very High Throughput) support (mainly for AP mode)
++# (depends on CONFIG_IEEE80211N)
++#CONFIG_IEEE80211AC=y
++
++# Wireless Network Management (IEEE Std 802.11v-2011)
++# Note: This is experimental and not complete implementation.
++#CONFIG_WNM=y
++
++# Interworking (IEEE 802.11u)
++# This can be used to enable functionality to improve interworking with
++# external networks (GAS/ANQP to learn more about the networks and network
++# selection based on available credentials).
++#CONFIG_INTERWORKING=y
++
++# Hotspot 2.0
++#CONFIG_HS20=y
++
++# Disable roaming in wpa_supplicant
++#CONFIG_NO_ROAMING=y
++
++# AP mode operations with wpa_supplicant
++# This can be used for controlling AP mode operations with wpa_supplicant. It
++# should be noted that this is mainly aimed at simple cases like
++# WPA2-Personal while more complex configurations like WPA2-Enterprise with an
++# external RADIUS server can be supported with hostapd.
++#CONFIG_AP=y
++
++# P2P (Wi-Fi Direct)
++# This can be used to enable P2P support in wpa_supplicant. See README-P2P for
++# more information on P2P operations.
++#CONFIG_P2P=y
++
++# Enable TDLS support
++#CONFIG_TDLS=y
++
++# Wi-Fi Direct
++# This can be used to enable Wi-Fi Direct extensions for P2P using an external
++# program to control the additional information exchanges in the messages.
++#CONFIG_WIFI_DISPLAY=y
++
++# Autoscan
++# This can be used to enable automatic scan support in wpa_supplicant.
++# See wpa_supplicant.conf for more information on autoscan usage.
++#
++# Enabling directly a module will enable autoscan support.
++# For exponential module:
++#CONFIG_AUTOSCAN_EXPONENTIAL=y
++# For periodic module:
++#CONFIG_AUTOSCAN_PERIODIC=y
++
++# Password (and passphrase, etc.) backend for external storage
++# These optional mechanisms can be used to add support for storing passwords
++# and other secrets in external (to wpa_supplicant) location. This allows, for
++# example, operating system specific key storage to be used
++#
++# External password backend for testing purposes (developer use)
++#CONFIG_EXT_PASSWORD_TEST=y
++#
++# DPAA MACsec API
++CONFIG_DPAA_UTILS_MACSEC=y
+--
+1.9.1
+
