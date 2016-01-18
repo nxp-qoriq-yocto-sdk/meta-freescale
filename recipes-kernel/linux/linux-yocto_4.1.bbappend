@@ -11,6 +11,9 @@ SRC_URI_qoriq = "git://sw-stash.freescale.net/scm/sdk/linux-sdk2.0.git;name=mach
     git://sw-stash.freescale.net/scm/sdk/yocto-kernel-cache.git;type=kmeta;name=meta-fsl;branch=master;destsuffix=${KMETA}-fsl;protocol=http \
 "
 
+KERNEL_CC_append_qoriq = " ${TOOLCHAIN_OPTIONS}"
+KERNEL_LD_append_qoriq = " ${TOOLCHAIN_OPTIONS}"
+
 KERNEL_EXTRA_FEATURES_qoriq = ""
 KERNEL_FEATURES_remove_qoriq = "features/kvm/qemu-kvm-enable.scc"
 
