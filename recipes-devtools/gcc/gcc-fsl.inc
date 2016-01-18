@@ -63,6 +63,7 @@ SRC_URI_qoriq-ppc = "\
     file://0046-libatomic-deptracking.patch \
     file://0049-Enable-SPE-AltiVec-generation-on-powepc-linux-target.patch \
     file://0054-gcc-Makefile.in-fix-parallel-building-failure.patch \
+    file://0066-cxxflags-for-build.patch \
 "
 SRC_URI[md5sum] = "4df8ee253b7f3863ad0b86359cd39c43"
 SRC_URI[sha256sum] = "2020c98295856aa13fda0f2f3a4794490757fc24bcca918d52cc8b4917b972dd"
