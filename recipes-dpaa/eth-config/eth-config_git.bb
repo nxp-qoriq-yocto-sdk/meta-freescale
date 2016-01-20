@@ -14,6 +14,7 @@ EXTRA_OEMAKE = "D=${D}"
 
 do_install() {
     oe_runmake install
+    chown -R root:root ${D}/etc
 }
 
 CLEANBROKEN = "1"
