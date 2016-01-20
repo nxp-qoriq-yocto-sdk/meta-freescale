@@ -94,5 +94,6 @@ do_install () {
 inherit libc-package
 
 INSANE_SKIP_${PN} = 'already-stripped'
+INSANE_SKIP_${MLPREFIX}glibc-gconv = 'already-stripped'
 
 BBCLASSEXTEND = "nativesdk"
