@@ -11,7 +11,7 @@ SRCREV = "a079d2c844edd85dff85a317a63198e7988bcd09"
 DEPENDS = "libxml2 fmlib tclap"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-COMPATIBLE_HOST_qoriq-ppc = ".*"
+COMPATIBLE_HOST_qoriq = ".*"
 COMPATIBLE_HOST ?= "(none)"
 
 S = "${WORKDIR}/git"
@@ -30,6 +30,7 @@ EXTRA_OEMAKE_PLATFORM_b4 = "b4860qds"
 EXTRA_OEMAKE_PLATFORM_t2 = "b4860qds"
 EXTRA_OEMAKE_PLATFORM_t4 = "b4860qds"
 EXTRA_OEMAKE_PLATFORM_t1 = "t1040qds"
+EXTRA_OEMAKE_PLATFORM_fsl-lsch2 = "ls1043"
 
 do_compile () {
     oe_runmake MACHINE=${EXTRA_OEMAKE_PLATFORM} -C source
