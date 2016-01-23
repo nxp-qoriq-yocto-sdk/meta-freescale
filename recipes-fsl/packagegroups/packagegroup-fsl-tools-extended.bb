@@ -74,6 +74,13 @@ RDEPENDS_${PN}_append_qoriq = "\
     ${@multilib_pkg_extend(d, "ldd")} \
     ${@multilib_pkg_extend(d, "libgcc")} \
     ${@multilib_pkg_extend(d, "libgcc-dev")} \
-    ${@multilib_pkg_extend(d, "valgrind")} \
     ${EXTRA_TOOLS} \
+"
+
+RDEPENDS_${PN}_append_qoriq-arm = "\
+    ${@multilib_pkg_extend(d, "valgrind")} \
+"
+
+RDEPENDS_${PN}_append_qoriq-ppc = "\
+    ${@multilib_pkg_extend(d, "valgrind")} \
 "

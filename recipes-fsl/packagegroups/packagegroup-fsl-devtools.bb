@@ -20,6 +20,7 @@ RDEPENDS_${PN} = " \
     git \
     git-perltools \
     intltool \
+    ncurses-dev \
     perl \
     perl-misc \
     perl-modules \
@@ -35,7 +36,10 @@ RDEPENDS_${PN} = " \
     u-boot-mkimage \
 "
 
-RDEPENDS_${PN}_append_qoriq = " \
+RDEPENDS_${PN}_append_qoriq-arm = " \
     valgrind \
-    ncurses-dev \
+"
+
+RDEPENDS_${PN}_append_qoriq-ppc = " \
+    valgrind \
 "
