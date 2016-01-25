@@ -41,23 +41,28 @@ export DIRS = "crypto ssl apps"
 export EX_LIBS = "-lgcc -ldl"
 export AS = "${CC} -c"
 
-inherit pkgconfig siteinfo multilib_header
+inherit pkgconfig siteinfo multilib_header ptest
 
-PACKAGES =+ "libcrypto libssl ${PN}-misc openssl-conf"
+PACKAGES =+ "libcrypto libssl ${PN}-misc ${PN}-conf"
 FILES_libcrypto = "${base_libdir}/libcrypto${SOLIBS}"
 FILES_libssl = "${libdir}/libssl.so.*"
 FILES_${PN} =+ " ${libdir}/ssl/*"
 FILES_${PN}-misc = "${libdir}/ssl/misc ${bindir}/c_rehash"
-RDEPENDS_${PN}-misc = "${@base_contains('PACKAGECONFIG', 'perl', 'perl', '', d)}"
+RDEPENDS_${PN}-misc = "${@bb.utils.contains('PACKAGECONFIG', 'perl', 'perl', '', d)}"
 FILES_${PN}-dev += "${base_libdir}/libcrypto${SOLIBSDEV}"
 
 # Add the openssl.cnf file to the openssl-conf package.  Make the libcrypto
 # package RRECOMMENDS on this package.  This will enable the configuration
 # file to be installed for both the base openssl package and the libcrypto
 # package since the base openssl package depends on the libcrypto package.
-FILES_openssl-conf = "${libdir}/ssl/openssl.cnf"
-CONFFILES_openssl-conf = "${libdir}/ssl/openssl.cnf"
-RRECOMMENDS_libcrypto += "openssl-conf"
+FILES_${PN}-conf = "${libdir}/ssl/openssl.cnf"
+CONFFILES_${PN}-conf = "${libdir}/ssl/openssl.cnf"
+RRECOMMENDS_libcrypto += "${PN}-conf"
+RDEPENDS_${PN}-ptest += "${PN}-misc make perl perl-module-filehandle bc"
+
+# Remove this to enable SSLv3. SSLv3 is defaulted to disabled due to the POODLE
+# vulnerability
+EXTRA_OECONF = " -no-ssl3"
 
 do_configure_prepend_darwin () {
 	sed -i -e '/version-script=openssl\.ld/d' Configure
@@ -70,17 +75,18 @@ do_configure () {
 	ln -sf apps/openssl.pod crypto/crypto.pod ssl/ssl.pod doc/
 
 	os=${HOST_OS}
-	if [ "x$os" = "xlinux-uclibc" ]; then
+	case $os in
+	linux-uclibc |\
+	linux-uclibceabi |\
+	linux-gnueabi |\
+	linux-uclibcspe |\
+	linux-gnuspe |\
+	linux-musl*)
 		os=linux
-	elif [ "x$os" = "xlinux-uclibceabi" ]; then
-		os=linux
-	elif [ "x$os" = "xlinux-uclibcspe" ]; then
-		os=linux
-	elif [ "x$os" = "xlinux-gnuspe" ]; then
-		os=linux
-	elif [ "x$os" = "xlinux-gnueabi" ]; then
-		os=linux
-	fi
+		;;
+		*)
+		;;
+	esac
 	target="$os-${HOST_ARCH}"
 	case $target in
 	linux-arm)
@@ -119,9 +125,12 @@ do_configure () {
 	linux-mipsel)
 		target=debian-mipsel
 		;;
-        linux-*-mips64)
+        linux-*-mips64 | linux-mips64)
                target=linux-mips
                 ;;
+	linux-microblaze*|linux-nios2*)
+		target=linux-generic32
+		;;
 	linux-powerpc)
 		target=linux-ppc
 		;;
@@ -147,11 +156,22 @@ do_configure () {
 	perl ./Configure ${EXTRA_OECONF} shared --prefix=$useprefix --openssldir=${libdir}/ssl --libdir=`basename ${libdir}` $target
 }
 
+do_compile_prepend_class-target () {
+    sed -i 's/\((OPENSSL=\)".*"/\1"openssl"/' Makefile
+}
+
 do_compile () {
 	oe_runmake
 }
 
+do_compile_ptest () {
+	oe_runmake buildtest
+}
+
 do_install () {
+	# Create ${D}/${prefix} to fix parallel issues
+	mkdir -p ${D}/${prefix}/
+
 	oe_runmake INSTALL_PREFIX="${D}" MANDIR="${mandir}" install
 
 	oe_libinstall -so libcrypto ${D}${libdir}
@@ -168,7 +188,7 @@ do_install () {
 	cp --dereference -R include/openssl ${D}${includedir}
 
 	oe_multilib_header openssl/opensslconf.h
-	if [ "${@base_contains('PACKAGECONFIG', 'perl', 'perl', '', d)}" = "perl" ]; then
+	if [ "${@bb.utils.contains('PACKAGECONFIG', 'perl', 'perl', '', d)}" = "perl" ]; then
 		install -m 0755 ${S}/tools/c_rehash ${D}${bindir}
 		sed -i -e '1s,.*,#!${bindir}/env perl,' ${D}${bindir}/c_rehash
 		sed -i -e '1s,.*,#!${bindir}/env perl,' ${D}${libdir}/ssl/misc/CA.pl
@@ -180,4 +200,21 @@ do_install () {
 	fi
 }
 
-BBCLASSEXTEND = "native nativesdk"
+do_install_ptest () {
+	cp -r -L Makefile.org Makefile test ${D}${PTEST_PATH}
+	cp Configure config e_os.h ${D}${PTEST_PATH}
+	cp -r -L include ${D}${PTEST_PATH}
+	ln -sf ${base_libdir}/libcrypto.a ${D}${PTEST_PATH}
+	ln -sf ${libdir}/libssl.a ${D}${PTEST_PATH}
+	mkdir -p ${D}${PTEST_PATH}/crypto
+	cp crypto/constant_time_locl.h ${D}${PTEST_PATH}/crypto
+	cp -r certs ${D}${PTEST_PATH}
+	mkdir -p ${D}${PTEST_PATH}/apps
+	ln -sf ${libdir}/ssl/misc/CA.sh  ${D}${PTEST_PATH}/apps
+	ln -sf ${libdir}/ssl/openssl.cnf ${D}${PTEST_PATH}/apps
+	ln -sf ${bindir}/openssl         ${D}${PTEST_PATH}/apps
+	cp apps/server2.pem             ${D}${PTEST_PATH}/apps
+	mkdir -p ${D}${PTEST_PATH}/util
+	install util/opensslwrap.sh    ${D}${PTEST_PATH}/util
+	install util/shlib_wrap.sh     ${D}${PTEST_PATH}/util
+}

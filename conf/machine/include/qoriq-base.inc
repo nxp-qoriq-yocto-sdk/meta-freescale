@@ -8,7 +8,7 @@ PREFERRED_PROVIDER_virtual/kernel ?= "linux-yocto"
 PREFERRED_PROVIDER_cryptodev-linux ?= "cryptodev-qoriq-linux"
 PREFERRED_PROVIDER_cryptodev-module ?= "cryptodev-qoriq-module"
 PREFERRED_PROVIDER_cryptodev-tests ?= "cryptodev-qoriq-tests"
-PREFERRED_PROVIDER_openssl = "openssl-qoriq"
+PREFERRED_PROVIDER_openssl ?= "openssl-qoriq"
 PREFERRED_VERSION_qemu ?= "2.4.0+fsl"
 
 PREFERRED_VERSION_make = "3.81"
