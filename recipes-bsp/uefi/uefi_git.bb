@@ -7,8 +7,11 @@ DEPENDS += "util-linux-native u-boot-mkimage-native"
 
 inherit deploy
 
-SRC_URI = "git://sw-stash.freescale.net/scm/dnnpi/ls1043a-uefi.git;branch=edk2-master;protocol=http"
-SRCREV = "fde4f64a514363c9134d6f664c6c2a5ed61954be"
+SRC_URI = "git://sw-stash.freescale.net/scm/dnnpi/ls1043a-uefi.git;branch=edk2-master;protocol=http \
+           git://sw-stash.freescale.net/scm/dnnpi/ls1043a-uefi-fatpkg.git;branch=master;protocol=http;name=FatPkg;destsuffix=git/FatPkg \
+"
+SRCREV = "520f4914b458436d783ec8484d107224686e410b"
+SRCREV_FatPkg ="a108418f3871c2ca44d00fa0c1d0544362c41536"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
@@ -31,22 +34,29 @@ do_generate_buildtool() {
 addtask generate_buildtool before do_compile after do_configure
 
 do_compile () {
-    export GCC48_AARCH64_PREFIX=${TARGET_PREFIX}
+    export GCC49_AARCH64_PREFIX=${TARGET_PREFIX}
     export EDK_TOOLS_PATH="${S}/BaseTools"
     source ${S}/edksetup.sh BaseTools
 
     ARCH=${UEFI_BUILD_ARCH}
     TARGET_TOOLS=${UEFI_BUILD_TARGET_TOOLS}
     for board in ${UEFI_MACHINES}; do
-        if echo $board |egrep -qi ${MACHINE};then
-            build -p ${S}/${UEFI_PATH}Pkg/${board}.dsc -a $ARCH \
+        case "${board}" in
+            *XIP*)   BootSuffix="XipBoot.dsc";;
+            *FATXIP*)   BootSuffix="FatXipBoot.dsc";;
+            *NAND*)   BootSuffix="NonXipBoot.dsc";;
+            *SD*)   BootSuffix="NonXipBoot.dsc";
+        esac
+   
+        if echo $board |egrep -qi "XIP|FATXIP";then
+            build -p ${S}/${UEFI_PATH}Pkg/${UEFI_PATH}Pkg${BootSuffix} -a $ARCH \
                 -t $TARGET_TOOLS -b RELEASE
         else
-            build -p ${S}/${UEFI_PATH}Pkg/${UEFI_PATH}PkgNonXipBoot.dsc -a $ARCH \
+            build -p ${S}/${UEFI_PATH}Pkg/${UEFI_PATH}Pkg${BootSuffix} -a $ARCH \
                 -t $TARGET_TOOLS -b RELEASE  -D${board}_BOOT_ENABLE=TRUE
         fi
 
-        if echo $board |egrep -qi ${MACHINE};then
+        if echo $board |egrep -qi "XIP|FATXIP";then
             cat ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/FV/${UEFI_SOURCE} >> ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/FV/${UEFIPI_SOURCE}
             mv  ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/FV/${UEFIPI_SOURCE} ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/FV/${board}_EFI.fd
         else 
@@ -54,7 +64,7 @@ do_compile () {
         fi 
 
         if echo $board |egrep -q "(NAND|SD)";then                                             
-            uboot-mkimage -n ${S}/${UEFI_PATH}Pkg/Library/${UEFI_PBL_PATH}/${MACHINE}_rcw_$(echo $board | tr '[A-Z]' '[a-z]').cfg -R ${S}/${UEFI_PATH}Pkg/Library/${UEFI_PBL_PATH}/${MACHINE}_pbi.cfg -T pblimage -A arm -a 0x10000000 -d ${S}/Build/${UEFI_PATH}/RELEASE_GCC48/FV/${board}_EFI.fd  ${S}/${UEFI_PATH}Pkg/Library/${UEFI_PBL_PATH}/$(echo ${MACHINE} | tr '[a-z]' '[A-Z]')PI_${board}_EFI.pbl
+            uboot-mkimage -n ${S}/${UEFI_PATH}Pkg/Library/${UEFI_PBL_PATH}/${MACHINE}_rcw_$(echo $board | tr '[A-Z]' '[a-z]').cfg -R ${S}/${UEFI_PATH}Pkg/Library/${UEFI_PBL_PATH}/${MACHINE}_pbi.cfg -T pblimage -A arm -a 0x10000000 -d ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/FV/${board}_EFI.fd  ${S}/${UEFI_PATH}Pkg/Library/${UEFI_PBL_PATH}/$(echo ${MACHINE} | tr '[a-z]' '[A-Z]')PI_${board}_EFI.pbl
         fi
     done
 }
@@ -82,4 +92,6 @@ do_deploy(){
 }
 addtask deploy after do_install
 
+PACKAGES += "${PN}-image"
+FILES_${PN}-image += "/boot"
 COMPATIBLE_MACHINE = "(ls1043ardb)"
