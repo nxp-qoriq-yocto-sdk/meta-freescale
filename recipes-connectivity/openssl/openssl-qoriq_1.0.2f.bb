@@ -5,7 +5,7 @@ RRECOMMENDS_libcrypto += "cryptodev-module"
 CFLAG += "-DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS"
 COMPATIBLE_MACHINE = "(qoriq)"
 
-LIC_FILES_CHKSUM = "file://LICENSE;md5=f9a8f968107345e0b75aa8c2ecaa7ec8"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=27ffa5d74bb5a337056c14b2ef93fbf6"
 
 export DIRS = "crypto ssl apps engines"
 export OE_LDFLAGS="${LDFLAGS}"
@@ -69,8 +69,8 @@ SRC_URI += "file://0001-remove-double-initialization-of-cryptodev-engine.patch \
 	file://0030-cryptodev-reduce-duplicated-efforts-for-searching-in.patch \
 "
 
-SRC_URI[md5sum] = "5262bfa25b60ed9de9f28d5d52d77fc5"
-SRC_URI[sha256sum] = "e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff"
+SRC_URI[md5sum] = "b3bf73f507172be9292ea2a8c28b659d"
+SRC_URI[sha256sum] = "932b4ee4def2b434f85435d9e3e19ca8ba99ce9a065a61524b429a9d5e9b2e9c"
 
 PACKAGES =+ " \
 	${PN}-engines \
