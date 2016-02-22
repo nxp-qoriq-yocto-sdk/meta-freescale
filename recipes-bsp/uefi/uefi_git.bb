@@ -89,6 +89,10 @@ do_deploy(){
         fi
         install ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/FV/${board}_EFI.fd ${DEPLOYDIR}
     done
+    if [ -e ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/${UEFI_BUILD_ARCH}/LinuxLoader.efi ]; then
+        install ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/${UEFI_BUILD_ARCH}/LinuxLoader.efi   ${DEPLOYDIR}
+    fi
+   
 }
 addtask deploy after do_install
 
