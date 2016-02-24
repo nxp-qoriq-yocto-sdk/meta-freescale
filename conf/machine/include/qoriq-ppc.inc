@@ -2,7 +2,7 @@ require conf/machine/include/qoriq-base.inc
 
 UBOOT_ENTRYPOINT = "0x80008000"
 
-MKUBIFS_ARGS ??= "-m 512 -e 15360 -c 3600"
+MKUBIFS_ARGS ??= "-m 512 -e 15360 -c 12000"
 UBINIZE_ARGS ??= "-m 512 -p 16KiB -s 512"
 
 SERIAL_CONSOLES ?= "115200;ttyS0 115200;ttyS1 115200;ttyEHV0"
