@@ -61,6 +61,8 @@ file://0035-use-directly-crypto-API-digest-operation-for-CIOCHAS.patch \
 file://0036-add-compat-for-CIOCHASH-operation.patch \
 file://0037-rewrite-sha_speed.c-to-reduce-code-duplication.patch \
 file://0038-extend-sha_speed.c-to-test-CIOCHASH.patch \
+file://0039-fix-memory-leaks-on-error-path-for-CIOCHASH.patch \
+file://0040-fix-structure-init-in-sha_speed-test.patch \
 "
 
 # Upstream hotfixes and yocto specific patches
