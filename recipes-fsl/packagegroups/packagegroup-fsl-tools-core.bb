@@ -46,6 +46,7 @@ DPAA_PKGS = " \
 "
 DPAA_PKGS_e500v2 = ""
 DPAA_PKGS_ls102xa = ""
+DPAA_PKGS_remove_fsl-lsch2 = "hypervisor-partman usdpaa usdpaa-apps dpa-offload"
 DPAA_PKGS_remove_e6500 = "hypervisor-partman"
 DPAA_PKGS_append_e6500 = " lib64-hypervisor-partman"
 
@@ -67,6 +68,7 @@ RDEPENDS_${PN}_append_qoriq-ppc = "\
     ${@base_contains('DISTRO_FEATURES', 'c29x_pkc', 'pkc-host', '', d)} \
 "
 RDEPENDS_${PN}_remove_ls102xa ="apptrk"
+RDEPENDS_${PN}_remove_fsl-lsch2 ="apptrk" 
 RDEPENDS_${PN}_append_e500v2 = " testfloat"
 RDEPENDS_${PN}_append_e6500-64b = " ceetm"
 RDEPENDS_${PN}_append_c293pcie = " skmm-ep"
