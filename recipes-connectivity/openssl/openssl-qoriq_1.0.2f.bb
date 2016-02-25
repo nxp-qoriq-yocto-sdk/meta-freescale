@@ -67,6 +67,23 @@ SRC_URI += "file://0001-remove-double-initialization-of-cryptodev-engine.patch \
 	file://0028-cryptodev-fix-debug-print-messages.patch \
 	file://0029-cryptodev-use-CIOCHASH-ioctl-for-digest-operations.patch \
 	file://0030-cryptodev-reduce-duplicated-efforts-for-searching-in.patch \
+	file://0031-cryptodev-remove-not-used-local-variables.patch \
+	file://0032-cryptodev-hide-not-used-variable-behind-ifndef.patch \
+	file://0033-cryptodev-fix-function-declaration-typo.patch \
+	file://0034-cryptodev-fix-incorrect-function-signature.patch \
+	file://0035-cryptodev-fix-warnings-on-excess-elements-in-struct-.patch \
+	file://0036-cryptodev-fix-free-on-error-path.patch \
+	file://0037-cryptodev-fix-return-value-on-error.patch \
+	file://0038-cryptodev-match-types-with-cryptodev.h.patch \
+	file://0039-cryptodev-explicitly-discard-const-qualifier.patch \
+	file://0040-cryptodev-replace-caddr_t-with-void.patch \
+	file://0041-cryptodev-check-for-errors-inside-cryptodev_rsa_mod_.patch \
+	file://0042-cryptodev-check-for-errors-inside-cryptodev_rsa_mod_.patch \
+	file://0043-cryptodev-check-for-errors-inside-cryptodev_dh_compu.patch \
+	file://0044-cryptodev-check-for-errors-inside-cryptodev_dh_compu.patch \
+	file://0045-cryptodev-change-signature-for-conversion-functions.patch \
+	file://0046-cryptodev-add-explicit-cast-for-known-BIGNUM-values.patch \
+	file://0047-cryptodev-treat-all-build-warnings-as-errors.patch \
 "
 
 SRC_URI[md5sum] = "b3bf73f507172be9292ea2a8c28b659d"
