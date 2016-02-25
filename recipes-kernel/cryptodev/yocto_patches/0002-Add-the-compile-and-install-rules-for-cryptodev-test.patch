@@ -1,65 +1,50 @@
-From 051e5b561d89601242778dd285b676dd45239246 Mon Sep 17 00:00:00 2001
-From: Cristian Stoica <cristian.stoica@freescale.com>
-Date: Mon, 27 Apr 2015 15:26:14 +0300
+From 03257bf2aff37b78496ccc1b58a87e7baaea042a Mon Sep 17 00:00:00 2001
+From: Cristian Stoica <cristian.stoica@nxp.com>
+Date: Mon, 22 Feb 2016 12:17:52 +0200
 Subject: [PATCH 2/2] Add the compile and install rules for cryptodev tests
 
-Change-Id: Ica10dc563c77220dcf0e0993515230df8a86c34d
-Signed-off-by: Yu Zongchun <b40527@freescale.com>
+(original patch Signed-off-by: Yu Zongchun <b40527@freescale.com>)
+Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>
+
+Upstream-Status: Inappropriate [ OE specific ]
 ---
  Makefile       | 6 ++++++
- tests/Makefile | 8 ++++++++
- 2 files changed, 14 insertions(+)
+ tests/Makefile | 4 ++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index cde709d..f0d394a 100644
+index 06202bd..a598b12 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -32,6 +32,9 @@ install: modules_install
- modules_install:
- 	$(MAKE) -C $(KERNEL_DIR) M=$(PWD) modules_install
- 
-+install_tests:
-+	make -C tests install DESTDIR=$(PREFIX)
-+
- clean:
- 	$(MAKE) -C $(KERNEL_DIR) M=$(PWD) clean
- 	rm -f $(hostprogs) *~
-@@ -40,6 +43,9 @@ clean:
+@@ -42,6 +42,12 @@ clean:
  check:
  	CFLAGS=$(CRYPTODEV_CFLAGS) KERNEL_DIR=$(KERNEL_DIR) $(MAKE) -C tests check
  
 +testprogs:
-+	KERNEL_DIR=$(KERNEL_DIR) make -C tests testprogs
++	KERNEL_DIR=$(KERNEL_DIR) $(MAKE) -C tests all
++
++install_tests:
++	$(MAKE) -C tests install
 +
  CPOPTS =
  ifneq ($(SHOW_TYPES),)
  CPOPTS += --show-types
 diff --git a/tests/Makefile b/tests/Makefile
-index 3155da9..3facce5 100644
+index 5e3111d..cda971c 100644
 --- a/tests/Makefile
 +++ b/tests/Makefile
-@@ -19,6 +19,12 @@ example-async-hmac-objs := async_hmac.o
- example-async-speed-objs := async_speed.o
- example-hashcrypt-speed-objs := hashcrypt_speed.c
- 
-+install:
-+	install -d  $(DESTDIR)/usr/bin/tests_cryptodev
-+	for bin in $(hostprogs); do \
-+		install -m 755 $${bin} $(DESTDIR)/usr/bin/tests_cryptodev/; \
-+	done
-+
- check: $(hostprogs)
- 	./cipher
- 	./hmac
-@@ -28,6 +34,8 @@ check: $(hostprogs)
- 	./cipher-gcm
+@@ -35,9 +35,9 @@ check: $(hostprogs)
  	./cipher-aead
  
-+testprogs: $(hostprogs)
-+
- clean:
- 	rm -f *.o *~ $(hostprogs)
+ install:
+-	install -d $(DESTDIR)/$(bindir)
++	install -d $(DESTDIR)/$(bindir)/tests_cryptodev
+ 	for prog in $(hostprogs); do \
+-		install -m 755 $$prog $(DESTDIR)/$(bindir); \
++		install -m 755 $$prog $(DESTDIR)/$(bindir)/tests_cryptodev/; \
+ 	done
  
+ clean:
 -- 
 2.7.0
 

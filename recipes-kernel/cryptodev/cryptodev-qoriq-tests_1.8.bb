@@ -6,7 +6,7 @@ PROVIDES = "cryptodev-tests"
 
 DEPENDS = "openssl"
 
-EXTRA_OEMAKE='KERNEL_DIR="${STAGING_KERNEL_DIR}" PREFIX="${D}"'
+EXTRA_OEMAKE='KERNEL_DIR="${STAGING_KERNEL_DIR}" DESTDIR="${D}"'
 
 do_compile() {
 	oe_runmake testprogs

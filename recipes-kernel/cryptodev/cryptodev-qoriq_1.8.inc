@@ -63,6 +63,9 @@ file://0037-rewrite-sha_speed.c-to-reduce-code-duplication.patch \
 file://0038-extend-sha_speed.c-to-test-CIOCHASH.patch \
 file://0039-fix-memory-leaks-on-error-path-for-CIOCHASH.patch \
 file://0040-fix-structure-init-in-sha_speed-test.patch \
+file://0041-add-separate-target-for-building-tests.patch \
+file://0042-fix-destination-for-staged-installs.patch \
+file://0043-add-install-target-for-tests.patch \
 "
 
 # Upstream hotfixes and yocto specific patches
