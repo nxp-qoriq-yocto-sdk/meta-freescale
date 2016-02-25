@@ -59,6 +59,7 @@ SRC_URI_qoriq-ppc = "\
     file://0029-Define-GLIBC_DYNAMIC_LINKER-and-UCLIBC_DYNAMIC_LINKE.patch \
     file://0032-libtool.patch \
     file://0034-Use-the-multilib-config-files-from-B-instead-of-usin.patch \
+    file://0040-fix-g++-sysroot.patch \
     file://0041-libtool-avoid-libdir.patch \
     file://0046-libatomic-deptracking.patch \
     file://0049-Enable-SPE-AltiVec-generation-on-powepc-linux-target.patch \
