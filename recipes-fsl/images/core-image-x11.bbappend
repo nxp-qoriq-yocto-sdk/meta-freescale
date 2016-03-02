@@ -3,6 +3,7 @@ require recipes-fsl/images/fsl-image-minimal.bb
 IMAGE_FEATURES_append_qoriq = " ssh-server-openssh"
 IMAGE_INSTALL_append_qoriq = " \
     alsa-utils \
+    alsa-plugins \
     can-utils \
     iproute2 \
     lmsensors-sensors \
