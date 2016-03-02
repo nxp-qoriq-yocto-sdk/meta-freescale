@@ -10,20 +10,13 @@ QorIQ machines. The poky version should be used for native/nativesdk build."
 LIC_FILES_CHKSUM = "file://COPYING;md5=441c28d2cf86e15a37fa47e15a72fbac \
                     file://COPYING.LIB;endline=24;md5=c04def7ae38850e7d3ef548588159913"
 
-# This means QEMU v2.2.0 with FSL specific patches applied
-PV = "2.2.0+fsl"
+# This means QEMU v2.4.0 with FSL specific patches applied
+PV = "2.4.0+fsl"
 
 # FIXME: this recipe requires poky's qemu.inc which assumes version 2.3
 # where glx enable config option changed to --enable-opengl. For now we
 # restore it, but we should remove the following lines when upgrading
 # to qemu 2.3:
-PACKAGECONFIG[glx] = "--enable-glx,--disable-glx,mesa"
-# remove not supported PACKAGECONFIG by this v2.2.0 based recipe
-PACKAGECONFIG[gnutls] = ""
-PACKAGECONFIG[gcrypt] = ""
-PACKAGECONFIG[nettle] = ""
-PACKAGECONFIG[nss] = ""
-RDEPENDS_${PN}_append = " gnutls"
 
 SRC_URI = "git://git.freescale.com/ppc/sdk/qemu.git;branch=sdk-v1.9.x"
 SRCREV = "8362a298c4feef33c84d7db2d111af18bd29ef86"
@@ -37,7 +30,8 @@ SRC_URI_append = "\
 S = "${WORKDIR}/git"
 
 QEMU_TARGETS_qoriq-ppc = "ppc"
-QEMU_TARGETS_qoriq-arm = "arm"
+QEMU_TARGETS_ls102xa = "arm"
+QEMU_TARGETS_fsl-lsch2 = "aarch64"
 PPC_OECONF = '${SDL} --cross-prefix=${TARGET_PREFIX} --disable-werror --disable-vnc --disable-bluez --disable-curl'
 EXTRA_OECONF_e5500-64b = "--target-list=ppc64-softmmu ${PPC_OECONF}"
 EXTRA_OECONF_e6500-64b = "--target-list=ppc64-softmmu ${PPC_OECONF}"
