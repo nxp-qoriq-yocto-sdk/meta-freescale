@@ -39,7 +39,7 @@ EXTRA_OECONF_e6500 = "--target-list=ppc64-softmmu ${PPC_OECONF}"
 EXTRA_OECONF_e5500 = "--target-list=ppc64-softmmu ${PPC_OECONF}"
 EXTRA_OECONF_e500v2 = "--target-list=ppc-softmmu ${PPC_OECONF}"
 EXTRA_OECONF_e500mc = "--target-list=ppc-softmmu ${PPC_OECONF}"
-PACKAGECONFIG_append = " libusb"
+PACKAGECONFIG_append = " aio libusb"
 
 inherit pkgconfig
 
