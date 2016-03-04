@@ -10,7 +10,7 @@ inherit deploy
 SRC_URI = "git://sw-stash.freescale.net/scm/dnnpi/ls1043a-uefi.git;branch=edk2-master;protocol=http \
            git://sw-stash.freescale.net/scm/dnnpi/ls1043a-uefi-fatpkg.git;branch=master;protocol=http;name=FatPkg;destsuffix=git/FatPkg \
 "
-SRCREV = "520f4914b458436d783ec8484d107224686e410b"
+SRCREV = "368f7b6a4f3ead10dce4bf5e4dab92d6170ae216"
 SRCREV_FatPkg ="a108418f3871c2ca44d00fa0c1d0544362c41536"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -64,7 +64,7 @@ do_compile () {
         fi 
 
         if echo $board |egrep -q "(NAND|SD)";then                                             
-            uboot-mkimage -n ${S}/${UEFI_PATH}Pkg/Library/${UEFI_PBL_PATH}/${MACHINE}_rcw_$(echo $board | tr '[A-Z]' '[a-z]').cfg -R ${S}/${UEFI_PATH}Pkg/Library/${UEFI_PBL_PATH}/${MACHINE}_pbi.cfg -T pblimage -A arm -a 0x10000000 -d ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/FV/${board}_EFI.fd  ${S}/${UEFI_PATH}Pkg/Library/${UEFI_PBL_PATH}/$(echo ${MACHINE} | tr '[a-z]' '[A-Z]')PI_${board}_EFI.pbl
+            uboot-mkimage -n ${S}/${UEFI_PATH}Pkg/Library/${UEFI_PBL_PATH}/${MACHINE}_rcw_$(echo $board | tr '[A-Z]' '[a-z]').cfg -R ${S}/${UEFI_PATH}Pkg/Library/${UEFI_PBL_PATH}/${MACHINE}_pbi.cfg -T pblimage -A arm -a 0x10000000 -d ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/FV/${UEFIPI_SOURCE}  ${S}/${UEFI_PATH}Pkg/Library/${UEFI_PBL_PATH}/$(echo ${MACHINE} | tr '[a-z]' '[A-Z]')PI_${board}_EFI.pbl
         fi
     done
 }
