@@ -44,7 +44,7 @@ do_configure_prepend() {
             ${S}/scripts/kconfig/merge_config.sh -m .config ${WORKDIR}/${deltacfg}
         elif [ -f "${S}/arch/${ARCH}/configs/${deltacfg}" ]; then
             ${S}/scripts/kconfig/merge_config.sh -m .config \
-                ${S}/arch/powerpc/configs/${deltacfg}
+                ${S}/arch/${ARCH}/configs/${deltacfg}
         fi
     done
     cp .config ${WORKDIR}/defconfig
