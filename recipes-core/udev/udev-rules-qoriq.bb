@@ -6,7 +6,7 @@ SRC_URI = "\
     file://71-fsl-dpaa-persistent-networking.rules \
     file://72-fsl-dpaa-persistent-networking.rules \
 "
-RULE_qoriq-ppc = "71-fsl-dpaa-persistent-networking.rules"
+RULE = "71-fsl-dpaa-persistent-networking.rules"
 RULE_e6500 = "72-fsl-dpaa-persistent-networking.rules"
 RULE_e6500-64b = "72-fsl-dpaa-persistent-networking.rules"
 RULE_t1024 = "72-fsl-dpaa-persistent-networking.rules"
