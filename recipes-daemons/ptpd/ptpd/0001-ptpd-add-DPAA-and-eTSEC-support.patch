@@ -1,0 +1,601 @@
+From 14e1a908fad773cf70f86bab55e06971e4f6bd2c Mon Sep 17 00:00:00 2001
+From: Yangbo Lu <yangbo.lu@nxp.com>
+Date: Mon, 7 Mar 2016 18:10:33 +0800
+Subject: [PATCH] ptpd: add DPAA and eTSEC support
+
+Upstream-Status: Pending
+
+Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
+---
+ src/dep/net.c                   |   79 +++++++++++++++++++++++++++++++++++++++
+ src/dep/ntpengine/ntpdcontrol.c |    4 ++
+ src/dep/ptpd_dep.h              |    9 +++++
+ src/dep/sys.c                   |   54 ++++++++++++++++++++++++++
+ src/protocol.c                  |    3 ++
+ src/ptpd.c                      |   15 ++++++++
+ src/ptpd.h                      |   25 +++++++++++++
+ src/timingdomain.c              |    8 ++++
+ 8 files changed, 197 insertions(+)
+
+diff --git a/src/dep/net.c b/src/dep/net.c
+index 2401c2a..f770126 100644
+--- a/src/dep/net.c
++++ b/src/dep/net.c
+@@ -85,6 +85,9 @@
+ #include <linux/ethtool.h>
+ #endif /* SO_TIMESTAMPING */
+ 
++#ifdef FSL_1588
++char fsl_1588_if_name[IFACE_NAME_LENGTH];
++#endif
+ /**
+  * shutdown the IPv4 multicast for specific address
+  *
+@@ -459,6 +462,9 @@ testInterface(char * ifaceName, const RunTimeOpts* rtOpts)
+ 	if(getInterfaceInfo(ifaceName, &info) != 1)
+ 		return FALSE;
+ 
++#ifdef FSL_1588
++	memcpy(fsl_1588_if_name, ifaceName, IFACE_NAME_LENGTH);
++#endif
+ 	switch(rtOpts->transport) {
+ 
+ 	    case UDP_IPV4:
+@@ -626,7 +632,11 @@ getTxTimestamp(NetPath* netPath,TimeInternal* timeStamp) {
+ 	extern PtpClock *G_ptpClock;
+ 	ssize_t length;
+ 	fd_set tmpSet;
++#ifdef FSL_1588
++	struct timeval timeOut = {1,0};
++#else
+ 	struct timeval timeOut = {0,0};
++#endif
+ 	int val = 1;
+ 	int i = 0;
+ 	if(netPath->txTimestampFailure)
+@@ -690,6 +700,26 @@ failure:
+ }
+ #endif /* SO_TIMESTAMPING */
+ 
++#ifdef FSL_1588
++/* select HWTSTAMP_TX_ON or HWTSTAMP_TX_OFF */
++void hwtstamp_tx_ctl(NetPath *netPath, Boolean enable)
++{
++	struct ifreq hwtstamp;
++	struct hwtstamp_config hwconfig;
++
++	memset(&hwtstamp, 0, sizeof(hwtstamp));
++	strncpy(hwtstamp.ifr_name, fsl_1588_if_name, sizeof(hwtstamp.ifr_name));
++	hwtstamp.ifr_data = (void *)&hwconfig;
++	memset(&hwconfig, 0, sizeof(hwconfig));
++	hwconfig.tx_type =
++		enable ?
++		HWTSTAMP_TX_ON : HWTSTAMP_TX_OFF;
++	hwconfig.rx_filter = HWTSTAMP_FILTER_PTP_V1_L4_SYNC;
++	if (ioctl(netPath->eventSock, SIOCSHWTSTAMP, &hwtstamp) < 0
++		|| ioctl(netPath->generalSock, SIOCSHWTSTAMP, &hwtstamp) < 0)
++			DBGV("error:hwtstamp_tx_ctl\n");
++}
++#endif
+ 
+ /**
+  * Initialize timestamping of packets
+@@ -706,10 +736,17 @@ netInitTimestamping(NetPath * netPath, const RunTimeOpts * rtOpts)
+ 	Boolean result = TRUE;
+ #if defined(SO_TIMESTAMPING) && defined(SO_TIMESTAMPNS)/* Linux - current API */
+ 	DBG("netInitTimestamping: trying to use SO_TIMESTAMPING\n");
++#ifdef FSL_1588
++	val = SOF_TIMESTAMPING_TX_HARDWARE |
++	    SOF_TIMESTAMPING_RX_HARDWARE |
++	    SOF_TIMESTAMPING_RAW_HARDWARE;
++#else
+ 	val = SOF_TIMESTAMPING_TX_SOFTWARE |
+ 	    SOF_TIMESTAMPING_RX_SOFTWARE |
+ 	    SOF_TIMESTAMPING_SOFTWARE;
++#endif
+ 
++#ifndef FSL_1588
+ /* unless compiled with PTPD_EXPERIMENTAL, check if we support the desired tstamp capabilities */
+ #ifndef PTPD_EXPERIMENTAL
+ #ifdef ETHTOOL_GET_TS_INFO
+@@ -740,6 +777,7 @@ netInitTimestamping(NetPath * netPath, const RunTimeOpts * rtOpts)
+ 	val = 1;
+ #endif /* ETHTOOL_GET_TS_INFO */
+ #endif /* PTPD_EXPERIMENTAL */
++#endif /* FSL_1588 */
+ 
+ 	if(val == 1) {
+ 	    if (setsockopt(netPath->eventSock, SOL_SOCKET, SO_TIMESTAMPNS, &val, sizeof(int)) < 0) {
+@@ -1008,6 +1046,9 @@ netInit(NetPath * netPath, RunTimeOpts * rtOpts, PtpClock * ptpClock)
+ 	DBG("Listening on IP: %s\n",inet_ntoa(
+ 		((struct sockaddr_in*)&(netPath->interfaceInfo.afAddress))->sin_addr));
+ 
++#if defined(FSL_1588)
++	hwtstamp_tx_ctl(&ptpClock->netPath, FALSE); /* HWTSTAMP_TX_OFF */
++#endif
+ #ifdef PTPD_PCAP
+ 	if (rtOpts->pcap == TRUE) {
+ 
+@@ -1542,7 +1583,11 @@ netRecvEvent(Octet * buf, TimeInternal * time, NetPath * netPath, int flags)
+ #if defined(SO_TIMESTAMPING) && defined(SO_TIMESTAMPNS)
+ 				if(cmsg->cmsg_type == SO_TIMESTAMPING || 
+ 				    cmsg->cmsg_type == SO_TIMESTAMPNS) {
++#ifdef FSL_1588
++					ts = (struct timespec *)CMSG_DATA(cmsg) + 2;
++#else
+ 					ts = (struct timespec *)CMSG_DATA(cmsg);
++#endif
+ 					time->seconds = ts->tv_sec;
+ 					time->nanoseconds = ts->tv_nsec;
+ 					timestampValid = TRUE;
+@@ -1781,6 +1826,9 @@ netSendEvent(Octet * buf, UInteger16 length, NetPath * netPath,
+ 	ssize_t ret;
+ 	struct sockaddr_in addr;
+ 
++#ifdef FSL_1588
++	hwtstamp_tx_ctl(netPath, TRUE); /* HWTSTAMP_TX_ON */
++#endif
+ 	addr.sin_family = AF_INET;
+ 	addr.sin_port = htons(PTP_EVENT_PORT);
+ 
+@@ -1823,6 +1871,9 @@ netSendEvent(Octet * buf, UInteger16 length, NetPath * netPath,
+ 				netPath->sentPackets++;
+ 				netPath->sentPacketsTotal++;
+ 			}
++#ifdef FSL_1588
++			usleep(100);
++#endif
+ #ifndef SO_TIMESTAMPING
+ 			/* 
+ 			 * Need to forcibly loop back the packet since
+@@ -1844,10 +1895,14 @@ netSendEvent(Octet * buf, UInteger16 length, NetPath * netPath,
+ 			if(!netPath->txTimestampFailure) {
+ #endif /* PTPD_PCAP */
+ 				if(!getTxTimestamp(netPath, tim)) {
++#ifdef FSL_1588
++					DBGV("getTxTimestamp: get tx timestamp error\n");
++#else
+ 					netPath->txTimestampFailure = TRUE;
+ 					if (tim) {
+ 						clearTime(tim);
+ 					}
++#endif
+ 				}
+ 			}
+ 
+@@ -1881,6 +1936,9 @@ netSendEvent(Octet * buf, UInteger16 length, NetPath * netPath,
+ 				netPath->sentPackets++;
+ 				netPath->sentPacketsTotal++;
+ 			}
++#ifdef FSL_1588
++			usleep(100);
++#endif
+ #ifdef SO_TIMESTAMPING
+ 
+ #ifdef PTPD_PCAP
+@@ -1889,6 +1947,9 @@ netSendEvent(Octet * buf, UInteger16 length, NetPath * netPath,
+ 			if(!netPath->txTimestampFailure) {
+ #endif /* PTPD_PCAP */
+ 				if(!getTxTimestamp(netPath, tim)) {
++#if defined(FSL_1588)
++					DBGV("getTxTimestamp: get tx timestamp error\n");
++#else
+ 					if (tim) {
+ 						clearTime(tim);
+ 					}
+@@ -1897,6 +1958,7 @@ netSendEvent(Octet * buf, UInteger16 length, NetPath * netPath,
+ 
+ 					/* Try re-enabling MULTICAST_LOOP */
+ 					netSetMulticastLoopback(netPath, TRUE);
++#endif
+ 				}
+ 			}
+ #endif /* SO_TIMESTAMPING */
+@@ -2051,6 +2113,9 @@ netSendPeerEvent(Octet * buf, UInteger16 length, NetPath * netPath, const RunTim
+ 	ssize_t ret;
+ 	struct sockaddr_in addr;
+ 
++#ifdef FSL_1588
++	hwtstamp_tx_ctl(netPath, TRUE); /* HWTSTAMP_TX_ON */
++#endif
+ 	addr.sin_family = AF_INET;
+ 	addr.sin_port = htons(PTP_EVENT_PORT);
+ 
+@@ -2082,6 +2147,9 @@ netSendPeerEvent(Octet * buf, UInteger16 length, NetPath * netPath, const RunTim
+ 		if (ret <= 0)
+ 			DBG("Error sending unicast peer event message\n");
+ 
++#ifdef FSL_1588
++		usleep(100);
++#endif
+ #ifndef SO_TIMESTAMPING
+ 		/* 
+ 		 * Need to forcibly loop back the packet since
+@@ -2102,10 +2170,14 @@ netSendPeerEvent(Octet * buf, UInteger16 length, NetPath * netPath, const RunTim
+ 		if(!netPath->txTimestampFailure) {
+ #endif /* PTPD_PCAP */
+ 			if(!getTxTimestamp(netPath, tim)) {
++#ifdef FSL_1588
++				DBGV("getTxTimestamp: get tx timestamp error\n");
++#else
+ 				netPath->txTimestampFailure = TRUE;
+ 				if (tim) {
+ 					clearTime(tim);
+ 				}
++#endif
+ 			}
+ 		}
+ 
+@@ -2135,9 +2207,15 @@ netSendPeerEvent(Octet * buf, UInteger16 length, NetPath * netPath, const RunTim
+ 			     sizeof(struct sockaddr_in));
+ 		if (ret <= 0)
+ 			DBG("Error sending multicast peer event message\n");
++#ifdef FSL_1588
++		usleep(100);
++#endif
+ #ifdef SO_TIMESTAMPING
+ 		if(!netPath->txTimestampFailure) {
+ 			if(!getTxTimestamp(netPath, tim)) {
++#ifdef FSL_1588
++				DBGV("getTxTimestamp: get tx timestamp error\n");
++#else
+ 				if (tim) {
+ 					clearTime(tim);
+ 				}
+@@ -2146,6 +2224,7 @@ netSendPeerEvent(Octet * buf, UInteger16 length, NetPath * netPath, const RunTim
+ 
+ 				/* Try re-enabling MULTICAST_LOOP */
+ 				netSetMulticastLoopback(netPath, TRUE);
++#endif
+ 			}
+ 		}
+ #endif /* SO_TIMESTAMPING */
+diff --git a/src/dep/ntpengine/ntpdcontrol.c b/src/dep/ntpengine/ntpdcontrol.c
+index bfe0b5e..ffad715 100644
+--- a/src/dep/ntpengine/ntpdcontrol.c
++++ b/src/dep/ntpengine/ntpdcontrol.c
+@@ -195,7 +195,11 @@ get_systime(
+          * Convert Unix clock from seconds and nanoseconds to seconds.
+          */
+ # ifdef HAVE_CLOCK_GETTIME
++#ifdef FSL_1588
++	clock_gettime(clkid, &ts);
++#else
+         clock_gettime(CLOCK_REALTIME, &ts);
++#endif
+ # else
+         getclock(TIMEOFDAY, &ts);
+ # endif
+diff --git a/src/dep/ptpd_dep.h b/src/dep/ptpd_dep.h
+index c330b2d..e8e3b26 100644
+--- a/src/dep/ptpd_dep.h
++++ b/src/dep/ptpd_dep.h
+@@ -339,6 +339,9 @@ UInteger16 msgPackManagementResponse(Octet * buf,MsgHeader*,MsgManagement*,PtpCl
+  * -Init network stuff, send and receive datas*/
+  /**\{*/
+ 
++#ifdef FSL_1588
++void hwtstamp_tx_ctl(NetPath *netPath, Boolean enable);
++#endif
+ Boolean testInterface(char* ifaceName, const RunTimeOpts* rtOpts);
+ Boolean netInit(NetPath*,RunTimeOpts*,PtpClock*);
+ Boolean netShutdown(NetPath*);
+@@ -422,6 +425,10 @@ void periodicUpdate(const RunTimeOpts *rtOpts, PtpClock *ptpClock);
+ void displayStatus(PtpClock *ptpClock, const char *prefixMessage);
+ void displayPortIdentity(PortIdentity *port, const char *prefixMessage);
+ int snprint_PortIdentity(char *s, int max_len, const PortIdentity *id);
++#ifdef FSL_1588
++clockid_t get_clockid(int fd);
++int clock_adjtime(clockid_t id, struct timex *tx);
++#endif
+ Boolean nanoSleep(TimeInternal*);
+ void getTime(TimeInternal*);
+ void getTimeMonotonic(TimeInternal*);
+@@ -446,6 +453,7 @@ void adjTime(Integer32);
+ void adjFreq_wrapper(const RunTimeOpts * rtOpts, PtpClock * ptpClock, double adj);
+ Boolean adjFreq(double);
+ double getAdjFreq(void);
++#ifndef FSL_1588
+ void informClockSource(PtpClock* ptpClock);
+ 
+ 
+@@ -454,6 +462,7 @@ void setTimexFlags(int flags, Boolean quiet);
+ void unsetTimexFlags(int flags, Boolean quiet);
+ int getTimexFlags(void);
+ Boolean checkTimexFlags(int flags);
++#endif /* FSL_1588 */
+ 
+ #if defined(MOD_TAI) &&  NTP_API == 4
+ void setKernelUtcOffset(int utc_offset);
+diff --git a/src/dep/sys.c b/src/dep/sys.c
+index 1d8fd5e..ef885ce 100644
+--- a/src/dep/sys.c
++++ b/src/dep/sys.c
+@@ -345,7 +345,14 @@ int writeMessage(FILE* destination, int priority, const char * format, va_list a
+ 		 * it also can cause problems in nested debug statements (which are solved by turning the signal
+ 		 *  handling synchronous, and not calling this function inside asycnhronous signal processing)
+ 		 */
++#ifdef FSL_1588
++		struct timespec ts;
++		clock_gettime(clkid, &ts);
++		now.tv_sec = ts.tv_sec;
++		now.tv_usec = ts.tv_nsec / 1000;
++#else
+ 		gettimeofday(&now, 0);
++#endif
+ 		strftime(time_str, MAXTIMESTR, "%F %X", localtime((time_t*)&now.tv_sec));
+ 		fprintf(destination, "%s.%06d ", time_str, (int)now.tv_usec  );
+ 		fprintf(destination,PTPD_PROGNAME"[%d].%s (%-9s ",
+@@ -938,7 +945,14 @@ writeStatusFile(PtpClock *ptpClock,const RunTimeOpts *rtOpts, Boolean quiet)
+ 	memset(hostName, 0, MAXHOSTNAMELEN);
+ 
+ 	gethostname(hostName, MAXHOSTNAMELEN);
++#ifdef FSL_1588
++	struct timespec ts;
++	clock_gettime(clkid, &ts);
++	now.tv_sec = ts.tv_sec;
++	now.tv_usec = ts.tv_nsec / 1000;
++#else
+ 	gettimeofday(&now, 0);
++#endif
+ 	strftime(timeStr, MAXTIMESTR, "%a %b %d %X %Z %Y", localtime((time_t*)&now.tv_sec));
+ 	
+ 	FILE* out = rtOpts->statusLog.logFP;
+@@ -1347,13 +1361,33 @@ nanoSleep(TimeInternal * t)
+ 	return TRUE;
+ }
+ 
++#if defined(FSL_1588)
++clockid_t get_clockid(int fd)
++{
++#define CLOCKFD 3
++#define FD_TO_CLOCKID(fd)       ((~(clockid_t) (fd) << 3) | CLOCKFD)
++	return FD_TO_CLOCKID(fd);
++}
++
++/* When glibc offers the syscall, this will go away. */
++#include <sys/syscall.h>
++int clock_adjtime(clockid_t id, struct timex *tx)
++{
++	return syscall(__NR_clock_adjtime, id, tx);
++}
++#endif
++
+ void
+ getTime(TimeInternal * time)
+ {
+ #if defined(_POSIX_TIMERS) && (_POSIX_TIMERS > 0)
+ 
+ 	struct timespec tp;
++#ifdef FSL_1588
++	if (clock_gettime(clkid, &tp) < 0) {
++#else
+ 	if (clock_gettime(CLOCK_REALTIME, &tp) < 0) {
++#endif
+ 		PERROR("clock_gettime() failed, exiting.");
+ 		exit(0);
+ 	}
+@@ -1377,7 +1411,11 @@ getTimeMonotonic(TimeInternal * time)
+ 
+ 	struct timespec tp;
+ #ifndef CLOCK_MONOTINIC                                                                                                       
++#ifdef FSL_1588
++	if (clock_gettime(clkid, &tp) < 0) {
++#else
+ 	if (clock_gettime(CLOCK_REALTIME, &tp) < 0) {
++#endif
+ #else
+ 	if (clock_gettime(CLOCK_MONOTONIC, &tp) < 0) {
+ #endif /* CLOCK_MONOTONIC */
+@@ -1417,7 +1455,11 @@ setTime(TimeInternal * time)
+ 
+ #if defined(_POSIX_TIMERS) && (_POSIX_TIMERS > 0)
+ 
++#ifdef FSL_1588
++	if (clock_settime(clkid, &tp) < 0) {
++#else
+ 	if (clock_settime(CLOCK_REALTIME, &tp) < 0) {
++#endif
+ 		PERROR("Could not set system time");
+ 		return;
+ 	}
+@@ -1795,7 +1837,11 @@ adjFreq(double adj)
+ #endif /* HAVE_STRUCT_TIMEX_TICK */
+ 	DBG2("        adj is %.09f;  t freq is %d       (float: %.09f)\n", adj, t.freq,  dFreq);
+ 	
++#ifdef FSL_1588
++	return !clock_adjtime(clkid, &t);
++#else
+ 	return !adjtimex(&t);
++#endif
+ }
+ 
+ 
+@@ -1809,7 +1855,11 @@ getAdjFreq(void)
+ 
+ 	memset(&t, 0, sizeof(t));
+ 	t.modes = 0;
++#ifdef FSL_1588
++	clock_adjtime(clkid, &t);
++#else
+ 	adjtimex(&t);
++#endif
+ 
+ 	dFreq = (t.freq + 0.0) / ((1<<16) / 1000.0);
+ 
+@@ -1820,6 +1870,7 @@ getAdjFreq(void)
+ }
+ 
+ 
++#ifndef FSL_1588
+ /* First cut on informing the clock */
+ void
+ informClockSource(PtpClock* ptpClock)
+@@ -1906,6 +1957,7 @@ checkTimexFlags(int flags) {
+ 		return FALSE;
+ 	return ((tflags & flags) == flags);
+ }
++#endif /* FSL_1588 */
+ 
+ /*
+  * TODO: track NTP API changes - NTP API version check
+@@ -1974,6 +2026,7 @@ getKernelUtcOffset(int *utc_offset) {
+ }
+ #endif /* MOD_TAI */
+ 
++#ifndef FSL_1588
+ void
+ setTimexFlags(int flags, Boolean quiet)
+ {
+@@ -2015,6 +2068,7 @@ setTimexFlags(int flags, Boolean quiet)
+ 		}
+ 	}
+ }
++#endif /* FSL_1588 */
+ 
+ #else /* SYS_TIMEX_H */
+ 
+diff --git a/src/protocol.c b/src/protocol.c
+index f082be6..34eafe6 100644
+--- a/src/protocol.c
++++ b/src/protocol.c
+@@ -1343,6 +1343,9 @@ handle(const RunTimeOpts *rtOpts, PtpClock *ptpClock)
+     TimeInternal timeStamp = { 0, 0 };
+     fd_set readfds;
+ 
++#ifdef FSL_1588
++	hwtstamp_tx_ctl(&ptpClock->netPath, FALSE); /* HWTSTAMP_TX_OFF */
++#endif
+     FD_ZERO(&readfds);
+     if (!ptpClock->message_activity) {
+ 	ret = netSelect(NULL, &ptpClock->netPath, &readfds);
+diff --git a/src/ptpd.c b/src/ptpd.c
+index 47ca463..cbb30b9 100644
+--- a/src/ptpd.c
++++ b/src/ptpd.c
+@@ -82,6 +82,21 @@ main(int argc, char **argv)
+ 	Integer16 ret;
+ 	TimingService *ts;
+ 
++#ifdef FSL_1588
++	char device[] = "/dev/ptp0";
++	int fd;
++
++	fd = open(device, O_RDWR);
++	if (fd < 0) {
++		fprintf(stderr, "opening %s: %s\n", device, strerror(errno));
++		return -1;
++	}
++	clkid = get_clockid(fd);
++	if (clkid == -1) {
++		fprintf(stderr, "failed to read clock id\n");
++		return -1;
++	}
++#endif
+ 	startupInProgress = TRUE;
+ 
+ 	memset(&timingDomain, 0, sizeof(timingDomain));
+diff --git a/src/ptpd.h b/src/ptpd.h
+index 620f323..0a0f6eb 100644
+--- a/src/ptpd.h
++++ b/src/ptpd.h
+@@ -22,6 +22,28 @@
+ # include <config.h>
+ #endif /* HAVE_CONFIG_H */
+ 
++#define FSL_1588 1
++
++#ifdef FSL_1588
++#ifndef HAVE_SYS_TIMEX_H
++#define HAVE_SYS_TIMEX_H 1
++#endif
++#ifdef MOD_TAI
++#undef MOD_TAI
++#endif
++#ifndef _POSIX_TIMERS
++#define _POSIX_TIMERS 1
++#endif
++#ifndef HAVE_CLOCK_GETTIME
++#define HAVE_CLOCK_GETTIME 1
++#endif
++#ifdef CLOCK_MONOTINIC
++#undef CLOCK_MONOTINIC
++#endif
++#ifndef SO_TIMESTAMPING
++#define SO_TIMESTAMPING 37
++#endif
++#endif /* FSL_1588 */
+ 
+ #ifdef linux
+ #	ifndef _GNU_SOURCE
+@@ -193,6 +215,9 @@
+ #include <linux/rtc.h>
+ #endif /* HAVE_LINUX_RTC_H */
+ 
++#ifdef FSL_1588
++clockid_t clkid;
++#endif
+ /** \name arith.c
+  * -Timing management and arithmetic*/
+  /**\{*/
+diff --git a/src/timingdomain.c b/src/timingdomain.c
+index 065c889..52c665e 100644
+--- a/src/timingdomain.c
++++ b/src/timingdomain.c
+@@ -209,7 +209,9 @@ prepareLeapFlags(RunTimeOpts *rtOpts, PtpClock *ptpClock) {
+ 	TimeInternal now;
+ 	Boolean leapInsert = FALSE, leapDelete = FALSE;
+ #ifdef HAVE_SYS_TIMEX_H
++#ifndef FSL_1588
+ 	int flags;
++#endif /* FSL_1588 */
+ 
+ 	/* first get the offset from kernel if we can */
+ #if defined(MOD_TAI) &&  NTP_API == 4
+@@ -220,11 +222,13 @@ prepareLeapFlags(RunTimeOpts *rtOpts, PtpClock *ptpClock) {
+ 	}
+ #endif /* MOD_TAI */
+ 
++#ifndef FSL_1588
+ 	flags= getTimexFlags();
+ 
+ 	leapInsert = ((flags & STA_INS) == STA_INS);
+ 	leapDelete = ((flags & STA_DEL) == STA_DEL);
+ 
++#endif /* FSL_1588 */
+ #endif 	/* HAVE_SYS_TIMEX_H  */
+ 
+ 	getTime(&now);
+@@ -400,11 +404,13 @@ ptpServiceClockUpdate (TimingService* service)
+ 	TimeInternal newTime, oldTime;
+ 
+ #ifdef HAVE_SYS_TIMEX_H
++#ifndef FSL_1588
+ 	int flags = getTimexFlags();
+ 
+ 	Boolean leapInsert = flags & STA_INS;
+ 	Boolean leapDelete = flags & STA_DEL;
+ 	Boolean inSync = !(flags & STA_UNSYNC);
++#endif /* FSL_1588 */
+ #endif /* HAVE_SYS_TIMEX_H */
+ 
+ 	ClockStatusInfo *clockStatus = &ptpClock->clockStatus;
+@@ -424,6 +430,7 @@ ptpServiceClockUpdate (TimingService* service)
+ #endif
+ 
+ #ifdef HAVE_SYS_TIMEX_H
++#ifndef FSL_1588
+ 
+ 	if(clockStatus->inSync & !inSync) {
+ 	    clockStatus->inSync = FALSE;
+@@ -462,6 +469,7 @@ ptpServiceClockUpdate (TimingService* service)
+ 		unsetTimexFlags(STA_DEL, TRUE);
+ 	}
+     }
++#endif /* FSL_1588 */
+ #else
+ 	if(clockStatus->leapInsert || clockStatus->leapDelete) {
+ 		if(rtOpts->leapSecondHandling != LEAP_SMEAR) {
+-- 
+1.7.9.5
+
