@@ -1,0 +1,13 @@
+diff --git a/src/cryptography/hazmat/bindings/openssl/bio.py b/src/cryptography/hazmat/bindings/openssl/bio.py
+index 6cc1bcb..7e7abe7 100644
+--- a/src/cryptography/hazmat/bindings/openssl/bio.py
++++ b/src/cryptography/hazmat/bindings/openssl/bio.py
+@@ -99,7 +99,7 @@ BIO *BIO_pop(BIO *);
+ BIO *BIO_next(BIO *);
+ BIO *BIO_find_type(BIO *, int);
+ BIO_METHOD *BIO_s_mem(void);
+-BIO *BIO_new_mem_buf(void *, int);
++BIO *BIO_new_mem_buf(const void *, int);
+ BIO_METHOD *BIO_s_file(void);
+ BIO *BIO_new_file(const char *, const char *);
+ BIO *BIO_new_fp(FILE *, int);
