@@ -43,12 +43,12 @@ do_compile () {
     for board in ${UEFI_MACHINES}; do
         case "${board}" in
             *XIP*)   BootSuffix="XipBoot.dsc";;
-            *FATXIP*)   BootSuffix="FatXipBoot.dsc";;
+            *FAT*)   BootSuffix="FatXipBoot.dsc";;
             *NAND*)   BootSuffix="NonXipBoot.dsc";;
             *SD*)   BootSuffix="NonXipBoot.dsc";
         esac
    
-        if echo $board |egrep -qi "XIP|FATXIP";then
+        if echo $board |egrep -qi "XIP|FAT";then
             build -p ${S}/${UEFI_PATH}Pkg/${UEFI_PATH}Pkg${BootSuffix} -a $ARCH \
                 -t $TARGET_TOOLS -b RELEASE
         else
@@ -56,7 +56,7 @@ do_compile () {
                 -t $TARGET_TOOLS -b RELEASE  -D${board}_BOOT_ENABLE=TRUE
         fi
 
-        if echo $board |egrep -qi "XIP|FATXIP";then
+        if echo $board |egrep -qi "XIP|FAT";then
             cat ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/FV/${UEFI_SOURCE} >> ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/FV/${UEFIPI_SOURCE}
             mv  ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/FV/${UEFIPI_SOURCE} ${S}/Build/${UEFI_PATH}/RELEASE_${TARGET_TOOLS}/FV/${board}_EFI.fd
         else 
