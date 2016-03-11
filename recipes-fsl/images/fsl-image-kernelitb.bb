@@ -3,7 +3,7 @@ LICENSE = "MIT"
 
 SRC_URI = "file://${KERNEL_ITS_FILE}"
 
-inherit deploy  siteinfo
+inherit deploy
 
 do_patch[noexec] = "1"
 do_configure[noexec] = "1"
@@ -20,7 +20,6 @@ KERNEL_IMAGE ?= "${KERNEL_IMAGETYPE}"
 ROOTFS_IMAGE ?= "fsl-image-core"
 KERNEL_ITB_IMAGE ?= "kernel.itb"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-MACHINE_BASE = "${@d.getVar('MACHINE', True).replace('-${SITEINFO_ENDIANNESS}', '')}"
 
 do_fetch[nostamp] = "1"
 do_unpack[nostamp] = "1"
@@ -39,7 +38,7 @@ do_deploy () {
         cp  ${S}/${KERNEL_ITS_FILE}  ${S}/kernel.its
         sed -i -e "s,./arch/arm64/boot/Image.gz,${KERNEL_IMAGE}.gz," ${S}/kernel.its
         sed -i -e "s,./arch/arm64/boot/dts/freescale/fsl-${MACHINE}.dtb,${DTB_IMAGE}," ${S}/kernel.its
-        sed -i -e "s,./fsl-image-${MACHINE_BASE}.ext2.gz,${ROOTFS_IMAGE}-${MACHINE}.ext2.gz," ${S}/kernel.its
+        sed -i -e "s,./fsl-image-${MACHINE}.ext2.gz,${ROOTFS_IMAGE}-${MACHINE}.ext2.gz," ${S}/kernel.its
 
         install -m 644 ${DEPLOY_DIR_IMAGE}/${DTB_IMAGE} ${S}/
 
@@ -53,4 +52,4 @@ do_deploy () {
 
 addtask deploy before build
 
-COMPATIBLE_MACHINE = "(ls1043ardb|ls1043aqds|ls2080ardb)"
+COMPATIBLE_MACHINE = "(fsl-lsch2|ls2080ardb)"
