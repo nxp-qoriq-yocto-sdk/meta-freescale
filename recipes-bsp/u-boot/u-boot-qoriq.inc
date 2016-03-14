@@ -2,18 +2,13 @@ require recipes-bsp/u-boot/u-boot.inc
 inherit fsl-u-boot-localversion
 
 DESCRIPTION = "U-boot provided by Freescale with focus on QorIQ boards"
-HOMEPAGE = "http://u-boot.sf.net"
-SECTION = "bootloaders"
-PROVIDES = "virtual/bootloader u-boot"
+PROVIDES += "u-boot"
 
 PV_append = "+fslgit"
 INHIBIT_DEFAULT_DEPS = "1"
 DEPENDS = "libgcc virtual/${TARGET_PREFIX}gcc"
-
 DEPENDS_append_qoriq-arm = " change-file-endianess-native dtc-native tcl-native"
 DEPENDS_append_qoriq-ppc = " boot-format-native"
-
-inherit deploy
 
 python () {
     if d.getVar("TCMODE", True) == "external-fsl":
@@ -21,7 +16,6 @@ python () {
 
     ml = d.getVar("MULTILIB_VARIANTS", True)
     arch = d.getVar("OVERRIDES", True)
-
     if "e5500-64b:" in arch or "e6500-64b:" in arch:
         if not "lib32" in ml:
             raise bb.parse.SkipPackage("Building the u-boot for this arch requires multilib to be enabled")
@@ -33,14 +27,10 @@ python () {
 }
 
 WRAP_TARGET_PREFIX ?= "${TARGET_PREFIX}"
-
-PACKAGE_ARCH = "${MACHINE_ARCH}"
+EXTRA_OEMAKE = 'CROSS_COMPILE=${WRAP_TARGET_PREFIX} CC="${WRAP_TARGET_PREFIX}gcc ${TOOLCHAIN_OPTIONS}" V=1'
+EXTRA_OEMAKE += 'HOSTCC="${BUILD_CC} ${BUILD_CFLAGS} ${BUILD_LDFLAGS}"'
 
 LOCALVERSION = "${@d.getVar('SDK_VERSION', True).partition(' ')[0]}"
-
-S = "${WORKDIR}/git"
-
-EXTRA_OEMAKE = 'CROSS_COMPILE=${WRAP_TARGET_PREFIX} CC="${WRAP_TARGET_PREFIX}gcc ${TOOLCHAIN_OPTIONS}"'
 
 do_compile_append_qoriq-ppc() {
     for board in ${UBOOT_MACHINE}; do
