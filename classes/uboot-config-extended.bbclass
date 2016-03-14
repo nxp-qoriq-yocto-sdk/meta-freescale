@@ -3,7 +3,7 @@
 # The format to specify it, in the machine, is:
 #
 # UBOOT_CONFIG ??= <default>
-# UBOOT_CONFIG[foo] = "config,images"
+# UBOOT_CONFIG[foo] = "config,images,binary"
 #
 # or
 #
@@ -14,6 +14,7 @@
 python () {
     ubootmachine = d.getVar("UBOOT_MACHINE", True)
     ubootconfigflags = d.getVarFlags('UBOOT_CONFIG')
+    ubootbinary = d.getVar('UBOOT_BINARY')
     ubootbinaries = d.getVar('UBOOT_BINARIES')
     # The "doc" varflag is special, we don't want to see it here
     ubootconfigflags.pop('doc', None)
@@ -51,7 +52,7 @@ python () {
                         bb.debug(1, "Appending '%s' to UBOOT_BINARIES." % items[2])
                         d.appendVar('UBOOT_BINARIES', ' ' + items[2])
                     else:
-                        d.appendVar('UBOOT_BINARIES', ' u-boot.bin')
+                        d.appendVar('UBOOT_BINARIES', ' ' + ubootbinary)
                     break
     elif len(ubootconfig) == 0:
        raise bb.parse.SkipPackage('You must set a default in UBOOT_CONFIG.')
