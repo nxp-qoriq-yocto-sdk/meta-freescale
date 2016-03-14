@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/BSD;md5=3775480a712fc46a6964767
 inherit deploy
 
 SRC_URI = "git://sw-stash.freescale.net/scm/dpaa2/ls2-rcw.git;branch=master;protocol=http"
-SRCREV = "f6d51a67254089efc393aa547c49cac024fffbba"
+SRCREV = "536c50905845d2de7868f331d83de6e34cc3172a"
 
 S = "${WORKDIR}/git"
 
