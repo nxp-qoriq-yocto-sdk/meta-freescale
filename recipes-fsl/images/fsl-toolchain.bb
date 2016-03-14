@@ -18,6 +18,8 @@ CORE_SPECIFIC = " \
 "
 
 CORE_SPECIFIC_ls102xa = ""
+CORE_SPECIFIC_qoriq-arm64 = ""
+CORE_SPECIFIC_e500v2 = ""
 
 TOOLCHAIN_HOST_TASK += " \
     nativesdk-dtc \
