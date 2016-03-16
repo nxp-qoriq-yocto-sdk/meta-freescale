@@ -20,7 +20,7 @@ SRCREV = "43cecda943a6c40a833b588801b0929e8bd48813"
 
 S = "${WORKDIR}/git"
 
-DEPENDS_append = " libgcc"
+DEPENDS_append = " libgcc dtc-native"
 # not put uImage into /boot of rootfs, install kernel-image if needed
 RDEPENDS_kernel-base = ""
 
@@ -53,6 +53,14 @@ do_configure_prepend() {
         fi
     done
     cp .config ${WORKDIR}/defconfig
+}
+
+# Fix the dtc compile issue if DTC related options are not enabled in defconfig
+do_compile_prepend() {
+    mkdir -p ${B}/scripts/dtc
+    if [ ! -e ${B}/scripts/dtc/dtc ]; then
+        ln -sf ${STAGING_BINDIR_NATIVE}/dtc ${B}/scripts/dtc/dtc
+    fi
 }
 
 do_install_append_qoriq-arm() {
