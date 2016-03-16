@@ -1,4 +1,5 @@
-inherit kernel kernel-arch qoriq_build_64bit_kernel
+inherit kernel kernel-arch qoriq_build_64bit_kernel siteinfo
+
 inherit fsl-kernel-localversion
 require recipes-kernel/linux/linux-dtb.inc
 
@@ -36,6 +37,10 @@ DELTA_KERNEL_DEFCONFIG ?= ""
 do_configure_prepend() {
     # copy desired defconfig so we pick it up for the real kernel_do_configure
     cp ${KERNEL_DEFCONFIG} .config
+    # check if bigendian is enabled
+    if [ "${SITEINFO_ENDIANNESS}" = "be" ]; then
+         echo "CONFIG_CPU_BIG_ENDIAN=y" >> ${B}/.config
+    fi
     # add config fragments
     for deltacfg in ${DELTA_KERNEL_DEFCONFIG}; do
         if [ -f "${deltacfg}" ]; then
