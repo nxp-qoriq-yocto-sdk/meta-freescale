@@ -4,7 +4,7 @@ require conf/machine/include/soc-family.inc
 # common providers of QorIQ targets
 PREFERRED_PROVIDER_u-boot ?= "u-boot-qoriq"
 PREFERRED_PROVIDER_virtual/bootloader ?= "u-boot-qoriq"
-PREFERRED_PROVIDER_virtual/kernel ?= "linux-yocto"
+PREFERRED_PROVIDER_virtual/kernel ?= "linux-qoriq"
 PREFERRED_PROVIDER_cryptodev-linux ?= "cryptodev-qoriq-linux"
 PREFERRED_PROVIDER_cryptodev-module ?= "cryptodev-qoriq-module"
 PREFERRED_PROVIDER_cryptodev-tests ?= "cryptodev-qoriq-tests"
