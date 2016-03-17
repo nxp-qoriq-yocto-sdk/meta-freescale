@@ -65,6 +65,7 @@ do_compile_prepend() {
 
 do_install_append_qoriq-arm() {
     install -m 0644 arch/${ARCH}/boot/zImage ${D}/boot/zImage-${KERNEL_VERSION}
+    ln -sf  zImage-${KERNEL_VERSION} ${D}/boot/zImage
 }
 
 do_deploy_append_qoriq-arm() {
