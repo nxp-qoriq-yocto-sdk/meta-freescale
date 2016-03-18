@@ -61,7 +61,7 @@ do_compile_prepend () {
 
 do_install () {
     export SOC=${SOC}
-    oe_runmake install DESTDIR=${D}
+    oe_runmake install LIBDIR=${BASELIB} DESTDIR=${D}
 }
 
 PARALLEL_MAKE_pn-${PN} = ""
