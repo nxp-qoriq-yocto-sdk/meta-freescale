@@ -296,6 +296,14 @@ fi
 mkdir -p $CACHES
 CACHES=`readlink -f "$CACHES"`
 
+# check if project folder was created before
+if [ -e "$PROJECT_DIR/SOURCE_THIS" ]; then
+    echo "$PROJECT_DIR was created before."
+    . $PROJECT_DIR/SOURCE_THIS
+    echo "Nothing is changed."
+    clean_up && return
+fi
+
 # source oe-init-build-env to init build env
 cd $OEROOTDIR
 set -- $PROJECT_DIR
