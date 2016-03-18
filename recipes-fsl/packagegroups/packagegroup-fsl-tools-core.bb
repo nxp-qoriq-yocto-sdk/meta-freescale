@@ -47,7 +47,7 @@ DPAA_PKGS = " \
 DPAA_PKGS_e500v2 = ""
 DPAA_PKGS_ls102xa = ""
 DPAA_PKGS_fsl-lsch3 = "restool"
-DPAA_PKGS_remove_fsl-lsch2 = "hypervisor-partman usdpaa usdpaa-apps dpa-offload"
+DPAA_PKGS_remove_fsl-lsch2 = "hypervisor-partman"
 DPAA_PKGS_remove_e6500 = "hypervisor-partman"
 DPAA_PKGS_append_e6500 = " lib64-hypervisor-partman"
 
