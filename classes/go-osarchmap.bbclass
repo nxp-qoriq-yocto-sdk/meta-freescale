@@ -21,6 +21,8 @@ def go_map_arch(a, d):
         return 'arm'
     elif re.match('aarch64.*', a):
         return 'arm64'
+    elif re.match('p(pc|owerpc)(|64)', a):
+        return 'powerpc'
     else:
         bb.error("cannot map '%s' to a Go architecture" % a)
 
