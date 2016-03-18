@@ -33,7 +33,8 @@ ZIMAGE_BASE_NAME = "zImage-${PKGE}-${PKGV}-${PKGR}-${MACHINE}-${DATETIME}"
 SCMVERSION ?= "y"
 LOCALVERSION = ""
 DELTA_KERNEL_DEFCONFIG ?= ""
-
+DELTA_KERNEL_DEFCONFIG_prepend_fsl-lsch2 = "freescale.config "
+DELTA_KERNEL_DEFCONFIG_prepend_fsl-lsch3 = "freescale.config "
 do_configure_prepend() {
     # copy desired defconfig so we pick it up for the real kernel_do_configure
     cp ${KERNEL_DEFCONFIG} .config
