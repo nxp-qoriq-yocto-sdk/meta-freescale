@@ -63,6 +63,4 @@ do_install () {
 
 PARALLEL_MAKE_pn-${PN} = ""
 FILES_${PN} += "/root/SOURCE_THIS /usr/etc/"
-
-COMPATIBLE_HOST_qoriq-ppc = ".*"
-COMPATIBLE_HOST ?= "(none)"
+COMPATIBLE_MACHINE = "(qoriq-ppc|fsl-lsch2)"

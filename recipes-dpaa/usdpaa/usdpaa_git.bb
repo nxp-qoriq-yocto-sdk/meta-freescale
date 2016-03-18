@@ -22,5 +22,4 @@ do_install () {
 }
 
 PARALLEL_MAKE_pn-${PN} = ""
-
-COMPATIBLE_MACHINE = "(qoriq-ppc)"
+COMPATIBLE_MACHINE = "(qoriq-ppc|fsl-lsch2)"

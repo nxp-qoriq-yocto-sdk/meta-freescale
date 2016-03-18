@@ -44,6 +44,4 @@ do_install () {
 }
 
 ALLOW_EMPTY_${PN} = "1"
-
-COMPATIBLE_HOST_qoriq-ppc = ".*"
-COMPATIBLE_HOST ?= "(none)"
+COMPATIBLE_MACHINE = "(qoriq-ppc|fsl-lsch2)"
