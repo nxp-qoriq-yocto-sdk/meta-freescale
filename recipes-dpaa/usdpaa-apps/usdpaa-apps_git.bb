@@ -22,8 +22,9 @@ SRCREV = "1d9418af04990289bec72cd43a9385690523fcdb"
 
 S = "${WORKDIR}/git"
 
-EXTRA_OEMAKE = 'CC="${CC}" LD="${LD}" AR="${AR}"'
-export ARCH="${TARGET_ARCH}"
+WRAP_ARCH ?= "${TARGET_ARCH}"
+WRAP_ARCH_fsl-lsch2 = "arm64"
+EXTRA_OEMAKE = 'CC="${CC}" LD="${LD}" AR="${AR}" ARCH="${WRAP_ARCH}"'
 
 SOC ?= "P4080"
 SOC_b4 = "B4860"
@@ -31,6 +32,7 @@ SOC_t1 = "T1040"
 SOC_t2 = "T2080"
 SOC_t4 = "T4240"
 SOC_p1023rdb = "P1023"
+SOC_fsl-lsch2 = "LS1043"
 
 FMAN_VARIANT ?= "P4080"
 FMAN_VARIANT_b4 = "FMAN_V3H"
@@ -38,6 +40,7 @@ FMAN_VARIANT_t1 = "FMAN_V3L"
 FMAN_VARIANT_t2 = "FMAN_V3H"
 FMAN_VARIANT_t4 = "FMAN_V3H"
 FMAN_VARIANT_p1023rdb = "P1023"
+FMAN_VARIANT_fsl-lsch2 = "LS1043"
 
 do_compile_prepend () {
     export SOC=${SOC}
