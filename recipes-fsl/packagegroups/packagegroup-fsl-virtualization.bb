@@ -19,7 +19,7 @@ RDEPENDS_${PN} = "${@base_contains('DISTRO_FEATURES', 'x11', \
     '', d)} \
 " 
 
-RDEPENDS_${PN}_append_qoriq-arm64 = " \
+RDEPENDS_${PN}_append_fsl-lsch3 = " \
     docker \
     docker-registry \
 "
