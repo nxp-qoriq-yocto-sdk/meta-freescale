@@ -19,10 +19,9 @@ SRCREV = "ed6191db9439d1aaba27fc01238da770d1d8ef9e"
 
 S = "${WORKDIR}/git"
 
-EXTRA_OEMAKE = 'CC="${CC}" LD="${LD}"'
-export ARCH="${TARGET_ARCH}"
-
-PARALLEL_MAKE_pn-${PN} = ""
+WRAP_ARCH ?= "${TARGET_ARCH}"
+WRAP_ARCH_fsl-lsch2 = "arm64"
+EXTRA_OEMAKE = 'CC="${CC}" LD="${LD}" ARCH="${WRAP_ARCH}"'
 
 FMAN_VARIANT ?= "P4080"
 FMAN_VARIANT_b4 = "FMAN_V3H"
@@ -44,4 +43,5 @@ do_install () {
 }
 
 ALLOW_EMPTY_${PN} = "1"
+PARALLEL_MAKE_pn-${PN} = ""
 COMPATIBLE_MACHINE = "(qoriq-ppc|fsl-lsch2)"
