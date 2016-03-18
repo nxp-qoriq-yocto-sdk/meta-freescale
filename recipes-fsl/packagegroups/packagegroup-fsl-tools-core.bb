@@ -72,6 +72,7 @@ RDEPENDS_${PN}_remove_ls102xa ="apptrk"
 RDEPENDS_${PN}_remove_fsl-lsch2 ="apptrk" 
 RDEPENDS_${PN}_remove_fsl-lsch3 ="apptrk asf"
 RDEPENDS_${PN}_append_e500v2 = " testfloat"
+RDEPENDS_${PN}_append_e6500-64b = " ceetm"
 RDEPENDS_${PN}_append_c293pcie = " skmm-ep"
 RDEPENDS_${PN}_append_p1023rdb = " fmc eth-config"
 RDEPENDS_${PN}_append_b4860qds = "${IPC_PKGS}"
@@ -83,10 +84,14 @@ RDEPENDS_${PN}_append_p4080ds = " \
 "
 
 RDEPENDS_${PN}_append_t1040 = " \
+    ar \
+    ceetm \
     uio-seville \
 "
 
 RDEPENDS_${PN}_append_t1042 = " \
+    ar \
+    ceetm \
 "
 
 RDEPENDS_${PN}_append_t4240qds = " \
