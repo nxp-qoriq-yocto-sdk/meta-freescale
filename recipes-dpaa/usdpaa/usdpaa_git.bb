@@ -14,11 +14,12 @@ SRCREV = "b73546dc923d9f3df92af08c2ebaf36d83ab96ea"
 
 S = "${WORKDIR}/git"
 
-EXTRA_OEMAKE = 'CC="${CC}" LD="${LD}" AR="${AR}"'
-export ARCH="${TARGET_ARCH}"
+WRAP_ARCH ?= "${TARGET_ARCH}"
+WRAP_ARCH_fsl-lsch2 = "arm64"
+EXTRA_OEMAKE = 'CC="${CC}" LD="${LD}" AR="${AR}" ARCH="${WRAP_ARCH}"'
 
 do_install () {
-    oe_runmake install DESTDIR=${D}
+    oe_runmake install LIBDIR=${BASELIB} DESTDIR=${D}
 }
 
 PARALLEL_MAKE_pn-${PN} = ""
