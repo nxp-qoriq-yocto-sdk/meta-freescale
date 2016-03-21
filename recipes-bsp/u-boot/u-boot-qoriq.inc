@@ -46,7 +46,7 @@ do_compile_append_qoriq() {
                     if [ -n "${BOOTFORMAT_CONFIG}" ] && echo "${type}" |grep -q spi;then
                         ${STAGING_BINDIR_NATIVE}/boot_format \
                             ${STAGING_DATADIR_NATIVE}/boot_format/${BOOTFORMAT_CONFIG} \
-                            ${config}/${UBOOT_SOURCE} -spi ${config}/u-boot.format.bin
+                            ${config}/${binary} -spi ${config}/u-boot.format.bin
                         cp ${config}/u-boot.format.bin ${config}/u-boot-${type}-${PV}-${PR}.${UBOOT_SUFFIX}
                     elif [ "qspi" = "${type}" ];then
                         tclsh ${STAGING_BINDIR_NATIVE}/byte_swap.tcl ${config}/${binary} ${config}/u-boot.swap.bin 8
