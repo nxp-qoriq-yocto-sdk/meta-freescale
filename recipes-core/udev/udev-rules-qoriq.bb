@@ -11,6 +11,7 @@ RULE_e6500 = "72-fsl-dpaa-persistent-networking.rules"
 RULE_e6500-64b = "72-fsl-dpaa-persistent-networking.rules"
 RULE_t1024 = "72-fsl-dpaa-persistent-networking.rules"
 RULE_t1023 = "72-fsl-dpaa-persistent-networking.rules"
+RULE_fsl-lsch2 = "72-fsl-dpaa-persistent-networking.rules"
 
 S = "${WORKDIR}"
 
@@ -19,4 +20,4 @@ do_install () {
     install -m 0644 ${WORKDIR}/${RULE} ${D}${sysconfdir}/udev/rules.d/
 }
 
-COMPATIBLE_MACHINE = "(qoriq-ppc)"
+COMPATIBLE_MACHINE = "(qoriq-ppc|fsl-lsch2)"
