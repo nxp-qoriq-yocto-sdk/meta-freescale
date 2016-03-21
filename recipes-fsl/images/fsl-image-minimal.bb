@@ -9,6 +9,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 CORE_IMAGE_EXTRA_INSTALL += "udev-extraconf lsb"
 CORE_IMAGE_EXTRA_INSTALL_append_qoriq-ppc = " udev-rules-qoriq"
+CORE_IMAGE_EXTRA_INSTALL_append_fsl-lsch2 = " udev-rules-qoriq"
 CORE_IMAGE_EXTRA_INSTALL_append_imx = " udev-rules-imx"
 
 export IMAGE_BASENAME = "fsl-image-minimal"
