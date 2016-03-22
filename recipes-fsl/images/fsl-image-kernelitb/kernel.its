@@ -3,6 +3,8 @@
  *
  * Mingkai Hu <Mingkai.hu@freescale.com>
  * Hou Zhiqiang <B48286@freescale.com>
+ * Bhupesh Sharma <bhupesh.sharma@freescale.com>
+ * Harninder Rai <harninder.rai@freescale.com>
  *
  * This file is licensed under the terms of the GNU General Public
  * License version 2.  This program is licensed "as is" without any
@@ -12,13 +14,13 @@
 /dts-v1/;
 
 / {
-	description = "Image file for the LS1043A Linux Kernel";
+	description = "Image file for the Linux Kernel";
 	#address-cells = <1>;
 
 	images {
 		kernel@1 {
 			description = "ARM64 Linux kernel";
-			data = /incbin/("./arch/arm64/boot/Image.gz");
+			data = /incbin/("kernel-image.gz");
 			type = "kernel";
 			arch = "arm64";
 			os = "linux";
@@ -28,15 +30,15 @@
 		};
 		fdt@1 {
 			description = "Flattened Device Tree blob";
-			data = /incbin/("./arch/arm64/boot/dts/freescale/fsl-ls1043ardb.dtb");
+			data = /incbin/("freescale.dtb");
 			type = "flat_dt";
 			arch = "arm64";
 			compression = "none";
 			load = <0x90000000>;
 		};
 		ramdisk@1 {
-			description = "LS1043 Ramdisk";
-                        data = /incbin/("./fsl-image-ls1043ardb.ext2.gz");
+			description = "Ramdisk";
+			data = /incbin/("rootfs.ext2.gz");
 			type = "ramdisk";
 			arch = "arm64";
 			os = "linux";

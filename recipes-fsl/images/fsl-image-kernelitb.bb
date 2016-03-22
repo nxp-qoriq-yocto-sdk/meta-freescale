@@ -1,7 +1,13 @@
-DESCRIPTION = "A FIT image comprising the Linux image, dtb and rootfs image"
+SUMMARY = "A FIT image comprising the Linux image, dtb and rootfs"
 LICENSE = "MIT"
 
-SRC_URI = "file://${KERNEL_ITS_FILE}"
+KERNEL_IMAGE ?= "${KERNEL_IMAGETYPE}"
+ROOTFS_IMAGE ?= "fsl-image-core"
+KERNEL_ITS ?= "kernel.its"
+
+SRC_URI = "file://${KERNEL_ITS}"
+
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit deploy
 
@@ -16,40 +22,32 @@ do_package_write_ipk[noexec] = "1"
 do_package_write_deb[noexec] = "1"
 do_package_write_rpm[noexec] = "1"
 
-KERNEL_IMAGE ?= "${KERNEL_IMAGETYPE}"
-ROOTFS_IMAGE ?= "fsl-image-core"
-KERNEL_ITB_IMAGE ?= "kernel.itb"
-PACKAGE_ARCH = "${MACHINE_ARCH}"
-
 do_fetch[nostamp] = "1"
 do_unpack[nostamp] = "1"
 do_deploy[nostamp] = "1"
 do_deploy[depends] += "virtual/kernel:do_build ${ROOTFS_IMAGE}:do_build"
 
 do_deploy () {
-    install -m 644 ${WORKDIR}/${KERNEL_ITS_FILE} ${S}
-    install -m 644 ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGE} ${S}/
-    rm -f ${S}/${KERNEL_IMAGE}.gz
-    gzip -c  ${S}/${KERNEL_IMAGE} > ${S}/${KERNEL_IMAGE}.gz
-    install -m 644 ${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE}-${MACHINE}.ext2.gz ${S}/
     install -d ${DEPLOYDIR}
+    cp ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGE} .
+    rm -f ${KERNEL_IMAGE}.gz
+    gzip ${KERNEL_IMAGE}
     for DTS_FILE in ${KERNEL_DEVICETREE}; do
-        DTB_IMAGE="${KERNEL_IMAGETYPE}-`basename ${DTS_FILE}`";
-        cp  ${S}/${KERNEL_ITS_FILE}  ${S}/kernel.its
-        sed -i -e "s,./arch/arm64/boot/Image.gz,${KERNEL_IMAGE}.gz," ${S}/kernel.its
-        sed -i -e "s,./arch/arm64/boot/dts/freescale/fsl-${MACHINE}.dtb,${DTB_IMAGE}," ${S}/kernel.its
-        sed -i -e "s,./fsl-image-${MACHINE}.ext2.gz,${ROOTFS_IMAGE}-${MACHINE}.ext2.gz," ${S}/kernel.its
+        DTB_FILE="${KERNEL_IMAGETYPE}-`basename ${DTS_FILE}`";
+        ITB_BASENAME=kernel-`basename ${DTS_FILE} |sed -e 's,.dtb$,,'`-${DATETIME}
+        ITB_SYMLINk=kernel-`basename ${DTS_FILE} |sed -e 's,.dtb$,,'`
 
-        install -m 644 ${DEPLOY_DIR_IMAGE}/${DTB_IMAGE} ${S}/
+        cp ${WORKDIR}/${KERNEL_ITS} kernel.its
+        sed -i -e "s,kernel-image.gz,${KERNEL_IMAGE}.gz," kernel.its
+        sed -i -e "s,freescale.dtb,${DEPLOY_DIR_IMAGE}/${DTB_FILE}," kernel.its
+        sed -i -e "s,rootfs.ext2.gz,${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE}-${MACHINE}.ext2.gz," kernel.its
 
-        mkimage -f kernel.its  kernel-`basename ${DTS_FILE}`.itb
-        install -m 644 ${S}/kernel-`basename ${DTS_FILE}`.itb ${DEPLOYDIR}/kernel-`basename ${DTS_FILE}`-${MACHINE}-${DATETIME}.itb
-        cd ${DEPLOYDIR}
-        ln -sf kernel-`basename ${DTS_FILE}`-${MACHINE}-${DATETIME}.itb kernel-`basename ${DTS_FILE}`-${MACHINE}.itb 
-        cd -
+        mkimage -f kernel.its ${ITB_BASENAME}.itb
+
+        install -m 644 ${ITB_BASENAME}.itb ${DEPLOYDIR}/
+        ln -sf ${ITB_BASENAME}.itb ${DEPLOYDIR}/${ITB_SYMLINk}.itb
     done
 }
-
 addtask deploy before build
 
-COMPATIBLE_MACHINE = "(fsl-lsch2|ls2080ardb)"
+COMPATIBLE_MACHINE = "(fsl-lsch2|fsl-lsch3)"
