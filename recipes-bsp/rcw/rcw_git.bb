@@ -12,7 +12,7 @@ SRCREV = "521008fe6ec9897fe245e1c1241fc27dad98f24d"
 
 S = "${WORKDIR}/git"
 
-EXTRA_OEMAKE = "BOARDS=${@d.getVar('MACHINE', True).replace('-${SITEINFO_ENDIANNESS}','')} DESTDIR=${D}/boot/rcw/"
+EXTRA_OEMAKE = "BOARDS=${@d.getVar('MACHINE', True).replace('-64b','').replace('-${SITEINFO_ENDIANNESS}','')} DESTDIR=${D}/boot/rcw/"
 
 do_install () {
     oe_runmake install
