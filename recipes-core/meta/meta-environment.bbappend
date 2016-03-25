@@ -1,0 +1,1 @@
+MULTILIBS_pn-${PN} = ""
