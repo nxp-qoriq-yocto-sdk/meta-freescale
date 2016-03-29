@@ -1,1 +1,1 @@
-EXTRA_OEMAKE_append = " SUBDIRS='lib tc ip bridge'"
+EXTRA_OEMAKE_append_fsl-lsch3 = " SUBDIRS='lib tc ip bridge'"
