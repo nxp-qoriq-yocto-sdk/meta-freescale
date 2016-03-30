@@ -52,6 +52,7 @@ DPAA_PKGS = " \
 "
 DPAA_PKGS_e500v2 = ""
 DPAA_PKGS_ls102xa = ""
+DPAA_PKGS_fsl-lsch3 = ""
 DPAA_PKGS_ls1043ardb-be ="eth-config fmc"
 DPAA_PKGS_ls1043aqds-be ="eth-config fmc" 
 DPAA_PKGS_remove_fsl-lsch2 = "hypervisor-partman"
