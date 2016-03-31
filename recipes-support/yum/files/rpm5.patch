@@ -1,0 +1,51 @@
+diff -Naur yum-3.4.3.orig/rpmUtils/oldUtils.py yum-3.4.3/rpmUtils/oldUtils.py
+--- yum-3.4.3.orig/rpmUtils/oldUtils.py	2011-06-28 22:27:22.000000000 +0200
++++ yum-3.4.3/rpmUtils/oldUtils.py	2015-04-15 14:14:16.670439665 +0200
+@@ -273,7 +273,6 @@
+ 
+ class RPM_Work(RPM_Base_Work):
+     def __init__(self, rpmfn):
+-        ts.setVSFlags(~(rpm._RPMVSF_NOSIGNATURES))
+         fd = os.open(rpmfn, os.O_RDONLY)
+         try:
+             self.hdr = ts.hdrFromFdno(fd)
+@@ -343,7 +342,6 @@
+             self.ts.setVSFlags(~(rpm.RPMVSF_NOMD5|rpm.RPMVSF_NEEDPAYLOAD))
+         elif sig == 'none':
+             # turn off everything - period
+-            self.ts.setVSFlags(~(rpm._RPMVSF_NOSIGNATURES))
+         elif sig == 'default':
+             # set it back to the default
+             self.ts.setVSFlags(rpm.RPMVSF_DEFAULT)
+diff -Naur yum-3.4.3.orig/rpmUtils/transaction.py yum-3.4.3/rpmUtils/transaction.py
+--- yum-3.4.3.orig/rpmUtils/transaction.py	2011-06-28 22:27:22.000000000 +0200
++++ yum-3.4.3/rpmUtils/transaction.py	2015-04-15 14:12:21.675439725 +0200
+@@ -188,6 +188,5 @@
+         
+ def initReadOnlyTransaction(root='/'):
+     read_ts =  TransactionWrapper(root=root)
+-    read_ts.pushVSFlags((rpm._RPMVSF_NOSIGNATURES|rpm._RPMVSF_NODIGESTS))
+     return read_ts
+ 
+diff -Naur yum-3.4.3.orig/yum/config.py yum-3.4.3/yum/config.py
+--- yum-3.4.3.orig/yum/config.py	2011-06-28 22:27:22.000000000 +0200
++++ yum-3.4.3/yum/config.py	2015-04-15 14:13:23.493439699 +0200
+@@ -1008,7 +1008,6 @@
+     @return: The release version as a string (eg. '4' for FC4)
+     '''
+     ts = rpmUtils.transaction.initReadOnlyTransaction(root=installroot)
+-    ts.pushVSFlags(~(rpm._RPMVSF_NOSIGNATURES|rpm._RPMVSF_NODIGESTS))
+     try:
+         idx = ts.dbMatch('provides', distroverpkg)
+     except TypeError, e:
+diff -Naur yum-3.4.3.orig/yum/__init__.py yum-3.4.3/yum/__init__.py
+--- yum-3.4.3.orig/yum/__init__.py	2011-06-28 22:27:22.000000000 +0200
++++ yum-3.4.3/yum/__init__.py	2015-04-15 14:13:08.171439577 +0200
+@@ -3087,7 +3087,6 @@
+             return 1
+             
+         myts = rpmUtils.transaction.initReadOnlyTransaction(root=self.conf.installroot)
+-        myts.pushVSFlags(~(rpm._RPMVSF_NOSIGNATURES|rpm._RPMVSF_NODIGESTS))
+         idx = myts.dbMatch('name', 'gpg-pubkey')
+         keys = idx.count()
+         del idx

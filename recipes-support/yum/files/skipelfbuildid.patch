@@ -1,0 +1,16 @@
+diff -Naur yum-3.4.3.orig/yum/rpmsack.py yum-3.4.3/yum/rpmsack.py
+--- yum-3.4.3.orig/yum/rpmsack.py	2011-06-28 22:27:22.000000000 +0200
++++ yum-3.4.3/yum/rpmsack.py	2015-04-21 13:23:43.519102773 +0200
+@@ -1534,8 +1534,12 @@
+             everything it provides) finds it. """
+         problems = []
+         for pkg in sorted(self.returnPackages()):
++    	    # print "----", pkg.name
+             for provtup in pkg.provides:
++        	# print provtup
+                 name, flags, version = provtup
++                if name == "elf(buildid)":
++            	    continue;
+                 if pkg not in self.getProvides(name, flags, version):
+                     problems.append(RPMDBProblemProvides(pkg, provide=provtup))
+                     break

@@ -1,0 +1,60 @@
+diff -Naur yum-3.4.3.orig/rpmUtils/arch.py yum-3.4.3/rpmUtils/arch.py
+--- yum-3.4.3.orig/rpmUtils/arch.py	2011-06-28 22:27:22.000000000 +0200
++++ yum-3.4.3/rpmUtils/arch.py	2015-04-18 18:42:37.218259702 +0200
+@@ -29,6 +29,19 @@
+     "ppc64pseries": "ppc64",
+     "ppc64iseries": "ppc64",    
+     "ppc64": "ppc",
++    "powerpc64": "ppc64",
++    "ppc64e6500": "ppc64",
++    "ppc64e5500": "ppc64",
++    "powerpc": "ppc",
++    "ppce6500": "ppc",
++    "ppce5500": "ppc",
++    "ppce500mc": "ppc",
++    "ppce500v2": "ppc",
++    "ppce500": "ppc",
++    "ppce300c3-nf": "ppc",
++    "ppce300c3": "ppc",
++    "ppc7400": "ppc",
++    "ppc603e": "ppc",
+     "ppc": "noarch",
+     
+     # s390{,x}
+@@ -233,6 +246,21 @@
+ 
+ def getCanonPPCArch(arch):
+     # FIXME: should I do better handling for mac, etc?
++
++    # For Freescale CPUs, we try to determine the most optimized arch
++    # as canonical arch
++    cpu = None
++    for line in _try_read_cpuinfo():
++        if line.startswith("cpu"):
++            cpu = line.split(':')[1]
++            cpu = cpu.split(',')[0]
++            cpu = cpu.strip()
++            break
++    if cpu is not None:
++        tmparch = arch + cpu
++        if tmparch in arches:
++    	    return tmparch
++
+     if arch != "ppc64":
+         return arch
+ 
+@@ -299,6 +327,14 @@
+             line = f.readline()
+             f.close()
+             (arch, vendor, opersys) = line.split("-", 2)
++	    # Work around unusual usage in Freescale SDKs
++	    if arch == "powerpc":
++		arch = "ppc"
++	    if arch == "powerpc64":
++		arch = "ppc64"
++	    if arch == "ppc" or arch == "ppc64":
++		# We try to be more precise than the fuzzy rpm file
++		arch = getCanonPPCArch(arch);
+             return arch
+         except:
+             pass

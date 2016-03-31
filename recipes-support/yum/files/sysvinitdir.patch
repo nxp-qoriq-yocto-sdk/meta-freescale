@@ -1,0 +1,62 @@
+diff --git a/etc/0yum.cron b/etc/0yum.cron
+index 0cfaa4b..c91f57f 100755
+--- a/etc/0yum.cron
++++ b/etc/0yum.cron
+@@ -1,6 +1,6 @@
+ #!/bin/bash
+ 
+-# Only run if this flag file is set (by /etc/rc.d/init.d/yum-cron)
++# Only run if this flag file is set (by /etc/init.d/yum-cron)
+ if [ ! -f /var/lock/subsys/yum-cron ]; then
+   exit 0
+ fi
+diff --git a/etc/Makefile b/etc/Makefile
+index 8716ad8..85246e8 100644
+--- a/etc/Makefile
++++ b/etc/Makefile
+@@ -19,8 +19,8 @@ install:
+ 	mkdir -p $(DESTDIR)$(sysconfdir)/logrotate.d
+ 	install -m 644 yum.logrotate $(DESTDIR)$(sysconfdir)/logrotate.d/yum
+ 
+-	mkdir -p $(DESTDIR)$(sysconfdir)/rc.d/init.d
+-	install -m 755 yum-updatesd.init $(DESTDIR)$(sysconfdir)/rc.d/init.d/yum-updatesd
++	mkdir -p $(DESTDIR)$(sysconfdir)/init.d
++	install -m 755 yum-updatesd.init $(DESTDIR)$(sysconfdir)/init.d/yum-updatesd
+ 
+ 	mkdir -p $(DESTDIR)$(sysconfdir)/dbus-1/system.d/
+ 	install -m 755 yum-updatesd-dbus.conf $(DESTDIR)$(sysconfdir)/dbus-1/system.d/yum-updatesd.conf
+@@ -32,7 +32,7 @@ install:
+ 	mkdir -p $(DESTDIR)$(sysconfdir)/cron.daily
+ 	mkdir -p $(DESTDIR)$(sysconfdir)/sysconfig/
+ 	install -D -m 755 0yum.cron $(DESTDIR)$(sysconfdir)/cron.daily/0yum.cron
+-	install -D -m 755 yum-cron $(DESTDIR)$(sysconfdir)/rc.d/init.d/yum-cron
++	install -D -m 755 yum-cron $(DESTDIR)$(sysconfdir)/init.d/yum-cron
+ 	install -D -m 644 yum-daily.yum $(YUMETC)/yum-daily.yum
+ 	install -D -m 644 yum-weekly.yum $(YUMETC)/yum-weekly.yum
+ 	install -D -m 644 yum-cron.sysconf $(DESTDIR)$(sysconfdir)/sysconfig/yum-cron
+diff --git a/etc/yum-cron b/etc/yum-cron
+index 63c5ec0..3d1954c 100755
+--- a/etc/yum-cron
++++ b/etc/yum-cron
+@@ -12,7 +12,7 @@
+ #
+ 
+ # source function library
+-. /etc/rc.d/init.d/functions
++. /etc/init.d/functions
+ 
+ test -f /etc/sysconfig/yum-cron && . /etc/sysconfig/yum-cron
+ 
+diff --git a/etc/yum-updatesd.init b/etc/yum-updatesd.init
+index 55f166d..c7eb4b0 100755
+--- a/etc/yum-updatesd.init
++++ b/etc/yum-updatesd.init
+@@ -14,7 +14,7 @@
+ #
+ 
+ # source function library
+-. /etc/rc.d/init.d/functions
++. /etc/init.d/functions
+ 
+ RETVAL=0
+ 
