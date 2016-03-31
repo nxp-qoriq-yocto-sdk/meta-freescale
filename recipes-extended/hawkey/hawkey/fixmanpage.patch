@@ -1,0 +1,11 @@
+diff --git a/doc/CMakeLists.txt b/doc/CMakeLists.txt
+index 2486801..05f21ee 100644
+--- a/doc/CMakeLists.txt
++++ b/doc/CMakeLists.txt
+@@ -17,4 +17,5 @@ ADD_CUSTOM_TARGET (doc-man
+ 		  COMMENT "Building manpage documentation")
+ ADD_CUSTOM_TARGET (doc)
+ ADD_DEPENDENCIES (doc doc-html doc-man)
+-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/hawkey.3 DESTINATION share/man/man3)
++ADD_CUSTOM_COMMAND(TARGET doc-man POST_BUILD
++                   COMMAND INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/hawkey.3 DESTINATION share/man/man3))

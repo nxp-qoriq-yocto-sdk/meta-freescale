@@ -1,0 +1,9 @@
+diff --git a/cmake/modules/FindPythonInstDir.cmake b/cmake/modules/FindPythonInstDir.cmake
+index dc23ebb..1221bdb 100644
+--- a/cmake/modules/FindPythonInstDir.cmake
++++ b/cmake/modules/FindPythonInstDir.cmake
+@@ -1 +1,3 @@
+-EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "from sys import stdout; from distutils import sysconfig; stdout.write(sysconfig.get_python_lib(True))" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
++IF (NOT DEFINED PYTHON_INSTALL_DIR)
++        EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "from sys import stdout; from distutils import sysconfig; stdout.write(sysconfig.get_python_lib(True))" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
++ENDIF (NOT DEFINED PYTHON_INSTALL_DIR)
