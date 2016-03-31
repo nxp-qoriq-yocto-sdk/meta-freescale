@@ -1,0 +1,15 @@
+diff --git a/bindings/python/CMakeLists.txt b/bindings/python/CMakeLists.txt
+index 73f2dca..71e8363 100644
+--- a/bindings/python/CMakeLists.txt
++++ b/bindings/python/CMakeLists.txt
+@@ -2,7 +2,9 @@
+ 
+ FIND_PACKAGE (PythonLibs)
+ FIND_PACKAGE (PythonInterp ${PYTHONLIBS_VERSION_STRING} REQUIRED)
+-EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "from sys import stdout; from distutils import sysconfig; stdout.write(sysconfig.get_python_lib(True))" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
++IF (NOT DEFINED PYTHON_INSTALL_DIR)
++    EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "from sys import stdout; from distutils import sysconfig; stdout.write(sysconfig.get_python_lib(True))" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
++ENDIF (NOT DEFINED PYTHON_INSTALL_DIR)
+ 
+ IF (NOT DEFINED PYTHON_VERSION_MAJOR)
+     SET (PYTHON_VERSION_MAJOR 2)
