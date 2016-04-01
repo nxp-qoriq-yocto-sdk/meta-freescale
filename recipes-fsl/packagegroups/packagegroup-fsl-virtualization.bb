@@ -19,7 +19,11 @@ RDEPENDS_${PN} = "${@base_contains('DISTRO_FEATURES', 'x11', \
     '', d)} \
 " 
 
-RDEPENDS_${PN}_append_qoriq-arm64 = " \
+DOCKER_PKGS = " \
     docker \
     docker-registry \
 "
+
+RDEPENDS_${PN}_append_ls1043aqds = "${DOCKER_PKGS}"
+RDEPENDS_${PN}_append_ls1043ardb = "${DOCKER_PKGS}"
+RDEPENDS_${PN}_append_ls2080ardb = "${DOCKER_PKGS}"
