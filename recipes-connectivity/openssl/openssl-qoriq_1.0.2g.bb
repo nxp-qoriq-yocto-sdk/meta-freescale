@@ -84,6 +84,7 @@ SRC_URI += "file://0001-remove-double-initialization-of-cryptodev-engine.patch \
 	file://0045-cryptodev-change-signature-for-conversion-functions.patch \
 	file://0046-cryptodev-add-explicit-cast-for-known-BIGNUM-values.patch \
 	file://0047-cryptodev-treat-all-build-warnings-as-errors.patch \
+	file://0048-fix-maclen-is-used-uninitialized-warning-on-some-com.patch \
 "
 
 SRC_URI[md5sum] = "f3c710c045cdee5fd114feb69feba7aa"
