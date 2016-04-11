@@ -213,6 +213,7 @@ LAYER_LIST=" \
     meta-security \
     meta-fsl-local-build \
     meta-fsl-testing \
+    meta-fsl-odp \
 "
 if [ "$setup_g" == "true" ]; then
 LAYER_LIST="$LAYER_LIST \
