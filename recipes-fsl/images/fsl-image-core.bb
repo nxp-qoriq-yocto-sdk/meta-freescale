@@ -13,7 +13,6 @@ IMAGE_INSTALL_append = " \
     packagegroup-fsl-networking-core \
 "
 
-export IMAGE_BASENAME = "fsl-image-core"
 
 IMAGE_INSTALL_append_imx = " \
     packagegroup-fsl-graphics-core \

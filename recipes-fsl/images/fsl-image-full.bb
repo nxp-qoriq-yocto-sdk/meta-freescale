@@ -24,7 +24,6 @@ IMAGE_INSTALL_append = " \
     packagegroup-fsl-tools-extended \
 "
 
-export IMAGE_BASENAME = "fsl-image-full"
 
 IMAGE_FEATURES_imx += " splash"
 IMAGE_FEATURES_imx += "${@base_contains('DISTRO_FEATURES', 'x11', \

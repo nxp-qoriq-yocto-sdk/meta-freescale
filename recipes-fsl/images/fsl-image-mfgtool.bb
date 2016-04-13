@@ -14,4 +14,3 @@ IMAGE_INSTALL_append = " \
     packagegroup-fsl-mfgtools \
 "
 
-export IMAGE_BASENAME = "fsl-image-mfgtool"

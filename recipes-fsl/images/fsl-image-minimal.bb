@@ -12,5 +12,4 @@ CORE_IMAGE_EXTRA_INSTALL_append_qoriq-ppc = " udev-rules-qoriq"
 CORE_IMAGE_EXTRA_INSTALL_append_fsl-lsch2 = " udev-rules-qoriq"
 CORE_IMAGE_EXTRA_INSTALL_append_imx = " udev-rules-imx"
 
-export IMAGE_BASENAME = "fsl-image-minimal"
 IMAGE_FSTYPES = "tar.gz ext2.gz ext2.gz.u-boot jffs2 ubi"
