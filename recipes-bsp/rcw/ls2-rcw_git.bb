@@ -15,13 +15,13 @@ S = "${WORKDIR}/git"
 TP ?= "RDB"
 
 do_install () {
-    M=`echo ${MACHINE} | sed -e 's,[b-z]*$,,'`
+    M=`echo ${MACHINE} | sed -e 's,[b-z-]*$,,'`
     install -d ${D}/boot/rcw
     cp -r ${S}/${M}/${TP}/* ${D}/boot/rcw
 }
 
 do_deploy () {
-    M=`echo ${MACHINE} | sed -e 's,[b-z]*$,,'`
+    M=`echo ${MACHINE} | sed -e 's,[b-z-]*$,,'`
     install -d ${DEPLOYDIR}/rcw
     cp -r ${S}/${M}/${TP}/* ${DEPLOYDIR}/rcw
 }

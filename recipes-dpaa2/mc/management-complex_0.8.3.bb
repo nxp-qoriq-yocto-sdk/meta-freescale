@@ -13,13 +13,13 @@ SRC_URI = "git://sw-stash.freescale.net/scm/dpaa2/mc-binary.git;branch=master;pr
 SRCREV = "37246d8aeda0033289bc082128a07e4821bbb057"
 
 do_install () {
-    M=`echo ${MACHINE} | sed -e 's,[b-z]*$,,'`
+    M=`echo ${MACHINE} | sed -e 's,[b-z-]*$,,'`
     install -d ${D}/boot
     install -m 755 ${S}/${M}/*.itb ${D}/boot
 }
 
 do_deploy () {
-    M=`echo ${MACHINE} | sed -e 's,[b-z]*$,,'`
+    M=`echo ${MACHINE} | sed -e 's,[b-z-]*$,,'`
     install -d ${DEPLOYDIR}/mc_app
     install -m 755 ${S}/${M}/*.itb ${DEPLOYDIR}/mc_app
     MC_FW=`ls ${S}/${M}/*.itb | xargs basename`
