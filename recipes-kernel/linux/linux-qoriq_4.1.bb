@@ -41,6 +41,7 @@ do_configure_prepend() {
     # check if bigendian is enabled
     if [ "${SITEINFO_ENDIANNESS}" = "be" ]; then
          echo "CONFIG_CPU_BIG_ENDIAN=y" >> ${B}/.config
+         echo "CONFIG_MTD_CFI_BE_BYTE_SWAP=y" >> ${B}/.config
     fi
     # add config fragments
     for deltacfg in ${DELTA_KERNEL_DEFCONFIG}; do
