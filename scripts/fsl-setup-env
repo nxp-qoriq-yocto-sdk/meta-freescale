@@ -172,7 +172,8 @@ fi
 
 # Check the machine type specified
 if [ -n "${MACHINE}" ] && \
-    [ -e "$FSLROOTDIR/conf/machine/${MACHINE}.conf" ]; then
+    [ -e "$FSLROOTDIR/conf/machine/${MACHINE}.conf" ] || \
+    [ -e "$FSLROOTDIR/../meta-fsl-local-build/conf/machine/${MACHINE}.conf" ]; then
     echo "Configuring for ${MACHINE} ..."
 else
     echo -e "\nThe \$MACHINE you have specified ($MACHINE) is not supported by this build setup."
@@ -235,7 +236,7 @@ EULA_FILE="$FSLROOTDIR/EULA"
 if [ "`ls $FSLROOTDIR/conf/machine \
        | grep "\.conf" | egrep "^imx|^twr" | grep ${MACHINE} | wc -l`" != "0" ]; then
     FSLDISTRO="fslc-imx"
-elif [ "`ls $FSLROOTDIR/conf/machine \
+elif [ "`ls $FSLROOTDIR/conf/machine $FSLROOTDIR/../meta-fsl-local-build/conf/machine \
        | grep "\.conf" | egrep -v "^imx|^twr" | grep ${MACHINE} | wc -l`" != "0" ]; then
     if [ "$setup_g" = "true" ]; then
         DISTRO="fsl-qoriq-cgl"
