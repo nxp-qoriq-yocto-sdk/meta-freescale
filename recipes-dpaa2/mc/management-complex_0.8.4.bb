@@ -10,7 +10,7 @@ S = "${WORKDIR}/git"
 inherit deploy
 
 SRC_URI = "git://sw-stash.freescale.net/scm/dpaa2/mc-binary.git;branch=master;protocol=http"
-SRCREV = "37246d8aeda0033289bc082128a07e4821bbb057"
+SRCREV = "44a343cb2ef6e31bd7c01499e6dd0bbf2632d24c"
 
 do_install () {
     M=`echo ${MACHINE} | sed -e 's,[b-z-]*$,,'`
