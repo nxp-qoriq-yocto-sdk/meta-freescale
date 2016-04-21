@@ -1,5 +1,5 @@
 DESCRIPTION = "flash map config"
-LICENSE = "Freescale-EULA"
+LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=8fbb14cbf822c224cb71a80a0e097452"
 
 inherit deploy
