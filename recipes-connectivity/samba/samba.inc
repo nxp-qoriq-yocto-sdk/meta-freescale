@@ -12,6 +12,7 @@ ${SAMBA_MIRROR}    http://www.mirrorservice.org/sites/ftp.samba.org \n \
 SRC_URI = "${SAMBA_MIRROR}/stable/samba-${PV}.tar.gz \
            file://volatiles.03_samba \
            file://smb.conf \
+           file://Heavy_Load_Assistant4LS1021A_NAS.sh \
            file://init.samba \
            file://init.winbind \
            file://tdb.pc \
@@ -104,6 +105,7 @@ do_install_append() {
         install -D -m 755 ${WORKDIR}/init.samba ${D}${sysconfdir}/init.d/samba
         install -D -m 755 ${WORKDIR}/init.winbind ${D}${sysconfdir}/init.d/winbind
     install -D -m 644 ${WORKDIR}/smb.conf ${D}${sysconfdir}/samba/smb.conf
+    install -D -m 644 ${WORKDIR}/Heavy_Load_Assistant4LS1021A_NAS.sh ${D}${sysconfdir}/samba/Heavy_Load_Assistant4LS1021A_NAS.sh
     install -D -m 644 ${WORKDIR}/volatiles.03_samba ${D}${sysconfdir}/default/volatiles/volatiles.03_samba
     install -d ${D}/var/log/samba
     install -d ${D}/var/spool/samba
