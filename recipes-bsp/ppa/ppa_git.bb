@@ -10,7 +10,7 @@ SRC_URI = "git://sw-stash.freescale.net/scm/dnnpi/ls1043-ppa.git;protocol=http \
     file://ppa.its \ 
 "
 
-SRCREV = "aa3e43d6fe47df0eaa26ce061616ebb868ba9bca"
+SRCREV = "8f5645dd224a91fdfdcc550454b3128f2f8d0c5c"
 
 S = "${WORKDIR}/git"
 
