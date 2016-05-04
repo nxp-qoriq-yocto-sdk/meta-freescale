@@ -1,6 +1,6 @@
 DESCRIPTION = "PPA code"
 LICENSE = "Freescale-EULA"
-LIC_FILES_CHKSUM = "file://Makefile;beginline=6;endline=17;md5=c614fadbf08e54f2441db4f8236e707b"
+LIC_FILES_CHKSUM = "file://EULA.txt;md5=60037ccba533a5995e8d1a838d85799c"
 
 DEPENDS += "u-boot-mkimage-native"
 
