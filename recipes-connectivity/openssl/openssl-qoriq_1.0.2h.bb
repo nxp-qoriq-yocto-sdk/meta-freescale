@@ -29,7 +29,6 @@ SRC_URI += "file://find.pl \
             file://debian1.0.2/version-script.patch \
             file://openssl_fix_for_x32.patch \
             file://fix-cipher-des-ede3-cfb1.patch \
-            file://openssl-avoid-NULL-pointer-dereference-in-EVP_DigestInit_ex.patch \
             file://openssl-fix-des.pod-error.patch \
             file://Makefiles-ptest.patch \
             file://ptest-deps.patch \
@@ -87,8 +86,8 @@ SRC_URI += "file://0001-remove-double-initialization-of-cryptodev-engine.patch \
 	file://0048-fix-maclen-is-used-uninitialized-warning-on-some-com.patch \
 "
 
-SRC_URI[md5sum] = "f3c710c045cdee5fd114feb69feba7aa"
-SRC_URI[sha256sum] = "b784b1b3907ce39abf4098702dade6365522a253ad1552e267a9a0e89594aa33"
+SRC_URI[md5sum] = "9392e65072ce4b614c1392eefc1f23d0"
+SRC_URI[sha256sum] = "1d4007e53aad94a5b2002fe045ee7bb0b3d98f1a47f8b2bc851dcd1c74332919"
 
 PACKAGES =+ " \
 	${PN}-engines \
