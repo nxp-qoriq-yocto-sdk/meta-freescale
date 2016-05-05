@@ -33,4 +33,4 @@ FILES_${PN} = "${bindir}/cli \
     /etc/crypto/pkc-firmware.bin \
 "
 
-COMPATIBLE_MACHINE = "(qoriq-ppc)"
+COMPATIBLE_MACHINE = "(qoriq)"
