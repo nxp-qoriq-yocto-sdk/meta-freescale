@@ -1,0 +1,37 @@
+Upstream-Status: Backport
+
+diff -uNr cryptography-0.8.1-ori/src/cryptography/hazmat/bindings/openssl/ssl.py cryptography-0.8.1/src/cryptography/hazmat/bindings/openssl/ssl.py
+--- cryptography-0.8.1-ori/src/cryptography/hazmat/bindings/openssl/ssl.py	2015-03-18 09:56:42.000000000 +0800
++++ cryptography-0.8.1/src/cryptography/hazmat/bindings/openssl/ssl.py	2016-05-09 11:49:56.866580179 +0800
+@@ -262,15 +262,6 @@
+ 
+ /*  methods */
+ 
+-/* SSLv2 support is compiled out of some versions of OpenSSL.  These will
+- * get special support when we generate the bindings so that if they are
+- * available they will be wrapped, but if they are not they won't cause
+- * problems (like link errors).
+- */
+-const SSL_METHOD *SSLv2_method(void);
+-const SSL_METHOD *SSLv2_server_method(void);
+-const SSL_METHOD *SSLv2_client_method(void);
+-
+ /*
+  * TLSv1_1 and TLSv1_2 are recent additions.  Only sufficiently new versions of
+  * OpenSSL support them.
+@@ -381,14 +372,8 @@
+ #else
+ static const long Cryptography_HAS_SECURE_RENEGOTIATION = 1;
+ #endif
+-#ifdef OPENSSL_NO_SSL2
++
+ static const long Cryptography_HAS_SSL2 = 0;
+-SSL_METHOD* (*SSLv2_method)(void) = NULL;
+-SSL_METHOD* (*SSLv2_client_method)(void) = NULL;
+-SSL_METHOD* (*SSLv2_server_method)(void) = NULL;
+-#else
+-static const long Cryptography_HAS_SSL2 = 1;
+-#endif
+ 
+ #ifdef OPENSSL_NO_SSL3_METHOD
+ static const long Cryptography_HAS_SSL3_METHOD = 0;
