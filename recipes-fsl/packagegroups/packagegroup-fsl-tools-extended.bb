@@ -62,6 +62,8 @@ EXTRA_TOOLS_p1022ds = " packagegroup-fsl-graphics-minimal"
 EXTRA_TOOLS_t4240 = " web-sysmon cairo-dev"
 
 RDEPENDS_${PN}_append_qoriq = "\
+    kernel-dev \
+    kernel-devsrc \
     kernel-devicetree \
     kernel-image \
     ${@multilib_pkg_extend(d, "binutils")} \
