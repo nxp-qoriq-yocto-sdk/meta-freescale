@@ -1,7 +1,7 @@
-From c1eccc3213d8a243e4d9e9fb67e976531f5e07d7 Mon Sep 17 00:00:00 2001
+From c8a5f714d35c3bd63d2511ad69e0661a7d1d5dcd Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Tue, 9 Feb 2016 11:53:22 +0200
-Subject: [PATCH 43/47] cryptodev: check for errors inside
+Subject: [PATCH 43/48] cryptodev: check for errors inside
  cryptodev_dh_compute_key
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>

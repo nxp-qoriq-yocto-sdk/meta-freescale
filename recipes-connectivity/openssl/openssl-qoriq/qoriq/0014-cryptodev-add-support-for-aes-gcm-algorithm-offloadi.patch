@@ -1,7 +1,7 @@
-From 0ffd3cb28d72301c1f504078031e25ba7a9cacae Mon Sep 17 00:00:00 2001
+From 317e3d9870097e6b115dd8c9a13ccb5e5ca76f2e Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@freescale.com>
 Date: Mon, 16 Jun 2014 14:06:21 +0300
-Subject: [PATCH 14/30] cryptodev: add support for aes-gcm algorithm offloading
+Subject: [PATCH 14/48] cryptodev: add support for aes-gcm algorithm offloading
 
 Signed-off-by: Cristian Stoica <cristian.stoica@freescale.com>
 ---
@@ -10,7 +10,7 @@ Signed-off-by: Cristian Stoica <cristian.stoica@freescale.com>
  2 files changed, 240 insertions(+), 2 deletions(-)
 
 diff --git a/apps/speed.c b/apps/speed.c
-index 3697b71..b7966ab 100644
+index 95adcc1..e5e609b 100644
 --- a/apps/speed.c
 +++ b/apps/speed.c
 @@ -226,7 +226,11 @@

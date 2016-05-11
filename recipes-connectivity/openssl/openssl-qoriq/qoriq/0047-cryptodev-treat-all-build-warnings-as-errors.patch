@@ -1,7 +1,7 @@
-From 7725179fee6449e780efa86d8d10420f85b94bb2 Mon Sep 17 00:00:00 2001
+From 596735ad86a3dae987e19c21ef22259179966fc6 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Mon, 8 Feb 2016 15:15:02 +0200
-Subject: [PATCH 47/47] cryptodev: treat all build warnings as errors
+Subject: [PATCH 47/48] cryptodev: treat all build warnings as errors
 
 This patch has the purpose of maintaining a higher level of code quality.
 

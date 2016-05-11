@@ -1,7 +1,7 @@
-From 1d95c78ab91bcf6a18baa40514bf0c008fa7dc1d Mon Sep 17 00:00:00 2001
+From 402a2e4da471728fa537462d7a13aa35955cd6d8 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Tue, 9 Feb 2016 11:47:52 +0200
-Subject: [PATCH 42/47] cryptodev: check for errors inside
+Subject: [PATCH 42/48] cryptodev: check for errors inside
  cryptodev_rsa_mod_exp_async
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>

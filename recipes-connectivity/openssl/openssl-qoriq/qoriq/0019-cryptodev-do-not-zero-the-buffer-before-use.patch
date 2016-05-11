@@ -1,7 +1,7 @@
-From 385f7ec47b261c3f7d8920f787e15309ace6692b Mon Sep 17 00:00:00 2001
+From 1f7ef531a010a3a86c9c16f801044b5f01652eb2 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@freescale.com>
 Date: Tue, 17 Feb 2015 13:12:53 +0200
-Subject: [PATCH 19/30] cryptodev: do not zero the buffer before use
+Subject: [PATCH 19/48] cryptodev: do not zero the buffer before use
 
 - The buffer is just about to be overwritten. Zeroing it before that has
   no purpose

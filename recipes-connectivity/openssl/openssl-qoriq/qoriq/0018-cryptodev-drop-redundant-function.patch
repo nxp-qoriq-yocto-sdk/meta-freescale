@@ -1,7 +1,7 @@
-From 76c75fdfcad9de55416bdfe1a485357595b6b8df Mon Sep 17 00:00:00 2001
+From 07d8dad75fb1e4c3487ae560ac51e2141aa0e0c1 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@freescale.com>
 Date: Thu, 19 Feb 2015 16:11:53 +0200
-Subject: [PATCH 18/30] cryptodev: drop redundant function
+Subject: [PATCH 18/48] cryptodev: drop redundant function
 
 get_dev_crypto already caches the result. Another cache in-between is
 useless.

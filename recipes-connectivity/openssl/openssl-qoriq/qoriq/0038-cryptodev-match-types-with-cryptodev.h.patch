@@ -1,7 +1,7 @@
-From b734f3ef4fe5a9ae55bf13c6456cb8bed50521c1 Mon Sep 17 00:00:00 2001
+From dcc3254b6dbb8627dd710fa58585542b98c80394 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Mon, 8 Feb 2016 17:11:43 +0200
-Subject: [PATCH 38/47] cryptodev: match types with cryptodev.h
+Subject: [PATCH 38/48] cryptodev: match types with cryptodev.h
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>
 ---

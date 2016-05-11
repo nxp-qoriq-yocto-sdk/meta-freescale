@@ -1,4 +1,4 @@
-From aa49712781f4220a0f8b652cda35db64300e976e Mon Sep 17 00:00:00 2001
+From 116bd4f6f1ee5acdb997d414902d9646b24df1be Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Wed, 6 Apr 2016 15:22:58 +0300
 Subject: [PATCH 48/48] fix 'maclen is used uninitialized' warning on some

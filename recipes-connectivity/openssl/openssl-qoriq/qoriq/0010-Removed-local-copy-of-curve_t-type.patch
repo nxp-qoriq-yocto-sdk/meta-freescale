@@ -1,7 +1,7 @@
-From a1133ac90c0ee17919235697f952d5df2ec534f9 Mon Sep 17 00:00:00 2001
+From cd80be25a3da28d23dfcb2762252b413879eaa74 Mon Sep 17 00:00:00 2001
 From: Yashpal Dutta <yashpal.dutta@freescale.com>
 Date: Thu, 17 Apr 2014 06:57:59 +0545
-Subject: [PATCH 10/30] Removed local copy of curve_t type
+Subject: [PATCH 10/48] Removed local copy of curve_t type
 
 Upstream-status: Pending
 
@@ -143,10 +143,10 @@ index eac5fb6..151774c 100644
      priv_key_len = r_len;
  
 diff --git a/crypto/engine/eng_cryptodev_ec.h b/crypto/engine/eng_cryptodev_ec.h
-index 77aee71..a4b8da5 100644
+index af54c51..41a8702 100644
 --- a/crypto/engine/eng_cryptodev_ec.h
 +++ b/crypto/engine/eng_cryptodev_ec.h
-@@ -286,11 +286,4 @@ static inline unsigned char *eng_copy_curve_points(BIGNUM * x, BIGNUM * y,
+@@ -287,11 +287,4 @@ static inline unsigned char *eng_copy_curve_points(BIGNUM * x, BIGNUM * y,
  
  	return xy;
  }

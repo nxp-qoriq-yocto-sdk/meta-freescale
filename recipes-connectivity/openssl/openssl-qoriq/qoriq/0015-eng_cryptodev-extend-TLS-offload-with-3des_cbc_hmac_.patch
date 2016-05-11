@@ -1,7 +1,7 @@
-From 13a6a25b5b8cc81137dbe824a72d1f91c4ab55aa Mon Sep 17 00:00:00 2001
+From 7dd6b35c35b027be8ef0ef2e29a949bc4ce96bbd Mon Sep 17 00:00:00 2001
 From: Tudor Ambarus <tudor.ambarus@freescale.com>
 Date: Fri, 9 May 2014 17:54:06 +0300
-Subject: [PATCH 15/30] eng_cryptodev: extend TLS offload with
+Subject: [PATCH 15/48] eng_cryptodev: extend TLS offload with
  3des_cbc_hmac_sha1
 
 Both obj_mac.h and obj_dat.h were generated using the scripts
@@ -180,10 +180,10 @@ index b57aabb..4e1ff18 100644
  ISO-US 10046 2 1	: dhpublicnumber		: X9.42 DH
  
 diff --git a/ssl/ssl_ciph.c b/ssl/ssl_ciph.c
-index 6957bda..1b4f4c4 100644
+index 302464e..a379273 100644
 --- a/ssl/ssl_ciph.c
 +++ b/ssl/ssl_ciph.c
-@@ -669,6 +669,10 @@ int ssl_cipher_get_evp(const SSL_SESSION *s, const EVP_CIPHER **enc,
+@@ -668,6 +668,10 @@ int ssl_cipher_get_evp(const SSL_SESSION *s, const EVP_CIPHER **enc,
                   c->algorithm_mac == SSL_SHA256 &&
                   (evp = EVP_get_cipherbyname("AES-256-CBC-HMAC-SHA256")))
              *enc = evp, *md = NULL;

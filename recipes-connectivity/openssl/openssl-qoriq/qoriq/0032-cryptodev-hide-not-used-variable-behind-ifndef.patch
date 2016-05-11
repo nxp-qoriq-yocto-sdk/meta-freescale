@@ -1,7 +1,7 @@
-From a73eaeff2fb92212a56153655c792f7ad0effede Mon Sep 17 00:00:00 2001
+From 335c80f847eacc573e10ba925b6a645963b16197 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Mon, 8 Feb 2016 17:22:49 +0200
-Subject: [PATCH 32/47] cryptodev: hide not used variable behind #ifndef
+Subject: [PATCH 32/48] cryptodev: hide not used variable behind #ifndef
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>
 ---

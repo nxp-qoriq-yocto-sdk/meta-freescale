@@ -1,7 +1,7 @@
-From 0c00982a1f9178ec0bacf409994ca71bd00f0df3 Mon Sep 17 00:00:00 2001
+From d9395f7d876f7dfaaae25867c88d1e1f684589de Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@freescale.com>
 Date: Thu, 19 Feb 2015 16:43:29 +0200
-Subject: [PATCH 21/30] cryptodev: do not cache file descriptor in 'open'
+Subject: [PATCH 21/48] cryptodev: do not cache file descriptor in 'open'
 
 The file descriptor returned by get_dev_crypto is cached after a
 successful return. The issue is, it is cached inside 'open_dev_crypto'

@@ -1,7 +1,7 @@
-From 07ce61a6819db09a72d44a5f922336c4de29d20e Mon Sep 17 00:00:00 2001
+From 82612e3c4161ed6e10379841b953a0f56e557be4 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Mon, 8 Feb 2016 16:21:46 +0200
-Subject: [PATCH 35/47] cryptodev: fix warnings on excess elements in struct
+Subject: [PATCH 35/48] cryptodev: fix warnings on excess elements in struct
  initializer
 
 The initialization data for these structures had either missing or excess
@@ -15,7 +15,7 @@ Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>
  3 files changed, 15 insertions(+), 13 deletions(-)
 
 diff --git a/crypto/dh/dh.h b/crypto/dh/dh.h
-index 6279a9c..f31a7e8 100644
+index 31dd762..11c6c7d 100644
 --- a/crypto/dh/dh.h
 +++ b/crypto/dh/dh.h
 @@ -123,9 +123,9 @@ struct dh_method {

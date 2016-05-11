@@ -1,7 +1,7 @@
-From d29dabc424e7aa22279f9ef6d1bb48432a41ae1b Mon Sep 17 00:00:00 2001
+From 12fad710349bb72b7f95ee30b40c2e6dfbb5d373 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Wed, 13 Jan 2016 15:18:20 +0200
-Subject: [PATCH 30/30] cryptodev: reduce duplicated efforts for searching
+Subject: [PATCH 30/48] cryptodev: reduce duplicated efforts for searching
  inside digests table
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>

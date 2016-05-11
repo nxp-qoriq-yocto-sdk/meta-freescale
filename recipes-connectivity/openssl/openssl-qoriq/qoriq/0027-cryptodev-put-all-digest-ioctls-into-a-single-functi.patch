@@ -1,7 +1,7 @@
-From f623533ea30c70389348c965edf1ee352bf65a51 Mon Sep 17 00:00:00 2001
+From 2187b18ffe4851efcb6465ca02ac036d2fe031b8 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Tue, 15 Dec 2015 12:23:13 +0200
-Subject: [PATCH 27/30] cryptodev: put all digest ioctls into a single function
+Subject: [PATCH 27/48] cryptodev: put all digest ioctls into a single function
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>
 ---

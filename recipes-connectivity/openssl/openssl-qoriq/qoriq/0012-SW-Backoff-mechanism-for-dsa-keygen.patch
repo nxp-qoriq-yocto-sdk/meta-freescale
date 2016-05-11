@@ -1,7 +1,7 @@
-From d5b3e3b9ba9862915d5dc0c0db07f85e080e236d Mon Sep 17 00:00:00 2001
+From 18f4dbbba2c0142792b394bec35531cefe277712 Mon Sep 17 00:00:00 2001
 From: Yashpal Dutta <yashpal.dutta@freescale.com>
 Date: Thu, 24 Apr 2014 00:35:34 +0545
-Subject: [PATCH 12/30] SW Backoff mechanism for dsa keygen
+Subject: [PATCH 12/48] SW Backoff mechanism for dsa keygen
 
 Upstream-status: Pending
 

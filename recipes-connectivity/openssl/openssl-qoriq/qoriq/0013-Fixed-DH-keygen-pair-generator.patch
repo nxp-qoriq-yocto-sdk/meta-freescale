@@ -1,7 +1,7 @@
-From 82d27bc7c8af6b7df731c9156fdd00ef849aef9a Mon Sep 17 00:00:00 2001
+From 4d5ffd41f423309fc9aaf3621598ca51c5838e31 Mon Sep 17 00:00:00 2001
 From: Yashpal Dutta <yashpal.dutta@freescale.com>
 Date: Thu, 1 May 2014 06:35:45 +0545
-Subject: [PATCH 13/30] Fixed DH keygen pair generator
+Subject: [PATCH 13/48] Fixed DH keygen pair generator
 
 Upstream-status: Pending
 

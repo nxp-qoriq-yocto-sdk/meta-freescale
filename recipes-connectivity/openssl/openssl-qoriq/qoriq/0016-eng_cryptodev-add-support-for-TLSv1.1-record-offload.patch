@@ -1,7 +1,7 @@
-From ffd028c4188deae40198711285180e9e8971428b Mon Sep 17 00:00:00 2001
+From 3f34089ab0a3b31ec6b31a6cbf308ca20c6ef597 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Fri, 22 Jan 2016 11:58:34 +0200
-Subject: [PATCH 16/30] eng_cryptodev: add support for TLSv1.1 record offload
+Subject: [PATCH 16/48] eng_cryptodev: add support for TLSv1.1 record offload
 
 Supported cipher suites:
 - 3des-ede-cbc-sha
@@ -285,10 +285,10 @@ index 4e1ff18..cda81da 100644
  ISO-US 10046 2 1	: dhpublicnumber		: X9.42 DH
  
 diff --git a/ssl/ssl_ciph.c b/ssl/ssl_ciph.c
-index 1b4f4c4..93f757d 100644
+index a379273..e3d73ac 100644
 --- a/ssl/ssl_ciph.c
 +++ b/ssl/ssl_ciph.c
-@@ -653,11 +653,13 @@ int ssl_cipher_get_evp(const SSL_SESSION *s, const EVP_CIPHER **enc,
+@@ -652,11 +652,13 @@ int ssl_cipher_get_evp(const SSL_SESSION *s, const EVP_CIPHER **enc,
              c->algorithm_mac == SSL_MD5 &&
              (evp = EVP_get_cipherbyname("RC4-HMAC-MD5")))
              *enc = evp, *md = NULL;
@@ -304,7 +304,7 @@ index 1b4f4c4..93f757d 100644
                   c->algorithm_mac == SSL_SHA1 &&
                   (evp = EVP_get_cipherbyname("AES-256-CBC-HMAC-SHA1")))
              *enc = evp, *md = NULL;
-@@ -669,9 +671,25 @@ int ssl_cipher_get_evp(const SSL_SESSION *s, const EVP_CIPHER **enc,
+@@ -668,9 +670,25 @@ int ssl_cipher_get_evp(const SSL_SESSION *s, const EVP_CIPHER **enc,
                   c->algorithm_mac == SSL_SHA256 &&
                   (evp = EVP_get_cipherbyname("AES-256-CBC-HMAC-SHA256")))
              *enc = evp, *md = NULL;

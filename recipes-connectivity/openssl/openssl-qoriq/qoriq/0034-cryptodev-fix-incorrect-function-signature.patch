@@ -1,7 +1,7 @@
-From 7c991a06ecaafec7fddcfab71c47b76878b6cb24 Mon Sep 17 00:00:00 2001
+From 7012cf33a00618749319b1903f48ee3a35f5887b Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Mon, 8 Feb 2016 16:12:54 +0200
-Subject: [PATCH 34/47] cryptodev: fix incorrect function signature
+Subject: [PATCH 34/48] cryptodev: fix incorrect function signature
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>
 ---

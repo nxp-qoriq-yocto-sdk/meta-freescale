@@ -1,7 +1,7 @@
-From 35a309954a14f61464d9f3d76f1d000eea5a9664 Mon Sep 17 00:00:00 2001
+From 8cd09ffdfd7d9c25605401f1c0947b1b4acc6e57 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Mon, 8 Feb 2016 16:00:22 +0200
-Subject: [PATCH 31/47] cryptodev: remove not used local variables
+Subject: [PATCH 31/48] cryptodev: remove not used local variables
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>
 ---

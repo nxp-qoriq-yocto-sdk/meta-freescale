@@ -1,7 +1,7 @@
-From 5326d42abde07a175a7384586623f3dbecab62f3 Mon Sep 17 00:00:00 2001
+From 79d6976e2ad2e5ac31374bc24ee29ae53f55c0e1 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@freescale.com>
 Date: Thu, 19 Feb 2015 13:09:32 +0200
-Subject: [PATCH 22/30] cryptodev: put_dev_crypto should be an int
+Subject: [PATCH 22/48] cryptodev: put_dev_crypto should be an int
 
 Change-Id: Ie0a83bc07a37132286c098b17ef35d98de74b043
 Signed-off-by: Cristian Stoica <cristian.stoica@freescale.com>
