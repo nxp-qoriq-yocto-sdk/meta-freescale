@@ -1,7 +1,7 @@
 DESCRIPTION = "DPAA2 Management Complex Firmware"
 SECTION = "dpaa2"
-LICENSE = "Freescale-EULA"
-LIC_FILES_CHKSUM = "file://Freescale-EULA;md5=bf20d39b348e1b0ed964c91a97638bbb"
+LICENSE = "Freescale-Binary-EULA"
+LIC_FILES_CHKSUM = "file://Freescale-Binary-EULA;md5=da89ad557c4a497fb005e76c2600cda3"
 
 BASEDEPENDS = ""
 
@@ -10,7 +10,7 @@ S = "${WORKDIR}/git"
 inherit deploy
 
 SRC_URI = "git://sw-stash.freescale.net/scm/dpaa2/mc-binary.git;branch=master;protocol=http"
-SRCREV = "44a343cb2ef6e31bd7c01499e6dd0bbf2632d24c"
+SRCREV = "40e7cc7bfc9b35488394450605d649cb7073051a"
 
 do_install () {
     M=`echo ${MACHINE} | sed -e 's,[b-z-]*$,,'`
