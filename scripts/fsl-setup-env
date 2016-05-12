@@ -231,7 +231,7 @@ if [ "` echo ${MACHINE} | grep '^ls'`" ]; then
     "
 fi
 
-EULA_FILE="$FSLROOTDIR/EULA"
+EULA_FILE="$FSLROOTDIR/licenses/Freescale-EULA"
 
 if [ "`ls $FSLROOTDIR/conf/machine \
        | grep "\.conf" | egrep "^imx|^twr" | grep ${MACHINE} | wc -l`" != "0" ]; then
