@@ -1,7 +1,7 @@
 SUMMARY = "Debug agent for Freescale CodeWarrior"
 SECTION = "apptrk"
 LICENSE = "Freescale-EULA"
-LIC_FILES_CHKSUM = "file://COPYING;md5=95560debfde180684364319811cc1421"
+LIC_FILES_CHKSUM = "file://EULA;md5=c9ae442cf1f9dd6c13dfad64b0ffe73f"
 
 DEPENDS = "elfutils"
 
