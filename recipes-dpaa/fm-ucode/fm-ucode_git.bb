@@ -1,7 +1,7 @@
 DESCRIPTION = "Fman microcode binary"
 SECTION = "fm-ucode"
 LICENSE = "Freescale-EULA"
-LIC_FILES_CHKSUM = "file://EULA;md5=60037ccba533a5995e8d1a838d85799c"
+LIC_FILES_CHKSUM = "file://EULA;md5=c9ae442cf1f9dd6c13dfad64b0ffe73f"
 
 PR = "r1"
 
