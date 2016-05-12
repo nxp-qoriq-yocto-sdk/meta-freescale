@@ -1,6 +1,6 @@
 DESCRIPTION = "PPA code"
 LICENSE = "Freescale-EULA"
-LIC_FILES_CHKSUM = "file://EULA.txt;md5=60037ccba533a5995e8d1a838d85799c"
+LIC_FILES_CHKSUM = "file://EULA;md5=c9ae442cf1f9dd6c13dfad64b0ffe73f"
 
 DEPENDS += "u-boot-mkimage-native"
 
@@ -10,7 +10,7 @@ SRC_URI = "git://sw-stash.freescale.net/scm/dnnpi/ls1043-ppa.git;protocol=http \
     file://ppa.its \ 
 "
 
-SRCREV = "8f5645dd224a91fdfdcc550454b3128f2f8d0c5c"
+SRCREV = "9dc7b122e6e9e3f3021bc3de1d05270160829429"
 
 S = "${WORKDIR}/git"
 
