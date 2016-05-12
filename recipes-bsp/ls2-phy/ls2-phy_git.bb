@@ -1,6 +1,6 @@
 DESCRIPTION = "Firmwares and Standalone Applications"
 LICENSE = "Freescale-EULA"
-LIC_FILES_CHKSUM = "file://Freescale-EULA;md5=f2f28705c8b140b3305c839c20cac6ef"
+LIC_FILES_CHKSUM = "file://EULA;md5=c9ae442cf1f9dd6c13dfad64b0ffe73f"
 
 inherit deploy
 
