@@ -1,7 +1,7 @@
 DESCRIPTION = "Datapath layout files"
 SECTION = "dpaa2"
 LICENSE = "Freescale-EULA"
-LIC_FILES_CHKSUM = "file://Freescale-EULA;md5=f8756d9df61899a909c957a63a791835"
+LIC_FILES_CHKSUM = "file://EULA;md5=c9ae442cf1f9dd6c13dfad64b0ffe73f"
 
 DEPENDS = "dtc-native"
 
