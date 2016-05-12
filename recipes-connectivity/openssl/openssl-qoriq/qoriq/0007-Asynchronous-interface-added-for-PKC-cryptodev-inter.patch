@@ -1,7 +1,7 @@
-From a63b0a8fe529d69772ddab36cb17a7f492caaba8 Mon Sep 17 00:00:00 2001
+From 45cfc01ade9eeb43fdb5950d3db152cae1b41059 Mon Sep 17 00:00:00 2001
 From: Yashpal Dutta <yashpal.dutta@freescale.com>
 Date: Tue, 11 Mar 2014 07:14:30 +0545
-Subject: [PATCH 07/30] Asynchronous interface added for PKC cryptodev
+Subject: [PATCH 07/48] Asynchronous interface added for PKC cryptodev
  interface
 
 Upstream-status: Pending
@@ -22,7 +22,7 @@ Signed-off-by: Yashpal Dutta <yashpal.dutta@freescale.com>
  10 files changed, 1605 insertions(+), 141 deletions(-)
 
 diff --git a/crypto/crypto.h b/crypto/crypto.h
-index c450d7a..830f40e 100644
+index 6c644ce..2b4ec59 100644
 --- a/crypto/crypto.h
 +++ b/crypto/crypto.h
 @@ -655,6 +655,22 @@ void ERR_load_CRYPTO_strings(void);
@@ -49,7 +49,7 @@ index c450d7a..830f40e 100644
  }
  #endif
 diff --git a/crypto/dh/dh.h b/crypto/dh/dh.h
-index b177673..6799b6a 100644
+index a5bd901..31dd762 100644
 --- a/crypto/dh/dh.h
 +++ b/crypto/dh/dh.h
 @@ -123,6 +123,9 @@ struct dh_method {

@@ -1,7 +1,7 @@
-From 4a8e9f233db166976665645081173953179d0a15 Mon Sep 17 00:00:00 2001
+From 02dd4d275f7544a4027ca3452b60ac5bdd9376fb Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Mon, 14 Dec 2015 17:49:08 +0200
-Subject: [PATCH 26/30] cryptodev: remove code duplication in digest operations
+Subject: [PATCH 26/48] cryptodev: remove code duplication in digest operations
 
 This patch simplifies code and removes duplication in digest_update and
 digest_final for cryptodev engine.

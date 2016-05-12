@@ -1,7 +1,7 @@
-From 9bff053c2f29aa1018510db0f377ecfbb4262a8b Mon Sep 17 00:00:00 2001
+From 45429e5ea075867f9219a6fcb233677d062a4451 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Tue, 9 Feb 2016 11:28:23 +0200
-Subject: [PATCH 40/47] cryptodev: replace caddr_t with void *
+Subject: [PATCH 40/48] cryptodev: replace caddr_t with void *
 
 This avoids warnings such as "pointer targets in assignment differ in
 signedness" when compiling the code

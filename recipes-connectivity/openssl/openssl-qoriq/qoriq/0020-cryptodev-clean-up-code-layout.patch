@@ -1,7 +1,7 @@
-From 6db8f14497bd0c1159fda5f7f09b7091efce0d37 Mon Sep 17 00:00:00 2001
+From 453c617b10fb2c4e748b5799ab4b00c184470c60 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@freescale.com>
 Date: Wed, 18 Feb 2015 10:39:46 +0200
-Subject: [PATCH 20/30] cryptodev: clean-up code layout
+Subject: [PATCH 20/48] cryptodev: clean-up code layout
 
 This is just a refactoring that uses else branch to check for malloc failures
 

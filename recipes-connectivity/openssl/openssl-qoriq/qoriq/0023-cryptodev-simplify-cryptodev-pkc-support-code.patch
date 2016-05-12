@@ -1,7 +1,7 @@
-From bec4e47170a02556ac70a66e25038d062db04008 Mon Sep 17 00:00:00 2001
+From f99682e0ccaeadb7446d211dfad6dbf8fcd5675f Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@freescale.com>
 Date: Thu, 19 Feb 2015 13:39:52 +0200
-Subject: [PATCH 23/30] cryptodev: simplify cryptodev pkc support code
+Subject: [PATCH 23/48] cryptodev: simplify cryptodev pkc support code
 
 - Engine init returns directly a file descriptor instead of a pointer to one
 - Similarly, the Engine close will now just close the file
@@ -16,7 +16,7 @@ Signed-off-by: Cristian Stoica <cristian.stoica@freescale.com>
  5 files changed, 44 insertions(+), 81 deletions(-)
 
 diff --git a/crypto/crypto.h b/crypto/crypto.h
-index 830f40e..a4da5e2 100644
+index 2b4ec59..ddb9b69 100644
 --- a/crypto/crypto.h
 +++ b/crypto/crypto.h
 @@ -668,7 +668,7 @@ struct pkc_cookie_s {

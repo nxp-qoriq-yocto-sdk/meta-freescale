@@ -1,7 +1,7 @@
-From f8331d83fc477e6b6a8a54d4f00466ad99b02812 Mon Sep 17 00:00:00 2001
+From 4c1531a088076118ce3c06cb0af15998f0796cb3 Mon Sep 17 00:00:00 2001
 From: Tudor Ambarus <tudor.ambarus@freescale.com>
 Date: Tue, 31 Mar 2015 16:32:35 +0300
-Subject: [PATCH 17/30] eng_cryptodev: add support for TLSv1.2 record offload
+Subject: [PATCH 17/48] eng_cryptodev: add support for TLSv1.2 record offload
 
 Supported cipher suites:
 - 3des-ede-cbc-sha
@@ -337,10 +337,10 @@ index cda81da..68a8da8 100644
  ISO-US 10046 2 1	: dhpublicnumber		: X9.42 DH
  
 diff --git a/ssl/ssl_ciph.c b/ssl/ssl_ciph.c
-index 93f757d..7a1be78 100644
+index e3d73ac..4698528 100644
 --- a/ssl/ssl_ciph.c
 +++ b/ssl/ssl_ciph.c
-@@ -691,6 +691,31 @@ int ssl_cipher_get_evp(const SSL_SESSION *s, const EVP_CIPHER **enc,
+@@ -690,6 +690,31 @@ int ssl_cipher_get_evp(const SSL_SESSION *s, const EVP_CIPHER **enc,
                   c->algorithm_mac == SSL_SHA1 &&
                   (evp = EVP_get_cipherbyname("TLS11-AES-256-CBC-HMAC-SHA1")))
              *enc = evp, *md = NULL;

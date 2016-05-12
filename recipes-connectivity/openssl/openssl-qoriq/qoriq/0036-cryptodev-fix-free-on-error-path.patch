@@ -1,7 +1,7 @@
-From e1ef2da143053a1965fdab27ceb9cc74d04ae637 Mon Sep 17 00:00:00 2001
+From 8ccc9b12954b7eb299020a1b15d9d1e5735779df Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Mon, 8 Feb 2016 16:36:33 +0200
-Subject: [PATCH 36/47] cryptodev: fix free on error path
+Subject: [PATCH 36/48] cryptodev: fix free on error path
 
 This was most likely a typo that escaped code review
 

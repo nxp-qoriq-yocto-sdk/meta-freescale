@@ -1,7 +1,7 @@
-From b9dc85ca1abc76476319896d0df0f8c0e04f4148 Mon Sep 17 00:00:00 2001
+From 3fe44ab50a87106af3349148e81ec8a1d524de82 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Tue, 15 Dec 2015 15:43:28 +0200
-Subject: [PATCH 29/30] cryptodev: use CIOCHASH ioctl for digest operations
+Subject: [PATCH 29/48] cryptodev: use CIOCHASH ioctl for digest operations
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>
 ---

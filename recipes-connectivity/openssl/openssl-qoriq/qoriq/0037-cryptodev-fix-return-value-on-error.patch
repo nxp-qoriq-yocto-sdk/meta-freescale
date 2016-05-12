@@ -1,7 +1,7 @@
-From 54546ef2728da1ca39636ae37f051db2d7a586e4 Mon Sep 17 00:00:00 2001
+From b3d3b86063e65b84ce53f4653295e3f6a83d5794 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Mon, 8 Feb 2016 16:55:32 +0200
-Subject: [PATCH 37/47] cryptodev: fix return value on error
+Subject: [PATCH 37/48] cryptodev: fix return value on error
 
 Even though we're on error path, the operation is taken care of on
 software; return success (ret is 1)

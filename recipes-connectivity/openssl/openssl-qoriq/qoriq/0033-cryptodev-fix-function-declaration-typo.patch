@@ -1,7 +1,7 @@
-From 9d784e725e95f19f9f7af59e686c4c9dba01a384 Mon Sep 17 00:00:00 2001
+From 03bdddf1495707119e4fa0eda385ecdccf66cbd8 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Mon, 8 Feb 2016 16:08:25 +0200
-Subject: [PATCH 33/47] cryptodev: fix function declaration typo
+Subject: [PATCH 33/48] cryptodev: fix function declaration typo
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>
 ---

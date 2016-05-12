@@ -1,7 +1,7 @@
-From 5efc32c94465a8d294035fe61c56a4bf04750c93 Mon Sep 17 00:00:00 2001
+From 3dd41691dc8162ec26d188269934689ad834894c Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Tue, 15 Dec 2015 12:51:36 +0200
-Subject: [PATCH 28/30] cryptodev: fix debug print messages
+Subject: [PATCH 28/48] cryptodev: fix debug print messages
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>
 ---

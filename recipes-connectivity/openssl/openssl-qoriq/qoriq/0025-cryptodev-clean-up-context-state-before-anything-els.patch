@@ -1,7 +1,7 @@
-From 776e99849f798e0a69bf650ff655143969b9571d Mon Sep 17 00:00:00 2001
+From 087ae4ecbaf9cd49a2fcae9cb09c491beabc4c88 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Tue, 15 Dec 2015 12:10:37 +0200
-Subject: [PATCH 25/30] cryptodev: clean-up context state before anything else
+Subject: [PATCH 25/48] cryptodev: clean-up context state before anything else
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>
 ---

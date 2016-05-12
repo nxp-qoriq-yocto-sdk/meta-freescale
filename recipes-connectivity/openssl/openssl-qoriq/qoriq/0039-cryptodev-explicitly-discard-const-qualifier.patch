@@ -1,7 +1,7 @@
-From 138814a63813b831c2d7395079fe336883920154 Mon Sep 17 00:00:00 2001
+From 605210c8ae9241cad6c4ec071f5193bf3e83b2d4 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Mon, 8 Feb 2016 17:15:25 +0200
-Subject: [PATCH 39/47] cryptodev: explicitly discard const qualifier
+Subject: [PATCH 39/48] cryptodev: explicitly discard const qualifier
 
 The const qualifier is discarded by the assignment as a result of how
 the variables are defined. This patch drops the const qualifier

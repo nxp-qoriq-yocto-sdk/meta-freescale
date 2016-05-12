@@ -1,7 +1,7 @@
-From 92c1d8e3d5c2d2b5a483e8894e1a4e6765851838 Mon Sep 17 00:00:00 2001
+From 528e4965e536d31cdccb11abe5e04db28a1008a8 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Tue, 9 Feb 2016 12:11:32 +0200
-Subject: [PATCH 45/47] cryptodev: change signature for conversion functions
+Subject: [PATCH 45/48] cryptodev: change signature for conversion functions
 
 These functions are called with const BIGNUMs, so we change the
 signatures to avoid compilation warnings

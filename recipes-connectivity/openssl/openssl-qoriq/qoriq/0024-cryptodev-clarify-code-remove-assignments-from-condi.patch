@@ -1,7 +1,7 @@
-From 2c2bc6cbff916d96cedecc8859aba60a3f5cb31f Mon Sep 17 00:00:00 2001
+From cb6842dac159b40acdc755526b0ba0afb61d9d64 Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Mon, 14 Dec 2015 14:02:00 +0200
-Subject: [PATCH 24/30] cryptodev: clarify code, remove assignments from
+Subject: [PATCH 24/48] cryptodev: clarify code, remove assignments from
  conditionals
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>

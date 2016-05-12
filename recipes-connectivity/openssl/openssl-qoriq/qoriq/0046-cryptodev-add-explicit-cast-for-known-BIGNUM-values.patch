@@ -1,7 +1,7 @@
-From 75d1c7e82a9d45c7673f9db9997a24737e905420 Mon Sep 17 00:00:00 2001
+From b27823ac9f460c96a72d9003e2e134c1288ac85f Mon Sep 17 00:00:00 2001
 From: Cristian Stoica <cristian.stoica@nxp.com>
 Date: Tue, 9 Feb 2016 12:13:59 +0200
-Subject: [PATCH 46/47] cryptodev: add explicit cast for known BIGNUM values
+Subject: [PATCH 46/48] cryptodev: add explicit cast for known BIGNUM values
 
 Signed-off-by: Cristian Stoica <cristian.stoica@nxp.com>
 ---
