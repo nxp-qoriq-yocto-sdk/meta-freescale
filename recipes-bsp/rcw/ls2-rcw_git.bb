@@ -1,9 +1,7 @@
 DESCRIPTION = "Reset Control Words (RCW)"
 SECTION = "rcw"
-LICENSE = "BSD"
-
-#NEED FIX
-LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/BSD;md5=3775480a712fc46a69647678acb234cb"
+LICENSE = "Freescale-EULA"
+LIC_FILES_CHKSUM = "file://EULA;md5=c9ae442cf1f9dd6c13dfad64b0ffe73f"
 
 inherit deploy
 
