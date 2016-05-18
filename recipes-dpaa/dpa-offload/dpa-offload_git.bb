@@ -14,8 +14,8 @@ RDEPENDS_${PN} = "libgcc bash"
 RDEPENDS_${PN}_append_b4860qds = " ipc-ust"
 RDEPENDS_${PN}_append_b4420qds = " ipc-ust"
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/usdpaa/dpa-offload.git;nobranch=1"
-SRCREV = "ed6191db9439d1aaba27fc01238da770d1d8ef9e"
+SRC_URI = "git://git.freescale.com/ppc/sdk/usdpaa/dpa-offload.git;branch=sdk-v2.0.x"
+SRCREV = "fed08b0667172fbe47d256b7d08be955e3333fdf"
 
 S = "${WORKDIR}/git"
 
