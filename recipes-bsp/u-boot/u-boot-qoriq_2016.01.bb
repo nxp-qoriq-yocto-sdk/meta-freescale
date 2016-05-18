@@ -9,6 +9,6 @@ LIC_FILES_CHKSUM = " \
     file://Licenses/lgpl-2.1.txt;md5=4fbd65380cdd255951079008b364516c \
 "
 
-SRCBRANCH = "master"
-SRC_URI = "git://sw-stash.freescale.net/scm/sdk/u-boot-devel.git;branch=${SRCBRANCH};protocol=http"
-SRCREV = "${AUTOREV}"
+SRCBRANCH = "sdk-v2.0.x"
+SRC_URI = "git://git.freescale.com/ppc/sdk/u-boot.git;branch=${SRCBRANCH}"
+SRCREV = "a9b437f50e2051f8d42ec9e1a6df52de4bc00e1e"
