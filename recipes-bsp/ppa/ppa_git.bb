@@ -6,11 +6,10 @@ DEPENDS += "u-boot-mkimage-native"
 
 inherit deploy
 
-SRC_URI = "git://sw-stash.freescale.net/scm/dnnpi/ls1043-ppa.git;protocol=http \
+SRC_URI = "git://git.freescale.com/ppc/sdk/ls1043-ppa.git;branch=sdk-v2.0.x \
     file://ppa.its \ 
 "
-
-SRCREV = "9dc7b122e6e9e3f3021bc3de1d05270160829429"
+SRCREV = "ffda4e6c2cfb535636ac8d667b0d2351d557cc66"
 
 S = "${WORKDIR}/git"
 
