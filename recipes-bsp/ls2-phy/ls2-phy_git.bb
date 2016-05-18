@@ -4,8 +4,8 @@ LIC_FILES_CHKSUM = "file://EULA;md5=c9ae442cf1f9dd6c13dfad64b0ffe73f"
 
 inherit deploy
 
-SRC_URI = "git://sw-stash.freescale.net/scm/dnnpi/ls2-phy.git;branch=master;protocol=http"
-SRCREV = "761f0a0726ce76f2a973d608f4e87265580d8b9c"
+SRC_URI = "git://git.freescale.com/ppc/sdk/ls2-phy.git;branch=sdk-v2.0.x"
+SRCREV = "554f2648c6a4c6f974827ab326e8c1908dead6f1"
 
 S = "${WORKDIR}/git"
 
