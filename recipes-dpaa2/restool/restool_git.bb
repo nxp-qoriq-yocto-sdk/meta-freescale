@@ -1,7 +1,7 @@
 DESCRIPTION = "DPAA2 Resource Manager Tool"
 SECTION = "dpaa2"
 LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://restool.h;beginline=6;endline=28;md5=edc369b6cf5027e65c15b82936734364"
+LIC_FILES_CHKSUM = "file://COPYING;md5=e613b54e73c0e4a2a8918c61924bd623"
 
 RDEPENDS_${PN} = "bash"
 
