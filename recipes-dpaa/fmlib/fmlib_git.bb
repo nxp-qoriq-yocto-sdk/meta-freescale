@@ -8,8 +8,8 @@ PR = "r1"
 DEPENDS += "virtual/kernel"
 DEPENDS_virtclass-native = ""
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/fmlib.git;branch=sdk-v1.9.x"
-SRCREV = "d697de9b0c867edcdb8851dc7320809cd7add67b"
+SRC_URI = "git://git.freescale.com/ppc/sdk/fmlib.git;branch=sdk-v2.0.x"
+SRCREV = "43fa98fdbf0c697167e415c3f060896d5b482791"
 
 S = "${WORKDIR}/git"
 
