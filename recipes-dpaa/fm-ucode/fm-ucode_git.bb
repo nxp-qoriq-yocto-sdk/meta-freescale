@@ -7,8 +7,8 @@ PR = "r1"
 
 inherit deploy
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/fm-ucode.git;branch=sdk-v1.9.x"
-SRCREV = "33c6c7a4ba1d057afd739bd0106471ffb3299e0e"
+SRC_URI = "git://git.freescale.com/ppc/sdk/fm-ucode.git;branch=sdk-v2.0.x"
+SRCREV = "7ebea4539f6e075448a12ee8808a1fc17a558bfd"
 
 S = "${WORKDIR}/git"
 
