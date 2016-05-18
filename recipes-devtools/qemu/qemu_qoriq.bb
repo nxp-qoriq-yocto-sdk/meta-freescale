@@ -13,13 +13,8 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=441c28d2cf86e15a37fa47e15a72fbac \
 # This means QEMU v2.4.0 with FSL specific patches applied
 PV = "2.4.0+fsl"
 
-# FIXME: this recipe requires poky's qemu.inc which assumes version 2.3
-# where glx enable config option changed to --enable-opengl. For now we
-# restore it, but we should remove the following lines when upgrading
-# to qemu 2.3:
-
-SRC_URI = "git://git.freescale.com/ppc/sdk/qemu.git;branch=sdk-v1.9.x"
-SRCREV = "8362a298c4feef33c84d7db2d111af18bd29ef86"
+SRC_URI = "git://git.freescale.com/ppc/sdk/qemu.git;branch=sdk-v2.0.x"
+SRCREV = "4b846e9b2b15660abace52dd27a406af08c4212d"
 
 # add ptest patches
 SRC_URI_append = "\
