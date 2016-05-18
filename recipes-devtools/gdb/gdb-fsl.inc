@@ -1,8 +1,8 @@
 PV = "7.10.1+fsl"
 
-SRCBRANCH = "fsl_gdb_7_10-branch"
+SRCBRANCH = "sdk-v2.0.x"
 SRCREV = "f7faa4d1e984de441479f8e319bbec0b12ea0624"
-SRC_URI = "git://sw-stash.freescale.net/scm/sdk/gdb.git;branch=${SRCBRANCH};protocol=http;destsuffix=gdb-${PV}"
+SRC_URI = "git://git.freescale.com/ppc/sdk/gdb.git;branch=${SRCBRANCH};destsuffix=gdb-${PV}"
 
 SRC_URI += "file://0002-Change-order-of-CFLAGS.patch \
             file://0001-Use-exported-definitions-of-SIGRTMIN.patch \
