@@ -5,8 +5,8 @@ LIC_FILES_CHKSUM = "file://EULA;md5=c9ae442cf1f9dd6c13dfad64b0ffe73f"
 
 inherit deploy
 
-SRC_URI = "git://sw-stash.freescale.net/scm/dpaa2/ls2-rcw.git;branch=master;protocol=http"
-SRCREV = "536c50905845d2de7868f331d83de6e34cc3172a"
+SRC_URI = "git://git.freescale.com/ppc/sdk/ls2-rcw.git;branch=sdk-v2.0.x"
+SRCREV = "74ec3bcdf33fbbedf417b800e0d486d1e8031115"
 
 S = "${WORKDIR}/git"
 
