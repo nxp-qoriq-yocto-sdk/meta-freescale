@@ -236,8 +236,8 @@ EULA_FILE="$FSLROOTDIR/licenses/Freescale-EULA"
 if [ "`ls $FSLROOTDIR/conf/machine \
        | grep "\.conf" | egrep "^imx|^twr" | grep ${MACHINE} | wc -l`" != "0" ]; then
     FSLDISTRO="fslc-imx"
-elif [ "`ls $FSLROOTDIR/conf/machine $FSLROOTDIR/../meta-fsl-local-build/conf/machine \
-       | grep "\.conf" | egrep -v "^imx|^twr" | grep ${MACHINE} | wc -l`" != "0" ]; then
+elif [ -e "$FSLROOTDIR/conf/machine/${MACHINE}.conf" ] || \
+     [ -e "$FSLROOTDIR/../meta-fsl-local-build/conf/machine/${MACHINE}.conf" ]; then
     if [ "$setup_g" = "true" ]; then
         DISTRO="fsl-qoriq-cgl"
     else
