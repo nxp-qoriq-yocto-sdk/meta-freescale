@@ -9,7 +9,7 @@ S = "${WORKDIR}/git"
 
 inherit deploy
 
-SRC_URI = "git://sw-stash.freescale.net/scm/dpaa2/mc-binary.git;branch=master;protocol=http"
+SRC_URI = "git://git.freescale.com/ppc/sdk/mc-binary.git;branch=sdk-v2.0.x"
 SRCREV = "40e7cc7bfc9b35488394450605d649cb7073051a"
 
 do_install () {
