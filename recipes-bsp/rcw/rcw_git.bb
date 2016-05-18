@@ -7,8 +7,8 @@ DEPENDS += "change-file-endianess-native"
 
 inherit deploy siteinfo
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/rcw.git;branch=sdk-v1.9.x"
-SRCREV = "521008fe6ec9897fe245e1c1241fc27dad98f24d"
+SRC_URI = "git://git.freescale.com/ppc/sdk/rcw.git;branch=sdk-v2.0.x"
+SRCREV = "1af724b64347170e9d9ba8e8f277dd30026a1a7e"
 
 S = "${WORKDIR}/git"
 
