@@ -9,8 +9,8 @@ S = "${WORKDIR}/git"
 
 inherit deploy
 
-SRC_URI = "git://sw-stash.freescale.net/scm/dpaa2/dpl-examples.git;branch=master;protocol=http"
-SRCREV = "e3d836ba298c5136d5819e28e8184a3654a2f9db"
+SRC_URI = "git://git.freescale.com/ppc/sdk/dpl-examples.git;branch=sdk-v2.0.x"
+SRCREV = "2f8a6c2c0607b663afd69aa0477c2047f25031ca"
 
 TP ?= "RDB"
 
