@@ -5,8 +5,8 @@ LIC_FILES_CHKSUM = "file://EULA;md5=c9ae442cf1f9dd6c13dfad64b0ffe73f"
 
 inherit deploy
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/qe-ucode.git;nobranch=1"
-SRCREV= "49efc94b553de5c2a9bd28093592eff0068e161c"
+SRC_URI = "git://git.freescale.com/ppc/sdk/qe-ucode.git;branch=sdk-v2.0.x"
+SRCREV= "a95f42aef152fc613f11099d7e7bc25b44c09836"
 
 S = "${WORKDIR}/git"
 
