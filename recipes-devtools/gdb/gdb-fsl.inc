@@ -1,8 +1,6 @@
 PV = "7.10.1+fsl"
 
-SRCBRANCH = "sdk-v2.0.x"
-SRCREV = "f7faa4d1e984de441479f8e319bbec0b12ea0624"
-SRC_URI = "git://git.freescale.com/ppc/sdk/gdb.git;branch=${SRCBRANCH};destsuffix=gdb-${PV}"
+SRC_URI = "http://git.freescale.com/git/cgit.cgi/ppc/sdk/gdb.git/snapshot/gdb-fsl-sdk-v2.0.tar.bz2"
 
 SRC_URI += "file://0002-Change-order-of-CFLAGS.patch \
             file://0001-Use-exported-definitions-of-SIGRTMIN.patch \
@@ -10,5 +8,9 @@ SRC_URI += "file://0002-Change-order-of-CFLAGS.patch \
             file://0001-use-asm-sgidefs.h.patch \
             file://force-readline-static.patch \
            "
+S = "${WORKDIR}/gdb-fsl-sdk-v2.0"
+
+SRC_URI[md5sum] = "a609a1ed7a56d87b94fd1d7567e6757d"
+SRC_URI[sha256sum] = "2a4d27f3d9f2eafb7fb2b1efeddc126b9487959c1afee920298e7ba4331d61d0"
 
 EXTRA_OECONF += " --disable-binutils --disable-gas --disable-gold --disable-gprof --disable-ld "
