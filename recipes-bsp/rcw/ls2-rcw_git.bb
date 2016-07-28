@@ -1,12 +1,12 @@
 DESCRIPTION = "Reset Control Words (RCW)"
 SECTION = "rcw"
-LICENSE = "Freescale-EULA"
-LIC_FILES_CHKSUM = "file://EULA;md5=c9ae442cf1f9dd6c13dfad64b0ffe73f"
+LICENSE = "Freescale-Binary-EULA"
+LIC_FILES_CHKSUM = "file://Freescale-Binary-EULA;md5=8835a59e50213e1b21243dd00c933e47"
 
 inherit deploy
 
 SRC_URI = "git://git.freescale.com/ppc/sdk/ls2-rcw.git;branch=sdk-v2.0.x"
-SRCREV = "74ec3bcdf33fbbedf417b800e0d486d1e8031115"
+SRCREV = "ef79fb9f96cd1bae1a122df54c61a05c91c11372"
 
 S = "${WORKDIR}/git"
 
