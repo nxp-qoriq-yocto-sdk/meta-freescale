@@ -1,14 +1,14 @@
 SUMMARY = "Reset Configuration Word"
 DESCRIPTION = "Reset Configuration Word - hardware boot-time parameters for the QorIQ targets"
-LICENSE = "Freescale-EULA"
-LIC_FILES_CHKSUM = "file://EULA;md5=c9ae442cf1f9dd6c13dfad64b0ffe73f"
+LICENSE = "BSD"
+LIC_FILES_CHKSUM = "file://COPYING;md5=3775480a712fc46a69647678acb234cb"
 
 DEPENDS += "change-file-endianess-native"
 
 inherit deploy siteinfo
 
 SRC_URI = "git://git.freescale.com/ppc/sdk/rcw.git;branch=sdk-v2.0.x"
-SRCREV = "1af724b64347170e9d9ba8e8f277dd30026a1a7e"
+SRCREV = "6ae9086528019ab55968da05c25bd319737c8e62"
 
 S = "${WORKDIR}/git"
 
