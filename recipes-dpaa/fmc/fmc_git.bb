@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=a504ab5a8ff235e67c7301214749346c"
 
 PR = "r2"
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/fmc.git;branch=sdk-v1.9.x"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/fmc.git;nobranch=1;protocol=http"
 SRCREV = "a079d2c844edd85dff85a317a63198e7988bcd09"
 
 DEPENDS = "libxml2 fmlib tclap"
