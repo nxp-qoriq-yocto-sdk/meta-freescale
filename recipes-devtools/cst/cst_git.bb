@@ -9,7 +9,7 @@ DEPENDS += "openssl"
 
 inherit kernel-arch
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/cst.git;branch=sdk-v2.0.x"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/cst.git;nobranch=1;protocol=http"
 SRCREV = "d1c6c28ee78f8ed2aa92dbd6c0c00e6defe1242b"
 
 S = "${WORKDIR}/git"
