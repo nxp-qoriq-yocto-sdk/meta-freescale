@@ -9,7 +9,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 DEPENDS += "flib"
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/usdpaa.git;branch=sdk-v2.0.x"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/usdpaa.git;nobranch=1;protocol=http"
 SRCREV = "940d8f7f989c567b8c554ddba7bc4f0f4f21eb11"
 
 S = "${WORKDIR}/git"
