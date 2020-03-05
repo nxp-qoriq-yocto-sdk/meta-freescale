@@ -18,7 +18,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit deploy
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/hv-cfg.git;branch=sdk-v2.0.x"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/hv-cfg.git;nobranch=1;protocol=http"
 SRCREV = "348748b2ce26258509997b19fead0dd7bba4dea4"
 
 S = "${WORKDIR}/git"
