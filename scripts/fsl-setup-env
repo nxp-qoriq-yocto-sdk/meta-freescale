@@ -201,9 +201,6 @@ LAYER_LIST=" \
     meta-openembedded/meta-xfce \
     \
     meta-freescale \
-    meta-freescale-internal \
-    \
-    meta-freescale-extra \
     \
     meta-qt5 \
     meta-fsl-demos \
