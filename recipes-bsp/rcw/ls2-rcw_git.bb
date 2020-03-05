@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://Freescale-Binary-EULA;md5=8835a59e50213e1b21243dd00c9
 
 inherit deploy
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/ls2-rcw.git;branch=sdk-v2.0.x"
+SRC_URI = "git://github.com/nxp/qoriq-rcw-bin.git;nobranch=1;protocol=http"
 SRCREV = "ef79fb9f96cd1bae1a122df54c61a05c91c11372"
 
 S = "${WORKDIR}/git"
