@@ -1,6 +1,6 @@
 PV = "7.10.1+fsl"
 
-SRC_URI = "http://git.freescale.com/git/cgit.cgi/ppc/sdk/gdb.git/snapshot/gdb-fsl-sdk-v2.0.tar.bz2"
+SRC_URI = "file://gdb-fsl-sdk-v2.0.tar.bz2"
 
 SRC_URI += "file://0002-Change-order-of-CFLAGS.patch \
             file://0001-Use-exported-definitions-of-SIGRTMIN.patch \
