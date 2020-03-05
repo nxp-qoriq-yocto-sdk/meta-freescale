@@ -13,7 +13,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=441c28d2cf86e15a37fa47e15a72fbac \
 # This means QEMU v2.4.0 with FSL specific patches applied
 PV = "2.4.0+fsl"
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/qemu.git;branch=sdk-v2.0.x"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/qemu.git;nobranch=1;protocol=http"
 SRCREV = "4b846e9b2b15660abace52dd27a406af08c4212d"
 
 # add ptest patches
