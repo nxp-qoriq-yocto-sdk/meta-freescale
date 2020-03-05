@@ -9,7 +9,7 @@ S = "${WORKDIR}/git"
 
 inherit deploy
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/dpl-examples.git;branch=sdk-v2.0.x"
+SRC_URI = "git://github.com/qoriq-open-source/dpl-examples.git;nobranch=1;protocol=http"
 SRCREV = "2f8a6c2c0607b663afd69aa0477c2047f25031ca"
 
 TP ?= "RDB"
