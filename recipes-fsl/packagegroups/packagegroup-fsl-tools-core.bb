@@ -59,17 +59,12 @@ DPAA_PKGS_remove_fsl-lsch2 = "hypervisor-partman"
 DPAA_PKGS_remove_e6500 = "hypervisor-partman"
 DPAA_PKGS_append_e6500 = " lib64-hypervisor-partman"
 
-PMETOOLS ?= "pme-tools"
-PMETOOLS_e500v2 = ""
-
 RDEPENDS_${PN}_append_qoriq = "\
     merge-files \
     ${DPAA_PKGS} \
 "
 RDEPENDS_${PN}_append_qoriq-ppc = "\
-    apptrk \
     asf \
-    ${PMETOOLS} \
 "
 # NOTE: Remove the conditional pkc-host inclusion and all traces of c29x_pkc
 # DISTRO_FEATURE if pkc-host no longer requires customized cryptodev patches
@@ -80,15 +75,7 @@ RDEPENDS_${PN}_append_ls102xa =" asf"
 RDEPENDS_${PN}_append_fsl-lsch3 = " restool"
 RDEPENDS_${PN}_append_e500v2 = " \
     cantest \
-    fsl-pme \
-    libppc \
     testfloat \
-"
-RDEPENDS_${PN}_append_e500mc = " \
-    libppc \
-"
-RDEPENDS_${PN}_append_e5500 = " \
-    libppc \
 "
 RDEPENDS_${PN}_append_e6500-64b = " ceetm"
 
