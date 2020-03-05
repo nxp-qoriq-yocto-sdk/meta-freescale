@@ -7,7 +7,7 @@ PR = "r1"
 
 inherit deploy
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/fm-ucode.git;branch=sdk-v2.0.x"
+SRC_URI = "git://github.com/nxp/qoriq-fm-ucode.git;nobranch=1;protocol=http"
 SRCREV = "b19c645821941493fbef32e616b5a16404259976"
 
 S = "${WORKDIR}/git"
