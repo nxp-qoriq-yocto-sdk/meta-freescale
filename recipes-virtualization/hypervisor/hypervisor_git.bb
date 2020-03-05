@@ -11,11 +11,10 @@ inherit deploy
 
 # TODO: fix dtc to use the already built package
 SRC_URI = " \
-	git://git.freescale.com/ppc/sdk/hypervisor/hypervisor.git;name=hypervisor;branch=sdk-v2.0.x \
-	git://git.freescale.com/ppc/sdk/hypervisor/kconfig.git;name=kconfig;destsuffix=git/kconfig;branch=sdk-v2.0.x \
-	git://git.freescale.com/ppc/sdk/hypervisor/libos.git;name=libos;destsuffix=git/libos;branch=sdk-v2.0.x \
+	git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/hypervisor.git;nobranch=1;protocol=http;name=hypervisor \
+	git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/kconfig.git;nobranch=1;protocol=http;name=kconfig;destsuffix=git/kconfig \
+	git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/libos.git;nobranch=1;protocol=http;name=libos;destsuffix=git/libos \
 	git://git.kernel.org/pub/scm/utils/dtc/dtc.git;name=dtc;destsuffix=dtc \
-	git://git.freescale.com/ppc/sdk/hypertrk.git;name=hypertrk;destsuffix=git/hypertrk;branch=sdk-v2.0.x \
 	file://81-fsl-embedded-hv.rules \
 	  "
 
@@ -24,7 +23,6 @@ SRCREV = "f23ac6da140e1c7e6327093b18e4b6355075de79"
 SRCREV_kconfig = "a56025d4da992b856796b0eccac2e410d751dbac"
 SRCREV_libos = "64f4424c35b306a8103a68e23adea4274921d699"
 SRCREV_dtc = "a6d55e039fd22048687fe061b4609e2807efe764"
-SRCREV_hypertrk = "975c98b562186afbd3bbf103ae54b96cf9b3e533"
 
 S = "${WORKDIR}/git"
 
