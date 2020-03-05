@@ -7,7 +7,7 @@ DEPENDS += "change-file-endianess-native"
 
 inherit deploy siteinfo
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/rcw.git;branch=sdk-v2.0.x"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/rcw.git;nobranch=1;protocol=http"
 SRCREV = "6ae9086528019ab55968da05c25bd319737c8e62"
 
 S = "${WORKDIR}/git"
