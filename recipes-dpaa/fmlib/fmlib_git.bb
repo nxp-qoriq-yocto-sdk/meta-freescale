@@ -8,7 +8,7 @@ PR = "r1"
 DEPENDS += "virtual/kernel"
 DEPENDS_virtclass-native = ""
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/fmlib.git;branch=sdk-v2.0.x"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/fmlib.git;nobranch=1;protocol=http"
 SRCREV = "43fa98fdbf0c697167e415c3f060896d5b482791"
 
 S = "${WORKDIR}/git"
