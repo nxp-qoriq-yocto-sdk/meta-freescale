@@ -96,22 +96,20 @@ clean_up()
          EULA EULA_FILE LAYER_LIST MACHINE FSLDISTRO EXTRAROOTDIR \
          OLD_OPTIND CPUS JOBS THREADS DOWNLOADS CACHES DISTRO \
          setup_flag setup_h setup_j setup_t setup_g setup_l setup_builddir \
-         setup_download setup_sstate setup_error layer append_layer
+         setup_download setup_sstate setup_error layer append_layer \
+         valid_machine valid_num
    unset -f usage prompt_message
 }
 
 usage() {
     echo "Usage: . $PROGNAME -m <machine>"
-    ls $FSLROOTDIR/conf/machine/*.conf > /dev/null 2>&1
 
-    if [ $? -eq 0 ]; then
-        echo -e "\n    Supported machines:
-    `ls $FSLROOTDIR/conf/machine | grep "\.conf" \
-           | egrep -v "^imx|^twr" | sed s/\.conf//g | xargs echo`
+    echo -e "\n    Supported machines:
+    `find ${ROOTDIR}/sources/meta-{fsl,freescale,nxp}*/conf/machine \
+        -name *.conf 2>/dev/null \
+        |egrep "/(mpc|b4|bsc|c29|p1|p2|p3|p4|p5|t1|t2|t4|ls).*conf$" |sort \
+        |xargs echo |sed -e 's,[^ ]*/,,g;s,.conf,,g'`
 "
-    else
-        echo "    ERROR: no available machine conf file is found. "
-    fi
 
     echo "    Optional parameters:
     * [-m machine]: the target machine to be built.
@@ -171,15 +169,25 @@ if test $setup_error || test $setup_h; then
 fi
 
 # Check the machine type specified
-if [ -n "${MACHINE}" ] && \
-    [ -e "$FSLROOTDIR/conf/machine/${MACHINE}.conf" ] || \
-    [ -e "$FSLROOTDIR/../meta-fsl-local-build/conf/machine/${MACHINE}.conf" ]; then
-    echo "Configuring for ${MACHINE} ..."
+valid_machine=false
+if [ -n "${MACHINE}" ];then
+    valid_num=`find ${ROOTDIR}/sources/meta-{fsl,freescale,nxp}*/conf/machine \
+        -name ${MACHINE}.conf 2>/dev/null |wc -l`
+    if [ "1" -lt "$valid_num" ];then
+        echo "ERROR: possible error may occur due to duplicate ${MACHINE}.conf exist:"
+        find ${ROOTDIR}/sources/meta-{fsl,freescale,nxp}*/conf/machine \
+            -name ${MACHINE}.conf 2>/dev/null
+        echo "Please remove the useless layer under ${ROOTDIR}/sources"
+        clean_up && return
+    elif [ "0" = "$valid_num" ];then
+        echo "$MACHINE is not supported by this build setup."
+        usage && clean_up && return
+    fi
 else
-    echo -e "\nThe \$MACHINE you have specified ($MACHINE) is not supported by this build setup."
     usage && clean_up && return
 fi
 
+echo "Configuring for ${MACHINE} ..."
 LAYER_LIST=" \
     meta-openembedded/meta-oe \
     meta-openembedded/meta-multimedia \
@@ -230,14 +238,15 @@ if [ "` echo ${MACHINE} | grep '^ls'`" ]; then
         meta-linaro/meta-linaro-toolchain \
     "
 fi
+LAYER_LIST="$LAYER_LIST `find ${ROOTDIR}/sources/meta-nxp-npi*/conf/ -name layer.conf \
+    |sed -e 's,/conf/layer.conf,,g;s,[^ ]*/,,g'`"
 
 EULA_FILE="$FSLROOTDIR/licenses/Freescale-EULA"
 
 if [ "`ls $FSLROOTDIR/conf/machine \
        | grep "\.conf" | egrep "^imx|^twr" | grep ${MACHINE} | wc -l`" != "0" ]; then
     FSLDISTRO="fslc-imx"
-elif [ -e "$FSLROOTDIR/conf/machine/${MACHINE}.conf" ] || \
-     [ -e "$FSLROOTDIR/../meta-fsl-local-build/conf/machine/${MACHINE}.conf" ]; then
+else
     if [ "$setup_g" = "true" ]; then
         DISTRO="fsl-qoriq-cgl"
     else
