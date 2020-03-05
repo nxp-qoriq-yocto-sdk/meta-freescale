@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=8fbb14cbf822c224cb71a80a0e097452"
 
 inherit deploy
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/flashmap.git;branch=sdk-v2.0.x"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/flashmap.git;nobranch=1;protocol=http"
 SRCREV= "decedc0186a4ba1483ee0ea488482d3ca75ea39f"
 
 S = "${WORKDIR}/git"
