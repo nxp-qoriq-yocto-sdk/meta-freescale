@@ -7,7 +7,7 @@ DESCRIPTION = "Linux kernel for Freescale platforms"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/linux.git;branch=sdk-v2.0.x"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/linux.git;nobranch=1;protocol=http"
 SRCREV = "bd51baffc04ecc73f933aee1c3a37c8b44b889a7"
 
 S = "${WORKDIR}/git"
