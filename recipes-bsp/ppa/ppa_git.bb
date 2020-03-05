@@ -6,10 +6,8 @@ DEPENDS += "u-boot-mkimage-native"
 
 inherit deploy
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/ls1043-ppa.git;branch=sdk-v2.0.x \
-    file://ppa.its \ 
-"
-SRCREV = "ffda4e6c2cfb535636ac8d667b0d2351d557cc66"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/ppa-generic.git;nobranch=1;protocol=http"
+SRCREV = "9fcb080dd7415927aa3fbabfcba8982bcb1466d3"
 
 S = "${WORKDIR}/git"
 
