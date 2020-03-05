@@ -9,8 +9,7 @@ LIC_FILES_CHKSUM = " \
     file://Licenses/lgpl-2.1.txt;md5=4fbd65380cdd255951079008b364516c \
 "
 
-SRCBRANCH = "sdk-v1.9.x"
-SRC_URI = "git://git.freescale.com/ppc/sdk/u-boot.git;branch=${SRCBRANCH} \
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/u-boot.git;nobranch=1;protocol=http \
     file://gcc5.patch \
     file://add-fgnu89-inline-option-for-gcc5.patch \
 "

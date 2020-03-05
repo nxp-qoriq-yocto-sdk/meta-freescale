@@ -9,6 +9,5 @@ LIC_FILES_CHKSUM = " \
     file://Licenses/lgpl-2.1.txt;md5=4fbd65380cdd255951079008b364516c \
 "
 
-SRCBRANCH = "sdk-v2.0.x"
-SRC_URI = "git://git.freescale.com/ppc/sdk/u-boot.git;branch=${SRCBRANCH}"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/u-boot.git;nobranch=1;protocol=http"
 SRCREV = "a9b437f50e2051f8d42ec9e1a6df52de4bc00e1e"
