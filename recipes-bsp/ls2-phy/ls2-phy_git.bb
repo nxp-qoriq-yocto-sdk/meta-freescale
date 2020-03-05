@@ -4,10 +4,11 @@ LIC_FILES_CHKSUM = "file://EULA;md5=c9ae442cf1f9dd6c13dfad64b0ffe73f"
 
 inherit deploy
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/ls2-phy.git;branch=sdk-v2.0.x"
-SRCREV = "554f2648c6a4c6f974827ab326e8c1908dead6f1"
+SRC_URI = "file://ls2-phy-fsl-sdk-v2.0.tar.bz2"
+SRC_URI[md5sum] = "788d786e5774d031817cffae704c83f5"
+SRC_URI[sha256sum] = "59a7eba0f4cb08eddb16a583523559e134891fdca9ea662cdc13a43f1574e815"
 
-S = "${WORKDIR}/git"
+S = "${WORKDIR}/ls2-phy-fsl-sdk-v2.0"
 
 do_install () {
     install -d ${D}/boot
