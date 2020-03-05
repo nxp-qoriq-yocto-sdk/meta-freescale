@@ -10,7 +10,7 @@ RDEPENDS_${PN} += "cryptodev-module bc"
 # if it is fixed.
 REQUIRED_DISTRO_FEATURES = "c29x_pkc"
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/pkc-host.git;branch=sdk-v2.0.x"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/pkc-host.git;nobranch=1;protocol=http"
 SRCREV = "21a6b5b7393bd668a049bde457e1cd0aa05d1bd0"
 
 S = "${WORKDIR}/git"
